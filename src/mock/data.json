@@ -1,0 +1,103 @@
+{
+  "datalist": [{
+      "id": "001",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "002",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "003",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "004",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "005",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "006",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "007",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "008",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "009",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    },
+    {
+      "id": "010",
+      "province": "黑龙江",
+      "manage_unit": "黑龙江省围棋协会",
+      "exam_room_code": "KH001",
+      "seat_size": "28位",
+      "address": "黑龙江省哈尔滨市动力区",
+      "build_date": "2018-12-04",
+      "created_user": "张国荣"
+    }
+  ]
+}
