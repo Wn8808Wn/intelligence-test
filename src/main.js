@@ -7,6 +7,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+
 //引入css
 import './styles/reset.css'
 
@@ -14,6 +15,9 @@ import './styles/reset.css'
 //引入 elementUI库
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import  "./styles/commonStyle.scss"
+
+
 
 // ajax
 // import http from './config/api'

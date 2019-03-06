@@ -18,51 +18,51 @@
             router
             style="border-right: none">   
                 <el-menu-item index="/exammanage">
-                    <img src="../assets/nav-icon1.png" alt="">
+                    <i class="iconfont icon-kaochangguanli-"></i>
                     <span slot="title">考场管理</span>
                 </el-menu-item>
                 <el-menu-item  index="/standardmanage">
-                    <img src="../assets/nav-icon2.png" alt="">
+                     <i class="iconfont icon-kaotibiaozhunguanli-"></i>
                     <span slot="title">考题标准管理</span>
                 </el-menu-item>
                 <el-menu-item  index="/planmanage">
-                    <img src="../assets/nav-icon3.png" alt="">
+                     <i class="iconfont icon-kaoshijihuaguanli-"></i>
                     <span slot="title">考题计划管理</span>
                 </el-menu-item>
                 <el-menu-item  index="/ordermanage">
-                    <img src="../assets/nav-icon4.png" alt="">
+                     <i class="iconfont icon-dingdanguanli-"></i>
                     <span slot="title">订单管理</span>
                 </el-menu-item>
-                <el-menu-item index="/status">
-                    <img src="../assets/nav-icon5.png" alt="">
+                <el-menu-item index="/examStatus">
+                    <i class="iconfont icon-kaoshizhuangtaichaxun-"></i>
                     <span slot="title">考试状态查询</span>
                 </el-menu-item>
                 <el-menu-item index="/ticketmanage">
-                    <img src="../assets/nav-icon6.png" alt="">
+                   <i class="iconfont icon-zhuankaozhengguanli-"></i>
                     <span slot="title">准考证管理</span>
                 </el-menu-item>
                 <el-menu-item index="7">
-                    <img src="../assets/nav-icon7.png" alt="">
+                    <i class="iconfont icon-caiwuguanli-"></i>
                     <span slot="title">财务管理</span>
                 </el-menu-item>
                 <el-menu-item index="8">
-                    <img src="../assets/nav-icon8.png" alt="">
+                    <i class="iconfont icon-tongjifenxi-"></i>
                     <span slot="title">统计分析</span>
                 </el-menu-item>
                 <el-menu-item index="9">
-                    <img src="../assets/nav-icon9.png" alt="">
+                    <i class="iconfont icon-QA-"></i>
                     <span slot="title">Q&A</span>
                 </el-menu-item>
-                <el-menu-item index="10">
-                    <img src="../assets/nav-icon10.png" alt="">
+                <el-menu-item index="/shortMessage">
+                    <i class="iconfont icon-duanxintongzhi-"></i>
                     <span slot="title">短信通知</span>
                 </el-menu-item>
                 <el-menu-item index="11">
-                    <img src="../assets/nav-icon11.png" alt="">
+                    <i class="iconfont icon-xitongtongzhi-"></i>
                     <span slot="title">系统通知</span>
                 </el-menu-item>
                 <el-menu-item index="12">
-                    <img src="../assets/nav-icon12.png" alt="">
+                    <i class="iconfont icon-xitongrizhi-"></i>
                     <span slot="title">系统日志</span>
                 </el-menu-item>
             </el-menu>
@@ -85,6 +85,7 @@
 
 
 <script>
+import "../assets/iconfont/iconfont.css"
 export default {
   data() {
     return {
@@ -138,7 +139,11 @@ export default {
       padding-left: 0 !important;
       padding-right: 0 !important;
       border-left: 3px solid #07281f;
-      & > img {
+      & > i {
+        margin-right: 19px;
+        margin-left: 18px;
+      }
+      & > img{
         width: 18px;
         height: 18px;
         margin-right: 19px;
@@ -190,11 +195,11 @@ export default {
     content: "";
     width: 0;
     height: 0;
-    border-top: 18px solid transparent;
-    border-bottom: 18px solid transparent;
-    border-right: 18px solid #fff;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-right: 12px solid #fff;
     position: absolute;
-    top: 10px;
+    top: 16px;
     right: 0; //根据三角形的位置，可以随意更改。
   }
 }

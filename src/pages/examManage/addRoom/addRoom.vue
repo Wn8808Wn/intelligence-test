@@ -70,12 +70,12 @@
 
              <div class="prov">
                 <span class="commontips">考场总座位数(个)</span>
-                <el-input v-model="seatSize"  :disabled="disabled"></el-input>
+                <el-input v-model.number="seatSize"  :disabled="disabled"></el-input>
             </div>
  
              <div class="prov">
                 <span class="commontips">备用座位数(个)</span>
-                <el-input v-model="spareSeatSize"  :disabled="disabled"></el-input>
+                <el-input v-model.number="spareSeatSize"  :disabled="disabled"></el-input>
             </div>
 
         </div>
@@ -236,7 +236,7 @@ export default {
 };
 </script>
 
-<style rel='stylesheet/scss' lang="scss" >
+<style rel='stylesheet/scss' lang="scss"  scoped>
 .el-tab-pane {
   background: #f0f0f0;
 }

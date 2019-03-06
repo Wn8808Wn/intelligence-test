@@ -1,336 +1,251 @@
 <template>
-    <div class="standardTemplate">
-          <div class="addStandard">
-            <common-top :titleTop="titleTop"></common-top>
-                <!-- 新增标准内容 -->
-            <div class="standardBody">
-                <div class="testLevel">
-                    <span class="commontips">考试级别:</span>
-                    <el-select v-model="examLevel" placeholder="请选择" :disabled="disabled">
-                        <el-option
-                        v-for="item in options1"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-
-                <div class="testLevel">
-                    <span class="commontips">报考条件:</span>
-                    <el-select v-model="Requirement" placeholder="请选择"  :disabled="disabled">
-                        <el-option
-                        v-for="item in options2"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-
-                <!-- <div class="testLevel">
-                    <span class="commontips">题库难度:</span>
-                      <el-input v-model="itemDifficulty"></el-input>
-                    <div class="addLevel">+</div>
-                    <div class="reduceLevel">_</div>
-                </div> -->
-                <div class="testLevel">
-                    <span class="commontips">题库难度:</span>
-                    <el-input-number v-model="itemDifficulty" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
-                </div>
-
-                <div class="knowledgeHierarchy">
-                  <span>知识体系:</span> 
-                  <p>
-                    <span>中盘2道</span>
-                    <span>布局2道</span>
-                    <span>官子2道</span>
-                    <span>死活2道</span>
-                    <span>对弈2道</span>
-                  </p>
-                </div>
-
-                 <div class="testTime">
-                  <span>考试时长:</span> 
-                  <p>45分钟</p>
-                </div>
-
-            </div>
-
-                <div class="examFee">
-                    <span>考试服务费:（元）</span>
-                    <el-input v-model="examServiceFee"></el-input>
-                </div>
-
-                <div class="examFee">
-                    <span>认证服务费:（元）</span>
-                    <el-input v-model="examServiceFee"></el-input>
-                </div>
-
-                <div class="examFee detailInfo">
-                    <span>详情介绍:</span>
-                    <el-input
-                      type="textarea"
-                      :autosize="{ minRows: 4, maxRows: 4}"
-                      maxlength="200"
-                      @input = "descInput"
-                      v-model="detailInfo"
-                      >
-                    </el-input>
-                    <p>已输入<span v-html="number"></span>个字,不得超过200字</p>
-                    <div style="text-align:center;width:100%;">
-                      <el-button type="primary" round 
-                        style="background:#1f91b5;
-                        width:145px;
-                        heiht:40px;
-                        font-size:16px;
-                        margin-top:38px;"
-                        @click="handleput"  
-                      >提交</el-button>
-                    </div>
-                </div>
-
+    <div class="standard">
+        <div class="top">
+            <el-button type="primary" icon="el-icon-plus"  round @click="handleAddStandardTemplate">新增模板</el-button>
+            <el-select  v-model="value" placeholder="全部管理单位">
+                <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+                </el-option>
+            </el-select>
+            <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
         </div>
 
-            
-    </div>
+    <!-- 表格数据部分 -->
+        <div class="tabs-data">     
+            <el-table
+            :data="tableData"
+            stripe
+            style="width: 100%">
+                <el-table-column
+                prop="id"
+                label="序号"
+                width="74">
+                </el-table-column>
+                <el-table-column
+                prop="manageUnit"
+                label="管理单位"
+                width="165">
+                </el-table-column>
+                <el-table-column
+                prop="examLevel"
+                label="级别"
+                sortable  
+                width="78">
+                </el-table-column>
+                <el-table-column
+                prop="itemDifficulty"
+                label="题库难度"
+                width="104">
+                </el-table-column>
+                <el-table-column
+                prop="knowledgeHierarchy"
+                label="知识体系"
+                width="245">
+                </el-table-column>
+                <el-table-column
+                prop="examLength"
+                label="考试时长"
+                width="88">
+                </el-table-column>
+                <el-table-column
+                prop="examServiceFee"
+                label="考试服务费"
+                width="106">
+                </el-table-column>
+                <el-table-column
+                prop="certificationServiceFee"
+                label="认证服务费"
+                width="110">
+                </el-table-column>
+                <el-table-column
+                prop="updatedTime"
+                label="修改时间"
+                width="133">
+                </el-table-column>
+                <el-table-column
+                prop="updatedUser"
+                label="修改人"
+                width="95">
+                </el-table-column>
+                <el-table-column
+                label="管理操作">
+                <template slot-scope="scope">
+                    <el-button type="text" icon="el-icon-error" @click.prevent="modifyData(scope.row.id)" >修改</el-button>
+                    <el-button type="text" icon="el-icon-error" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                </template>
+                </el-table-column >
+            </el-table>
 
+                <el-pagination
+                background
+                :total="total" 
+                layout="prev, pager, next"
+                :current-page="currentPage"
+                @current-change="handleCurrentChange"
+                >
+                </el-pagination>
+        </div>
+
+    </div>
 
 </template>
 
 
-
 <script>
-import commonTop from "../../common/common-top";
 export default {
-  components: {
-    commonTop
-  },
   data() {
     return {
-      titleTop: "标准模板",
-      examLevel: "",
-      Requirement: "",
-      itemDifficulty: "25级",
-      examServiceFee: 200,
-      disabled: false,
-      detailInfo:'',
-      number:0,
-      options1: [
+      tableData: [
+      ],
+      options: [
         {
-          value: "1",
-          label: "20级"
+          value: "中国围棋协会",
+          label: "中国围棋协会"
         },
         {
-          value: "2",
-          label: "10级"
+          value: "上海围棋协会",
+          label: "上海围棋协会"
         },
         {
-          value: "3",
-          label: "9级"
+          value: "河北围棋协会",
+          label: "河北围棋协会"
         },
         {
-          value: "4",
-          label: "8级"
+          value: "河南围棋协会",
+          label: "河南围棋协会"
         },
         {
-          value: "5",
-          label: "5级"
+          value: "北京围棋协会",
+          label: "北京围棋协会"
         }
       ],
-      options2: [
-        {
-          value: "1",
-          label: "25级"
-        },
-        {
-          value: "2",
-          label: "20级"
-        },
-        {
-          value: "3",
-          label: "15级"
-        },
-        {
-          value: "4",
-          label: "10级"
-        },
-        {
-          value: "5",
-          label: "5级"
-        }
-      ],
-      options3: [
-        {
-          value: "1",
-          label: "25级"
-        },
-        {
-          value: "2",
-          label: "20级"
-        },
-        {
-          value: "3",
-          label: "15级"
-        },
-        {
-          value: "4",
-          label: "10级"
-        },
-        {
-          value: "5",
-          label: "5级"
-        }
-      ]
+      total: null,
+      value: "",
+      dataType:0,
+      currentPage: 1,
+      pageSize: 10,
+      totalPage: null,
+      total: null,
     };
   },
   methods: {
-    handleChange(value) {
-      console.log(value);
+    handleAddStandardTemplate() {
+      this.$router.push({path: '/addStandardTemplate' })
     },
-    descInput(){
-      this.number = this.detailInfo.length
-    },
-    handleput(){
+    getData(url,params){
+        this.tableData=null;
+        this.$http.get(url,params).then(res => {
+            // console.log(res.data.data.rows);
+            this.total = res.data.data.total;
+            this.totalPage = res.data.data.totalPage;
+            this.pageSize = res.data.data.pageSize;
+            this.currentPage = res.data.data.page;
 
+            let rst = res.data.data.rows;
+            this.tableData = rst;
+            // console.log(this.tableData)
+            //处理数据
+            for(let i = 0 ;  i< this.tableData.length; i++){
+              this.tableData[i].examLevel = rst[i].examLevel +'级'
+              this.tableData[i].itemDifficulty = rst[i].itemDifficulty +'级'
+              this.tableData[i].knowledgeHierarchy = rst[i].knowledgeHierarchy.replace(/道/g,'/')
+              //处理时间
+              let time = rst[i].updatedTime;
+              let d = new Date(time);
+              let times =
+                  d.getFullYear() +"-" +(d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1): d.getMonth() + 1) +
+                    "-" +
+                  (d.getDate() < 10 ? "0" + d.getDate() : d.getDate() + 1);
+               this.tableData[i].updatedTime = times 
+            }
+        })
+    },
+     handleCurrentChange(val) {
+      let params = new URLSearchParams();
+      params.append("dataType", this.dataType);
+      params.append("userId", 1);
+      params.append("page", val);
+      this.getData("/api/standard/standard_list", { params });
+    },
+
+    // 修改对应的数据
+    modifyData(id){
+      this.$router.push({path:'/updateStandardTemplate',query: { id: id }})
+      // console.log(id)
+    },
+    //查看详情页
+    handldetails(id){
+      this.$router.push({path:'/standardDetail',query: { id: id }})
+      // console.log(id)
     }
+
+
   },
- 
+  created(){
+
+    //进入页面显示考题标准信息
+    let params = new URLSearchParams();
+    params.append("userId", 1);
+    params.append("dataType", this.dataType);
+    this.getData("/api/standard/standard_list", { params });
+  }
 };
 </script>
 
-
-<style rel='stylesheet/scss' lang="scss" >
-.el-tabs--border-card>.el-tabs__content{
-  padding: 0;
-}
-.el-tab-pane{
-    width: 1042px;
-    height: auto;
-    background: #1f91b5;
-}
-.standardTemplate{
-    width: 1042px;
-    height: auto;
-}
-.addStandard {
-  width: 952px;
-  height: 880px;
-  padding: 0 50px 0 40px;
+<style rel='stylesheet/scss' lang="scss">
+.top {
+  width: 100%;
+  height: 95px;
   background: #ffffff;
-  // background: #1f91b5;
-  .standardBody {
-    padding-left: 3px;
-    width: 952px;
-    overflow: hidden;
-    padding-bottom: 39px;
-    margin-bottom: 27px;
-    border-bottom: 1px solid #acacac;
-    .testLevel {
-      width: 164px;
-      height: 112px;
-      float: left;
-      margin-right: 27px;
-      .commontips {
-        width: 164px;
-        height: 17px;
-        display: block;
-        height: 15px;
-        font-size: 16px;
-        color: #a3a3a3;
-        padding-top: 39px;
-        padding-bottom: 18px;
-        padding-left: 7px;
-      }
-    }
-   
-    .knowledgeHierarchy {
-      width: 100%;
-      height: 121px;
-      float: left;
-      margin-bottom: 36px;
-      &>span{
-        width: 164px;
-        height: 17px;
-        display: block;
-        height: 15px;
-        font-size: 16px;
-        color: #a3a3a3;
-        padding-top: 35px;
-        padding-bottom: 27px;
-        padding-left: 7px;
-      }
-      & > p {
-        padding-left: 7px;
-        height: 70px;
-        & > span {
-          display: block;
-          float: left;
-          width: 112px;
-          font-size: 16px;
-          height: 70px;
-          line-height: 70px;
-        }
-      }
-    }
-    .testTime {
-      float: left;
-      height: 53px;
-      &>span{
-        width: 164px;
-        height: 17px;
-        display: block;
-        height: 15px;
-        font-size: 16px;
-        color: #a3a3a3;
-        padding-bottom: 20px;
-        padding-left: 7px;
-      }
-      & > p {
-        padding-left: 7px;
-        width: 112px;
-        
-        font-size: 16px;
-      }
-    }
-  }
-  .examFee {
-    width: 164px;
-    height: 85px;
-    float: left;
-    margin-right: 27px;
+  & > .el-button.el-button--primary.is-round {
+    width: 145px;
+    height: 40px;
     font-size: 16px;
-    margin-bottom: 35px;
+    background: #1f91b5;
+    border: none;
+    float: left;
+    margin: 34px 20px 22px 21px;
+    padding: 0;
+    i.el-icon-plus {
+      margin-left: 8px;
+      margin-right: 16px;
+    }
     & > span {
-      height: 38px;
-      line-height: 38px;
-      color: #acacac;
+      font-size: 16px;
     }
   }
 
-  .detailInfo{
-    width: 100%;
-    height: 125px;
-    margin-bottom: 34px;
-    &>p{
-      float: right;
-      height: 42px;
-      line-height: 42px;
-      font-size: 14px;
-      color:#1f91b5;
-    }
-  }
-
+  // 下拉菜单样式
   .el-select {
-    width: 100%;
-    background: #f8f8f8;
-    border-color: #cccccc;
-    border-radius: 4px;
+    margin: 34px 20px 22px 23px;
+    .el-input__inner {
+      color: #000;
+      width: 180px;
+      height: 38px;
+      font-size: 16px;
+      padding-left: 20px;
+      background: #f8f8f8;
+      border-radius: 38px;
+      border: 1px solid #8b8b8b;
+    }
+  }
+  // 下拉三角样式
+  .el-select .el-input .el-select__caret {
+    // color: #000;
+    font-size: 22px;
+    margin-right: 7px;
+    margin-top: 1px;
+  }
+  & > p {
+    height: 47px;
+    padding-top: 48px;
+    float: right;
+    margin-right: 27px;
+    font-size: 14px;
     color: #000;
   }
 }
-
-
 </style>
-
-

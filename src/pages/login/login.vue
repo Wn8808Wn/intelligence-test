@@ -1,7 +1,8 @@
 <template>
     <div class="login">
         <div class="login-left">
-            <img src="../../assets/text.png" alt="">
+              <h3 id="firstH3">中国围棋协会</h3>
+              <h3>智能管理平台</h3>
         </div>
         <div class="login-right">
             <el-form class="lr login-input"
@@ -101,51 +102,6 @@ export default {
           dataStr.append("loginName", username);
           dataStr.append("passWord", password);
 
-          // let dataStr ={
-          //   loginName:username,
-          //   passWord:password
-          // }
-
-          // ---------------------
-          // let params = {
-          //   url: '/api/login',
-          //   data: dataStr,
-          //   method: 'post',
-          //   callback: res => {
-          //     console.log(res)
-          //     if (res.status === 200 ) {
-          //       // res = res.data
-          //       // let token = res.data.token
-          //       // let expiration = res.expiration
-          //       // sessionStorage.setItem('dsToken', token) // 存token
-          //       // sessionStorage.setItem('lifeTime', expiration) // 存过期时间
-          //       this.$message({
-          //         showClose: true,
-          //         type: 'success',
-          //         message: '登录成功',
-          //         duration: 800
-          //       })
-          //       setTimeout(() => {
-          //         this.$router.push({ path: '/manage' })
-          //       }, 1000)
-          //     } else {
-          //       this.$message({
-          //         showClose: true,
-          //         type: 'error',
-          //         message: '账号或密码错误',
-          //         duration: 1000
-          //       })
-          //     }
-          //   },
-          //   errcallback: msg => {
-          //     console.log(msg)
-          //   }
-          // }
-          // this.$http.sendRequest(params)
-
-          //---------------------------------------
-
-          // 登录请求
           this.$http
             .post("/api/login", dataStr)
             .then(res => {
@@ -225,17 +181,27 @@ export default {
   height: 100%;
   position: relative;
   overflow: hidden;
-  .login-left {
+  .login-left{
     width: 28.85%;
     height: 26.76%;
     position: absolute;
     left: 9.48%;
     top: 37.63%;
-    & > img {
-      width: 100%;
-      height: 100%;
-    }
+      &>h3{
+          width: 100%;
+          height: 90px;
+          font-size: 90px;
+          line-height: 90px;
+          font-weight: 900;
+          background: linear-gradient(to bottom, #22effe, #008ae1);
+          -webkit-background-clip: text;
+          color: transparent;
+          &:nth-child(1){
+            margin-bottom: 30px;
+          }
+      }
   }
+
   .login-right {
     width: 50.31%;
     height: 50.32%;

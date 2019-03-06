@@ -106,8 +106,8 @@ export default {
   },
   data() {
     return {
-      titleTop: "新增标准",
-      dataType:1,
+      titleTop: "新增模板",
+      dataType:0,
       examLevel: null,
       signRequirement: null,
       itemDifficulty: null,
@@ -212,7 +212,7 @@ export default {
         this.$http.post("/api/standard/add_standard", params).then(res => {
           console.log(res);
         });
-        this.$router.push({path: "/standardmanage"})
+        this.$router.push({name: "standardTemplate"})
     }
   },
  

@@ -3,11 +3,9 @@
         <p>{{titleTop}}</p>
 
         <div class="right">
-            <i class="el-icon-back"></i> 
-            <span>返回</span>   
+            <i class="iconfont icon-fanhui"></i> 
+            <span @click="handleBack" style="cursor:pointer">返回</span>   
         </div>
-
-
     </div>
 </template>
 
@@ -17,7 +15,23 @@ export default {
     data(){
         return{
         }
-    }
+    },
+    methods:{
+        handleBack(){
+           if(this.$route.path == "/ordermanage"){
+                this.$router.go(0)
+           }else if(this.$route.path == "/exammanage"){
+                this.$router.go(0)
+           }
+           else{
+               
+               this.$router.go(-1)
+           }
+        }
+    },
+    beforeRouteEnter (to, from, next) {
+
+    },
 }
 </script>
 

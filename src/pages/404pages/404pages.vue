@@ -3,8 +3,10 @@
         <div class="errarpages">
              <img src="../../assets/404.png" alt="">
             <p>你访问的网页已被围困住了.....</p>
-            <el-button type="primary" icon="el-icon-refresh" round @click="updataPages">刷新页面</el-button>
-            <el-button type="primary" icon="el-icon-refresh"  round  @click="toHome">返回首页</el-button>    
+            <div>
+                <el-button type="primary" icon="el-icon-refresh" round @click="updataPages">刷新页面</el-button>
+                <el-button type="primary" icon="el-icon-refresh"  round  @click="toHome">返回首页</el-button>    
+            </div>
         </div>
   </div>
 </template>
@@ -32,8 +34,8 @@ export default {
     height: 100%;
     background:#f0f0f0;
     .errarpages{
-        width: 440px;
-        height: 307px;
+        width: 40.5%;
+        height: 49.5%;
         position: fixed;
         top: 0;
         bottom: 0;
@@ -41,8 +43,8 @@ export default {
         right: 0;
         margin: auto;
         & > img {
-            width: 440px;
-            height: 144px;
+            width: 100%;
+            height: 49.5%;
         }
         &>p{
             width: 100%;
@@ -52,21 +54,23 @@ export default {
             color: #000;
             text-align: center;
         }
+        &>div{
+            width: 100%;
+            height: 9.4%;
         .el-button{
             background: #1f91b5;
             font-size: 16px;
             color: #fff;
-            width: 145px;
-            height: 40px;
+            width: 18.7%;
+            height: 100%;
             padding: 0;
             border: none;
-            
+        }
+        .el-button:nth-of-type(1){
+            margin-left: 29.4%;
+            margin-right:3.7%;
         }
 
-        .el-button:nth-of-type(1){
-               margin-left: 55px;
-               margin-right: 30px;
-              
         }
     }
 }

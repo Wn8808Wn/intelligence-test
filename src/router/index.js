@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 export default new Router({
-  // mode: 'history',
+  mode: 'history',
   routes: [{
       path: '/',
       name: 'login',
@@ -29,46 +29,69 @@ export default new Router({
         }
 
         , {
-          path: '/standardManage',   //考题标准
+          path: '/standardManage', //考题标准
           name: 'standardManage',
           component: () => import('@/pages/standardManage/standardManage'),
           children: [{
-            path: '/standardManage',   //考题标准
-            name: 'standard',
-            component: () => import('@/pages/standardManage/standard/standard'),
-          },
-          {
-            path: '/addStandard',   //考题标准
-            name: 'addStandard',
-            component: () => import('@/pages/standardManage/addStandard/addStandard'),
-          },
-          {
-            path: '/standardTemplate',   //考题标准
-            name: 'standardTemplate',
-            component: () => import('@/pages/standardManage/standardTemplate/standardTemplate'),
-          }
-        
-        ]
+              path: '/standardManage', //考题标准
+              name: 'standard',
+              component: () => import('@/pages/standardManage/standard/standard'),
+            },
+            {
+              path: '/addStandard', //增加考题标准
+              name: 'addStandard',
+              component: () => import('@/pages/standardManage/addStandard/addStandard'),
+            },
+            {
+              path: '/standardTemplate', //考题模板
+              name: 'standardTemplate',
+              component: () => import('@/pages/standardManage/standardTemplate/standardTemplate'),
+            },
+            {
+              path: '/addStandardTemplate', //增加考题模板
+              name: 'addStandardTemplate',
+              component: () => import('@/pages/standardManage/addStandard/addStandardTemplate'),
+            },
+            {
+              path: '/standardDetail', //考题详情
+              name: 'standardDetail',
+              component: () => import('@/pages/standardManage/standardDetail/standardDetail'),
+            },
+            {
+              path: '/updateStandard', //修改考题
+              name: 'updateStandard',
+              component: () => import('@/pages/standardManage/updateStandard/updateStandard'),
+            },
+            {
+              path: '/updateStandardTemplate', //修改考题模板
+              name: 'updateStandardTemplate',
+              component: () => import('@/pages/standardManage/updateStandard/updateStandardTemplate'),
+            }
+
+          ]
         },
-         {
-          path: '/planManage',       //考试计划
+        {
+          path: '/planManage', //考试计划
           name: 'planManage',
           component: () => import('@/pages/planManage/planManage')
         }, {
-          path: '/orderManage',      //订单管理
+          path: '/orderManage', //订单管理
           name: 'orderManage',
-          component: () => import('@/pages/orderManage/orderManage')
-        }, {
-          path: '/status',
-          name: 'status',
-          component: () => import('@/pages/status/status')
+          component: () => import('@/pages/orderManage/orderManage'),
+        },{
+          path: '/examStatus',
+          name: 'examStatus',
+          component: () => import('@/pages/examStatus/examStatus')
         }, {
           path: '/ticketManage',
           name: 'ticketManage',
           component: () => import('@/pages/ticketManage/ticketManage')
+        },
+        {
+          path: '/shortMessage',
+          name: 'shortMessage',
+          component: () => import('@/pages/shortMessage/shortMessage')
         }
-
-
 
       ]
     },
