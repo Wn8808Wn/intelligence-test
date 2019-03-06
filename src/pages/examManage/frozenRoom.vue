@@ -1,0 +1,209 @@
+<template>
+    <div class="frozenRoom">
+        <commonTop :titleTop="titleTop"></commonTop>
+        <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
+        <!-- 表格数据部分 -->
+        <div class="tabs-data">     
+            <el-table
+            stripe
+            :data="tableData" 
+            style="width: 100%,padding:0;">
+                <el-table-column
+                prop="province"
+                label="省份"
+                width="160">
+                </el-table-column>
+                
+                <el-table-column
+                prop="examRoomCode"
+                label="考场编号"
+                width="160">
+                </el-table-column>
+
+                <el-table-column
+                prop="seatSize"
+                label="座位数"
+                width="120">
+                </el-table-column>
+
+                <el-table-column
+                prop="addressabbr"
+                label="地址"
+                width="280">
+                </el-table-column>
+
+                <el-table-column
+                prop="buildDate"
+                label="设立时间"
+                width="180">
+                </el-table-column>
+
+               <el-table-column
+                prop="manageUnit"
+                label="管理单位"
+                width="256">
+                </el-table-column>
+
+                <el-table-column
+                label="管理操作">
+                <template slot-scope="scope">
+                    <el-button type="text" icon="el-icon-error iconfont icon-huifu" @click.prevent="unFreezeData(scope.row.id)" :disabled="isDisable">恢复</el-button>
+                    <el-button type="text" icon="el-icon-error" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                </template>
+                </el-table-column >
+            </el-table>
+        <el-pagination
+        background
+        :total="total" 
+        layout="prev, pager, next"
+        :current-page="currentPage"
+        @current-change="handleCurrentChange"
+        >
+        </el-pagination>
+        </div>
+
+    </div>
+    
+</template>
+
+<script>
+import commonTop from '../common/common-top'
+import { _debounce } from "@/utils/public";
+export default {
+  components:{
+        commonTop
+  },
+  data() {
+    return {
+      titleTop:'已冻结考场',
+      RoomCode: "",
+      currentPage: null,
+      pageSize: 10,
+      totalPage: null,
+      total: null,
+      isDisable: false,
+      tableData: []
+    };
+  },
+  methods: {
+    getDate(url, params) {
+      this.tableData = [];
+      this.$http.get(url, params).then(res => {
+          // 分页
+          // console.log(res.data.data);
+          this.total = res.data.data.total;
+          this.totalPage = res.data.data.totalPage;
+          this.pageSize = res.data.data.pageSize;
+          this.currentPage = res.data.data.page;
+          //列表数据
+          let rst = res.data.data.rows;
+          if(rst){
+            // console.log(rst)
+          //转换日期格式   座位数(加单位'个')   地址缩写
+            for (let i = 0; i < rst.length; i++) {
+            //转换日期格式
+            let time = rst[i].buildDate;
+            let d = new Date(time);
+            let times =
+              d.getFullYear() +
+              "-" +
+              (d.getMonth() + 1 < 10
+                ? "0" + (d.getMonth() + 1)
+                : d.getMonth() + 1) +
+              "-" +
+              (d.getDate() < 10 ? "0" + d.getDate() : d.getDate() + 1);
+            rst[i].buildDate = times;
+            // 转换座位数
+            let seatSizes = rst[i].seatSize + "个";
+            rst[i].seatSize = seatSizes;
+            //地址缩写
+            rst[i].addressabbr = rst[i].province + rst[i].city + rst[i].distric;
+            this.tableData.push(rst[i]);
+          }
+
+          }else{
+
+          }
+          
+          
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    handleCurrentChange:_debounce(function(val) {
+      //分页切换当前页
+      let params = new URLSearchParams();
+      params.append("dataStatus", 1);
+      params.append("userId", 1);
+      params.append("page", val);
+      this.getDate("/api/room/room_list", { params });
+    },200),
+    unFreezeData(id){
+       //恢复考场操作
+      alert(id);
+      this.$confirm(
+         "考场恢复使用后，可在考场列表中查看。确定恢复？",
+        "考场恢复",
+        {
+          confirmButtonText: "确认",
+          cancelButtonText: "取消"
+        }
+      )
+        .then(() => {
+          let params = new URLSearchParams();
+          params.append("id", id);
+          params.append("dataStatus", 0);
+          this.$http.post("/api/room/update_status", params);
+          this.$message({
+            type: "success",
+            message: "恢复成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "warning",
+            message: "已取消恢复"
+          });
+        });
+
+    },
+    handldetails(id) {
+      //查看详细页
+      this.$router.push({ name: "examRoomDetail", query: { id: id } });
+    }
+  },
+  created() {
+    //页面进入请求数据
+    let params = new URLSearchParams();
+    params.append("userId", 1);
+    params.append("dataStatus", 1);
+    this.getDate("/api/room/room_list", { params });
+  }
+};
+</script>
+
+<style rel='stylesheet/scss' lang="scss"  scoped>
+.frozenRoom {
+     width: calc(100% - 40px);
+     padding: 0 20px;
+     background: #ffffff;
+  &>p{
+      width: 100%;
+      height: 20px;
+      line-height: 20px;
+      font-size: 14px;
+      color: #000;
+      margin-top: 10px;
+      margin-bottom: 14px;
+  }
+
+  &>.tabs-data {
+  width: 100%;
+  height: calc(100% - 20px);
+  min-height: 762px;
+  padding: 0 0 20px 0;
+  }
+}
+</style>
+

@@ -1,11 +1,13 @@
 <template>
-    <div>
-        <h1>考试状态查询页面</h1>
+    <div class="ticketTemplate">
+
+
+
 
     </div>
 
-
 </template>
+
 
 <script>
 export default {

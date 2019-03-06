@@ -19,6 +19,7 @@ export default {
   props: {county:String, number:String},
   methods: {
     modifyExamName() {
+      alert(111)
       this.disabled = !this.disabled;
     },
     resetExamName(){
@@ -30,8 +31,7 @@ export default {
 };
 </script>
 
-
-<style rel='stylesheet/scss' lang="scss" >
+<style rel='stylesheet/scss' lang="scss">
 .createNumberTop{
   width: 952px;
   height: 175px;
@@ -74,6 +74,7 @@ export default {
       top: 14px;
       font-size: 24px;
       color: #1f91b5;
+      cursor: pointer;
     }
   }
 }

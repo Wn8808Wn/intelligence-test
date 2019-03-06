@@ -38,7 +38,7 @@
                 <div class="testLevel">
                     <span class="commontips">题库难度:</span>
                     <el-input-number v-model="itemDifficulty" controls-position="right" @change="handleChange" 
-                    :min="5" :max="25" label="级" :step="5"
+                    :min="5" :max="25"  :step="5"
                     >
                     </el-input-number>
                 </div>
@@ -59,12 +59,12 @@
 
                 <div class="examFee">
                     <span>考试服务费:（元）</span>
-                    <el-input v-model.number="examServiceFee"></el-input>
+                    <el-input v-model="examServiceFee"></el-input>
                 </div>
 
                 <div class="examFee">
                     <span>认证服务费:（元）</span>
-                    <el-input v-model.number="certificationServiceFee"></el-input>
+                    <el-input v-model="certificationServiceFee"></el-input>
                 </div>
 
                 <div class="examFee detailInfo">
@@ -86,7 +86,7 @@
                         font-size:16px;
                         margin-top:38px;"
                         @click="handleput"  
-                      >提交</el-button>
+                      >修改</el-button>
                     </div>
                 </div>
 
@@ -106,16 +106,17 @@ export default {
   },
   data() {
     return {
-      titleTop: "新增标准",
+      titleTop: "修改标准",
       dataType:1,
+      id:null,
       examLevel: null,
       signRequirement: null,
       itemDifficulty: null,
       examServiceFee: null,
       certificationServiceFee:null,
-      knowledgeHierarchy:['中盘2','布局2','官子2','死活2','对弈2'],
-      examLength:"45分钟",
-      updatedUser:'张老师',
+      knowledgeHierarchy:null,
+      examLength:null,
+      updatedUser:1,
       disabled: false,
       details:null,
       number:0,
@@ -196,9 +197,9 @@ export default {
       this.number = this.details.length
     },
     handleput(){
-      // let examLevelToNum = parseInt(this.examLevel)
-      let params = new URLSearchParams();
+        let params = new URLSearchParams();
         // params.append("manageUnit", parseInt(this.manageUnit));  机构代码
+        params.append("id", this.id); 
         params.append("examLevel", parseInt(this.examLevel));  // int 
         params.append("signRequirement", parseInt(this.signRequirement));  //int
         params.append("itemDifficulty",  this.itemDifficulty);  //varchar
@@ -209,21 +210,35 @@ export default {
         params.append("details", this.details);
         params.append("updatedUser", this.updatedUser);   //????????????修改人
         params.append("dataType", this.dataType);  //int 
-        this.$http.post("/api/standard/add_standard", params).then(res => {
+        this.$http.post("/api/standard/edit_standard", params).then(res => {
           console.log(res);
         });
         this.$router.push({path: "/standardmanage"})
     }
   },
- 
-};
+  created(){
+      let id = this.$route.query.id;
+      this.id = id;
+      let url = '/api/standard/standard_detail?id='+id
+      this.$http.get(url).then(res => {
+        console.log(res.data.data);
+        let rst = res.data.data;
+        //处理数据
+        this.examLevel = rst.examLevel +'级'
+        this.signRequirement = rst.signRequirement+'级'
+        this.itemDifficulty = rst.itemDifficulty
+        this.certificationServiceFee = rst.certificationServiceFee
+        this.examServiceFee = rst.examServiceFee
+        this.examLength = rst.examLength
+        this.details = rst.details
+        this.knowledgeHierarchy = rst.knowledgeHierarchy.split(',').splice(0,5)
+        this.number = rst.details.length
+        })
+  }
+}
 </script>
 
-
-
-
 <style rel='stylesheet/scss' lang="scss">
-
 .el-tabs--border-card>.el-tabs__content{
   padding: 0;
 }
@@ -311,7 +326,6 @@ export default {
       & > p {
         padding-left: 7px;
         width: 112px;
-        
         font-size: 16px;
       }
     }
@@ -342,7 +356,6 @@ export default {
       color:#1f91b5;
     }
   }
-
   .el-select {
     width: 100%;
     background: #f8f8f8;
@@ -351,8 +364,6 @@ export default {
     color: #000;
   }
 }
-
-
 </style>
 
 

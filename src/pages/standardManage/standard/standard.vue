@@ -2,7 +2,7 @@
     <div class="standard">
         <div class="top">
             <el-button type="primary" icon="el-icon-plus"  round @click="handleAddStandard">新增标准</el-button>
-            <el-select  v-model="value" placeholder="全部管理单位">
+            <el-select  v-model="value" placeholder="全部管理单位" @change="changeSearch">
                 <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -10,7 +10,7 @@
                 :value="item.value">
                 </el-option>
             </el-select>
-            <p>共有<span>10</span>/<span>10</span>条结果</p>
+            <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
         </div>
 
     <!-- 表格数据部分 -->
@@ -32,6 +32,7 @@
                 <el-table-column
                 prop="examLevel"
                 label="级别"
+                sortable  
                 width="78">
                 </el-table-column>
                 <el-table-column
@@ -72,8 +73,8 @@
                 <el-table-column
                 label="管理操作">
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error" @click.prevent="freezeData(scope.row.id)" >修改</el-button>
-                    <el-button type="text" icon="el-icon-error" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                    <el-button type="text" icon="el-icon-error iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" >修改</el-button>
+                    <el-button type="text" icon="el-icon-error iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
                 </template>
                 </el-table-column >
             </el-table>
@@ -82,6 +83,7 @@
                 background
                 :total="total" 
                 layout="prev, pager, next"
+                :current-page="currentPage"
                 @current-change="handleCurrentChange"
                 >
                 </el-pagination>
@@ -97,158 +99,112 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 1,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 2,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 3,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 4,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 5,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 6,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 7,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 8,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 9,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        },
-        {
-          certificationServiceFee: 200,
-          examLength: "45分钟",
-          examLevel: "10级",
-          examServiceFee: 200,
-          id: 10,
-          itemDifficulty: "15级",
-          knowledgeHierarchy: "中盘2/布局2/官子2/死活2/对弈1",
-          manageUnit: "黑龙江围棋协会",
-          updatedTime: "2019-01-31",
-          updatedUser: "张老师"
-        }
+       
       ],
       options: [
         {
-          value: "1",
+          value: "中国围棋协会",
           label: "中国围棋协会"
         },
         {
-          value: "2",
+          value: "上海围棋协会",
           label: "上海围棋协会"
         },
         {
-          value: "3",
+          value: "河北围棋协会",
           label: "河北围棋协会"
         },
         {
-          value: "4",
+          value: "河南围棋协会",
           label: "河南围棋协会"
         },
         {
-          value: "5",
+          value: "北京围棋协会",
           label: "北京围棋协会"
         }
       ],
-      total: 10,
-      value: ""
+      total: null,
+      value: "",
+      dataType:1,
+      currentPage: 1,
+      pageSize: 10,
+      totalPage: null,
+      total: null,
     };
   },
   methods: {
     handleAddStandard() {
       this.$router.push({path: '/addStandard' })
     },
-    handleCurrentChange() {}
+    handleCurrentChange(val) {
+      let params = new URLSearchParams();
+      params.append("dataType", this.dataType);
+      params.append("userId", 1);
+      params.append("page", val);
+      this.getData("/api/standard/standard_list", { params });
+    },
+    getData(url,params){
+        this.tableData=null;
+        this.$http.get(url,params).then(res => {
+            // console.log(res.data.data);
+            this.total = res.data.data.total;
+            let rst = res.data.data.rows;
+            this.tableData = rst;
+            //处理数据
+            for(let i = 0 ;  i< this.tableData.length; i++){
+              this.tableData[i].examLevel = rst[i].examLevel +'级'
+              this.tableData[i].itemDifficulty = rst[i].itemDifficulty +'级'
+              this.tableData[i].knowledgeHierarchy = rst[i].knowledgeHierarchy.replace(/,/g,'/')
+              // this.tableData[i].updatedUser = rst[i].updatedUser  
+              //处理时间
+              let time = rst[i].updatedTime;
+              let d = new Date(time);
+              let times =
+                  d.getFullYear() +"-" +(d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1): d.getMonth() + 1) +
+                    "-" +
+                  (d.getDate() < 10 ? "0" + d.getDate() : d.getDate() + 1);
+               this.tableData[i].updatedTime = times 
+            }
+        })
+    },
+    changeSearch(val){
+       let params = new URLSearchParams();
+       if(val =='中国围棋协会'){
+         val = 0;
+         console.log(val)
+       }else if(val =='上海围棋协会'){
+         val = 1;
+       }else if(val =='河北围棋协会'){
+         val = 2;
+       }else if(val =='河南围棋协会'){
+         val = 3;
+       }else{
+         val = 4;
+       }
+       params.append("userId", 1);
+       params.append("manageUnit", val);    // 管理单位对应的数字编码
+       this.getData("/api/standard/standard_list", { params });
+      
+    },
+    // 修改对应的数据
+    modifyData(id){
+      this.$router.push({path:'/updateStandard',query: { id: id }})
+      // console.log(id)
+    },
+    //查看详情页
+    handldetails(id){
+      this.$router.push({path:'/standardDetail',query: { id: id }})
+      // console.log(id)
+    }
+  },
+  
+  created(){
+    //进入页面显示考题标准信息
+    let params = new URLSearchParams();
+    params.append("userId", 1);
+    params.append("dataType", this.dataType);
+    this.getData("/api/standard/standard_list", { params });
+    
   }
 };
 </script>
@@ -304,59 +260,6 @@ export default {
     margin-right: 27px;
     font-size: 14px;
     color: #000;
-  }
-}
-
-// 表格部分样式
-.tabs-data {
-  width: 100%;
-  height: 100%;
-  padding: 0 20px 60px 20px;
-  background: #ffffff;
-  // overflow-x: hidden;
-  .el-table th {
-    width: 100%;
-    height: 55px;
-    color: #7c7c7c;
-    font-size: 14px;
-    background-color: #e5e5e5;
-  }
-  .el-table tr {
-    width: 100%;
-    font-size: 14px;
-    color: #000;
-    background-color: #f2f2f2;
-  }
-  // 控制表格的tr行高
-  .el-table__body tr,
-  .el-table__body td {
-    padding: 0;
-    height: 55px;
-  }
-
-  // 分页样式
-  .el-pagination {
-    text-align: center;
-    margin-top: 58px;
-    & li.active {
-      background: #1f91b5 !important;
-    }
-    .el-pager li {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 34px;
-      background: #e9e9eb;
-    }
-    .btn-prev,
-    .btn-next {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #1f91b5;
-      color: #fff;
-    }
   }
 }
 </style>

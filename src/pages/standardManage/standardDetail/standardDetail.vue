@@ -8,63 +8,61 @@
                 <div class="testLevel">
                     <span class="commontips">考试级别:</span>
                     <el-select v-model="examLevel" placeholder="请选择" :disabled="disabled">
-                        <el-option
+                        <!-- <el-option
                         v-for="item in options1"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
-                        </el-option>
+                        </el-option> -->
                     </el-select>
                 </div>
 
                 <div class="testLevel">
                     <span class="commontips">报考条件:</span>
                     <el-select v-model="signRequirement" placeholder="请选择"  :disabled="disabled">
-                        <el-option
+                        <!-- <el-option
                         v-for="item in options2"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
-                        </el-option>
+                        </el-option> -->
                     </el-select>
                 </div>
 
-                <!-- <div class="testLevel">
-                    <span class="commontips">题库难度:</span>
-                      <el-input v-model="itemDifficulty"></el-input>
-                    <div class="addLevel">+</div>
-                    <div class="reduceLevel">_</div>
-                </div> -->
+                
                 <div class="testLevel">
                     <span class="commontips">题库难度:</span>
-                    <el-input-number v-model="itemDifficulty" controls-position="right" @change="handleChange" 
-                    :min="5" :max="25" label="级" :step="5"
-                    >
-                    </el-input-number>
+                    <el-select v-model="itemDifficulty" placeholder="请选择"  :disabled="disabled"></el-select>
+                    <!-- <el-input-number v-model="itemDifficulty" controls-position="right"  :disabled="disabled"></el-input-number> -->
                 </div>
 
                 <div class="knowledgeHierarchy">
                   <span>知识体系:</span> 
                   <p>
                     <span v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item}}道</span>
+                    <!-- <span>中盘2道</span>
+                    <span>布局2道</span>
+                    <span>官子2道</span>
+                    <span>死活2道</span>
+                    <span>对弈2道</span> -->
                   </p>
                 </div>
 
                  <div class="testTime">
                   <span>考试时长:</span> 
-                  <p v-html="examLength"></p>
+                  <p v-html='examLength'></p>
                 </div>
 
             </div>
 
                 <div class="examFee">
                     <span>考试服务费:（元）</span>
-                    <el-input v-model.number="examServiceFee"></el-input>
+                    <el-input v-model="examServiceFee" :disabled="disabled"></el-input>
                 </div>
 
                 <div class="examFee">
                     <span>认证服务费:（元）</span>
-                    <el-input v-model.number="certificationServiceFee"></el-input>
+                    <el-input v-model="certificationServiceFee" :disabled="disabled"></el-input>
                 </div>
 
                 <div class="examFee detailInfo">
@@ -73,12 +71,12 @@
                       type="textarea"
                       :autosize="{ minRows: 4, maxRows: 4}"
                       maxlength="200"
-                      @input = "descInput"
                       v-model="details"
+                      :disabled="disabled"
                       >
                     </el-input>
                     <p>已输入<span v-html="number"></span>个字,不得超过200字</p>
-                    <div style="text-align:center;width:100%;">
+                    <!-- <div style="text-align:center;width:100%;">
                       <el-button type="primary" round 
                         style="background:#1f91b5;
                         width:145px;
@@ -86,8 +84,8 @@
                         font-size:16px;
                         margin-top:38px;"
                         @click="handleput"  
-                      >提交</el-button>
-                    </div>
+                      >回到上一页</el-button>
+                    </div> -->
                 </div>
 
         </div>
@@ -106,134 +104,58 @@ export default {
   },
   data() {
     return {
-      titleTop: "新增标准",
-      dataType:1,
+      titleTop: "考题标准详情",
       examLevel: null,
       signRequirement: null,
       itemDifficulty: null,
       examServiceFee: null,
       certificationServiceFee:null,
-      knowledgeHierarchy:['中盘2','布局2','官子2','死活2','对弈2'],
-      examLength:"45分钟",
-      updatedUser:'张老师',
-      disabled: false,
-      details:null,
-      number:0,
-      options1: [
-        {
-          value: "20级",
-          label: "20级"
-        },
-        {
-          value: "10级",
-          label: "10级"
-        },
-        {
-          value: "9级",
-          label: "9级"
-        },
-        {
-          value: "8级",
-          label: "8级"
-        },
-        {
-          value: "5级",
-          label: "5级"
-        }
-      ],
-      options2: [
-        {
-          value: "25级",
-          label: "25级"
-        },
-        {
-          value: "20级",
-          label: "20级"
-        },
-        {
-          value: "15级",
-          label: "15级"
-        },
-        {
-          value: "10级",
-          label: "10级"
-        },
-        {
-          value: "5级",
-          label: "5级"
-        }
-      ],
-      options3: [
-        {
-          value: "25级",
-          label: "25级"
-        },
-        {
-          value: "20级",
-          label: "20级"
-        },
-        {
-          value: "15级",
-          label: "15级"
-        },
-        {
-          value: "10级",
-          label: "10级"
-        },
-        {
-          value: "5级",
-          label: "5级"
-        }
-      ]
+      knowledgeHierarchy:null,
+      examLength:null,
+      disabled: true,
+      details: null,
+      number: 0
     };
   },
   methods: {
-    handleChange(value) {
-      console.log(value);
-    },
-    descInput(){
-      details:null,
-      this.number = this.details.length
-    },
-    handleput(){
-      // let examLevelToNum = parseInt(this.examLevel)
-      let params = new URLSearchParams();
-        // params.append("manageUnit", parseInt(this.manageUnit));  机构代码
-        params.append("examLevel", parseInt(this.examLevel));  // int 
-        params.append("signRequirement", parseInt(this.signRequirement));  //int
-        params.append("itemDifficulty",  this.itemDifficulty);  //varchar
-        params.append("knowledgeHierarchy", this.knowledgeHierarchy); //varchar     //??????????????????????处理数据
-        params.append("examLength", this.examLength);  //varchar
-        params.append("examServiceFee", parseInt(this.examServiceFee));  //int 
-        params.append("certificationServiceFee", parseInt(this.certificationServiceFee));  //int 
-        params.append("details", this.details);
-        params.append("updatedUser", this.updatedUser);   //????????????修改人
-        params.append("dataType", this.dataType);  //int 
-        this.$http.post("/api/standard/add_standard", params).then(res => {
-          console.log(res);
-        });
-        this.$router.push({path: "/standardmanage"})
-    }
+    handleput() {}
   },
- 
+  created() {
+    let id = this.$route.query.id;
+    let params = new URLSearchParams();
+    params.append("id", id);
+    this.$http.get("/api/standard/standard_detail",{params}).then(res => {
+        console.log(res.data.data);
+        let rst = res.data.data;
+        //处理数据
+        this.examLevel = rst.examLevel +'级'
+        this.signRequirement = rst.signRequirement+'级'
+        this.itemDifficulty = rst.itemDifficulty+'级'
+        this.certificationServiceFee = rst.certificationServiceFee
+        this.examServiceFee = rst.examServiceFee
+        this.examLength = rst.examLength
+        this.details = rst.details
+        this.knowledgeHierarchy = rst.knowledgeHierarchy.split(',').splice(0,5)
+        this.number = rst.details.length
+        console.log(this.knowledgeHierarchy)
+        })
+  }
+  
 };
 </script>
 
 
-
-
 <style rel='stylesheet/scss' lang="scss">
-
-.el-tabs--border-card>.el-tabs__content{
+.el-tabs--border-card > .el-tabs__content {
   padding: 0;
 }
-#standardTemplateBox{
+#standardTemplateBox {
   width: 100%;
   background: #f0f0f0;
 }
-.standardTemplate{
-    width: 1042px;
-    height: auto;
+.standardTemplate {
+  width: 1042px;
+  height: auto;
 }
 .addStandard {
   width: 952px;
@@ -265,13 +187,13 @@ export default {
         padding-left: 7px;
       }
     }
-   
+
     .knowledgeHierarchy {
       width: 100%;
       height: 121px;
       float: left;
       margin-bottom: 36px;
-      &>span{
+      & > span {
         width: 164px;
         height: 17px;
         display: block;
@@ -298,7 +220,7 @@ export default {
     .testTime {
       float: left;
       height: 53px;
-      &>span{
+      & > span {
         width: 164px;
         height: 17px;
         display: block;
@@ -311,7 +233,7 @@ export default {
       & > p {
         padding-left: 7px;
         width: 112px;
-        
+
         font-size: 16px;
       }
     }
@@ -330,16 +252,16 @@ export default {
     }
   }
 
-  .detailInfo{
+  .detailInfo {
     width: 100%;
     height: 125px;
     margin-bottom: 34px;
-    &>p{
+    & > p {
       float: right;
       height: 42px;
       line-height: 42px;
       font-size: 14px;
-      color:#1f91b5;
+      color: #1f91b5;
     }
   }
 
@@ -351,8 +273,6 @@ export default {
     color: #000;
   }
 }
-
-
 </style>
 
 
