@@ -112,7 +112,7 @@ export default {
         getData(url,params){
             this.messageList =[];
             this.$http.get(url,params).then( res => {
-                console.log(res)
+                // console.log(res)
                 this.total = res.data.data.total;
                 this.totalPage = res.data.data.totalPage;
                 this.pageSize = res.data.data.pageSize;

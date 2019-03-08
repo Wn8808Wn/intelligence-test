@@ -8,7 +8,7 @@
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
         </div>
         
-        <div class="tabs-data">     
+        <div class="tabs-data" id="emailBox">     
             <el-table
             :data="tableData"
             stripe
@@ -49,7 +49,6 @@
                 width="80">
                 </el-table-column>
 
-
                 <el-table-column
                 prop="examTime"
                 label="考试时间"
@@ -69,8 +68,18 @@
                 label="操作"
                >
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error iconfont icon-xiangqing"  @click.prevent="handlSent(scope.row.id)">发送</el-button>
+                    <el-button type="text" icon="el-icon-error iconfont icon-fasong"  @click.prevent="handlSent(scope.row.id)">发送</el-button>
                     <el-button type="text" icon="el-icon-error iconfont icon-xiangqing"  @click.prevent="handlDetails(scope.row.id)">详情</el-button>
+                    <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%'>
+                        <el-radio  v-model="radio" @click="checkedButton"><el-input  v-model="email" placeholder="同时发送至用户邮箱:"></el-input></el-radio>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="dialogFormVisible = false">发 送</el-button>
+                    </div>
+                    </el-dialog>
+
+
+
+
                 </template>
                 </el-table-column >
             </el-table>
@@ -114,10 +123,74 @@ export default {
                     examTime:'2019-01-01 8:00',
                     dataStatus:1
                 },
+                {
+                    manageUnit:'黑龙江省围棋协会',
+                    playerName: "刘强",
+                    certificateNo:21090419888121901234,
+                    chessLevel:"5级",
+                    phone:18210465511,
+                    examLevel:"1段",
+                    examTime:'2019-01-01 8:00',
+                    dataStatus:0
+                },
+                {
+                    manageUnit:'黑龙江省围棋协会',
+                    playerName: "刘强",
+                    certificateNo:21090419888121901234,
+                    chessLevel:"5级",
+                    phone:18210465511,
+                    examLevel:"1段",
+                    examTime:'2019-01-01 8:00',
+                    dataStatus:1
+                },
+                 {
+                    manageUnit:'黑龙江省围棋协会',
+                    playerName: "刘强",
+                    certificateNo:21090419888121901234,
+                    chessLevel:"5级",
+                    phone:18210465511,
+                    examLevel:"1段",
+                    examTime:'2019-01-01 8:00',
+                    dataStatus:0
+                },
+                {
+                    manageUnit:'黑龙江省围棋协会',
+                    playerName: "刘强",
+                    certificateNo:21090419888121901234,
+                    chessLevel:"5级",
+                    phone:18210465511,
+                    examLevel:"1段",
+                    examTime:'2019-01-01 8:00',
+                    dataStatus:1
+                },
+                 {
+                    manageUnit:'黑龙江省围棋协会',
+                    playerName: "刘强",
+                    certificateNo:21090419888121901234,
+                    chessLevel:"5级",
+                    phone:18210465511,
+                    examLevel:"1段",
+                    examTime:'2019-01-01 8:00',
+                    dataStatus:0
+                },
+                {
+                    manageUnit:'黑龙江省围棋协会',
+                    playerName: "刘强",
+                    certificateNo:21090419888121901234,
+                    chessLevel:"5级",
+                    phone:18210465511,
+                    examLevel:"1段",
+                    examTime:'2019-01-01 8:00',
+                    dataStatus:1
+                },
             ],
+            title:'重新发送准考证，用户可在报名端已报考项目内查看',
             total:10,
             currentPage:1,
-            nameNum:''
+            nameNum:'',
+            dialogFormVisible: false,
+            email:'',
+            radio:1,
         }
     },
     methods:{
@@ -125,15 +198,45 @@ export default {
 
         },
         handlSent(){
+            this.dialogFormVisible = true;
 
         },
-        handleCurrentChange(){
+        handleCurrentChange(val){
 
         },
         searchData(){
             
+        },
+        checkedButton(){
         }
     }
 
 }
 </script>
+
+<style  lang="scss" scoped>
+.ticketList{
+    #emailBox{
+        .el-radio{
+            width: 88%;
+            & /deep/ .el-radio__inner{
+                width: 20px;
+                height: 20px;
+            }
+            & /deep/ .el-radio__inner::after {
+                width: 8px;
+                height: 8px;
+                background-color: #1F91B5;
+            }
+            & /deep/ .el-radio__input.is-checked .el-radio__inner {
+                border-color: #48BDD1;
+                background: #B3E2ED;
+            }
+        }
+        
+    }
+}
+
+
+
+</style>
