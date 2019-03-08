@@ -70,15 +70,29 @@
                 <template slot-scope="scope">
                     <el-button type="text" icon="el-icon-error iconfont icon-fasong"  @click.prevent="handlSent(scope.row.id)">发送</el-button>
                     <el-button type="text" icon="el-icon-error iconfont icon-xiangqing"  @click.prevent="handlDetails(scope.row.id)">详情</el-button>
-                    <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%'>
-                        <el-radio  v-model="radio" @click="checkedButton"><el-input  v-model="email" placeholder="同时发送至用户邮箱:"></el-input></el-radio>
+                    
+                    <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%' :modal= false>
+                        <el-radio  v-model="radio" @click.native="checkedButton"><el-input  v-model="email" placeholder="同时发送至用户邮箱:"></el-input></el-radio>
                     <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="dialogFormVisible = false">发 送</el-button>
                     </div>
                     </el-dialog>
 
-
-
+                    <el-dialog 
+                    class="ticketPage"
+                    :visible.sync="dialogVisible"
+                    :modal= false
+                    center
+                    width="50%"
+                    >
+                    <div class="titleTop">
+                        <span>准考证</span>
+                        <p>2019年中国围棋协会段级位标准化考试</p>
+                    </div>
+                    
+                    <span slot="footer" class="dialog-footer">
+                    </span>
+                    </el-dialog>
 
                 </template>
                 </el-table-column >
@@ -93,10 +107,7 @@
             </el-pagination>
         </div>
     </div>
-
-
 </template>
-
 
 <script>
 export default {
@@ -189,25 +200,30 @@ export default {
             currentPage:1,
             nameNum:'',
             dialogFormVisible: false,
+            dialogVisible:false,
             email:'',
-            radio:1,
+            radio:false,
         }
     },
     methods:{
         handlDetails(){
-
+            this.dialogVisible = true;
         },
         handlSent(){
             this.dialogFormVisible = true;
-
+            if(this.radio){
+                // 发送邮箱逻辑
+            }
         },
         handleCurrentChange(val){
 
         },
         searchData(){
+
             
         },
         checkedButton(){
+            this.radio =!this.radio
         }
     }
 
@@ -233,7 +249,23 @@ export default {
                 background: #B3E2ED;
             }
         }
-        
+        .ticketPage{
+            .el-dialog__header{
+                padding: 0 30px 0 0;
+            }
+
+            .titleTop{
+                width: 100%;
+                height: 134px;
+                background: salmon;
+                &>span{
+                    display: inline;
+                    width: 200px;
+                    height: 200px;
+                    background: #1F91B5;
+                }
+            }
+        }
     }
 }
 
