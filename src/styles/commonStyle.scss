@@ -1,3 +1,17 @@
+
+ .clearfix:after{
+    /*添加一个内容*/
+    content: "";
+    /*转换为一个块元素*/
+    display: block;
+    /*清除两侧的浮动*/
+    clear: both;
+}
+
+
+
+
+
 // 表格,分页样式  
 .tabs-data {
   width: calc(100% - 40px);
@@ -174,7 +188,7 @@
     border: none;
     float: left;
     margin: 34px 20px 22px 21px;
-    // padding: 0 20px;
+    padding: 0 20px;
     i.el-icon-plus {
       // margin-left: 8px;
       margin-right: 16px;

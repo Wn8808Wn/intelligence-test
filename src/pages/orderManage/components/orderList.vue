@@ -152,20 +152,6 @@ export default {
     ...mapActions({
       sendID : "modify"
     }),
-    getTimeStyle(time) {
-      let d = new Date(time);
-      let times =
-        d.getFullYear() +
-        "-" +
-        (d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1) +
-        "-" +
-        (d.getDate() < 10 ? "0" + d.getDate() : d.getDate()) +
-        " " +
-        (d.getHours() < 10 ? "0" + d.getHours() : d.getHours()) +
-        ":" +
-        (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
-      return times;
-    },
     getData(url, params) {
       this.$http.get(url, params).then(res => {
         this.tableData = [];
@@ -182,7 +168,7 @@ export default {
             item.payTime = this.getTimeStyle(item.payTime);
           });
         } else {
-          console.log(rst);
+          console.log("err");
         }
       });
     },
@@ -193,11 +179,9 @@ export default {
       this.getData("/api/order/order_list", { params });
     },
     searchData() {
-      alert("后期判断订单编号和用户名");
       //输入订单编号或用户名搜索相对应的考场
       let params = new URLSearchParams();
-      params.append("orderNo", this.orderNumber);
-      // params.append("userName", this.userName);
+      params.append("str", this.orderNumber) 
       params.append("userId", 1);
       this.getData("/api/order/order_list", { params });
     },

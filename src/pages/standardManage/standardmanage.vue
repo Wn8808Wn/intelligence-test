@@ -36,6 +36,7 @@ export default {
 //  标签页样式
 .standardmanage {
   width: 100%;
-  height: 916px;
+//   height: 916px;
+  height: 100%;
 }
 </style>

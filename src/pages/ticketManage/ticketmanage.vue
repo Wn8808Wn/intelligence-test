@@ -34,6 +34,7 @@ export default {
 //  标签页样式
 .ticketmanage {
  width: 1188px;
- height: 916px;
+ min-height: 916px;
+ overflow-y: auto;
 }
 </style>

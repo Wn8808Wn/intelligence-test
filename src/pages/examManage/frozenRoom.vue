@@ -21,9 +21,9 @@
                 </el-table-column>
 
                 <el-table-column
-                prop="seatSize"
                 label="座位数"
                 width="120">
+                <template slot-scope="scope">{{ scope.row.seatSize+'个' }}</template>
                 </el-table-column>
 
                 <el-table-column
@@ -61,9 +61,7 @@
         >
         </el-pagination>
         </div>
-
     </div>
-    
 </template>
 
 <script>
@@ -97,39 +95,15 @@ export default {
           this.currentPage = res.data.data.page;
           //列表数据
           let rst = res.data.data.rows;
-          if(rst){
-            // console.log(rst)
-          //转换日期格式   座位数(加单位'个')   地址缩写
-            for (let i = 0; i < rst.length; i++) {
-            //转换日期格式
-            let time = rst[i].buildDate;
-            let d = new Date(time);
-            let times =
-              d.getFullYear() +
-              "-" +
-              (d.getMonth() + 1 < 10
-                ? "0" + (d.getMonth() + 1)
-                : d.getMonth() + 1) +
-              "-" +
-              (d.getDate() < 10 ? "0" + d.getDate() : d.getDate() + 1);
-            rst[i].buildDate = times;
-            // 转换座位数
-            let seatSizes = rst[i].seatSize + "个";
-            rst[i].seatSize = seatSizes;
-            //地址缩写
-            rst[i].addressabbr = rst[i].province + rst[i].city + rst[i].distric;
-            this.tableData.push(rst[i]);
-          }
-
-          }else{
-
-          }
-          
-          
-        })
-        .catch(err => {
-          console.log(err);
-        });
+          this.tableData = rst 
+          this.tableData.forEach( (item,index) =>{
+              item.buildDate = this.getTimeStyle(item.buildDate)
+              item.addressabbr = item.province+item.city+item.distric
+          })
+    })
+      .catch(err => {
+        console.log(err);
+      });
     },
     handleCurrentChange:_debounce(function(val) {
       //分页切换当前页
@@ -166,7 +140,6 @@ export default {
             message: "已取消恢复"
           });
         });
-
     },
     handldetails(id) {
       //查看详细页

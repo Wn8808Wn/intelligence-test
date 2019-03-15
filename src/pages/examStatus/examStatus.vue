@@ -146,24 +146,6 @@ export default {
       totalPage: '',
       total: null,
       tableData: [
-        // {
-        //   province:'河北省',
-        //   manageUnit:"河北省围棋协会",
-        //   playerName:'张三',
-        //   chessLevel:'15k',
-        //   examLevel:"20k",
-        //   examTime:"2018-12-09 08:20",
-        //   examResult:0
-        // },
-        // {
-        //   province:'河北省',
-        //   manageUnit:"河北省围棋协会",
-        //   playerName:'张三',
-        //   chessLevel:'15k',
-        //   examLevel:"24d",
-        //   examTime:"2018-12-09 08:20",
-        //   examResult:1
-        // }
       ],
       province:'',
       provinces: [
@@ -248,16 +230,9 @@ export default {
     };
   },
   methods: {
-    getTimeStyle(time){
-      let d = new Date(time);
-      let times =
-      d.getFullYear() +"-" +(d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1): d.getMonth() + 1) +
-       "-" +(d.getDate() < 10 ? "0" + d.getDate() : d.getDate())+' '+(d.getHours() < 10 ? "0" + d.getHours() : d.getHours())
-       +":"+(d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes())
-       return times;
-    },
     getData(url,params){
       this.$http.get(url,params).then(res => {
+        // console.log(1111)
         this.tableData =[];
         // console.log(res.data.data)
         this.total = res.data.data.total;
@@ -265,10 +240,11 @@ export default {
         this.pageSize = res.data.data.pageSize;
         this.currentPage = res.data.data.page;
         let rst = res.data.data.rows
-        this.tableData = rst;
-        this.tableData.forEach((item,index)=>{
-          item.examTime = this.getTimeStyle(item.examTime);
-        })
+          this.tableData = rst;
+          this.tableData.forEach((item,index)=>{
+            item.examTime = this.getTimeStyle(item.examTime);
+          })
+        
        
       })
     },
@@ -278,15 +254,12 @@ export default {
       params.append("userId", 1);
       this.getData("/api/order/order_list", { params });
     },
-    searchData() {
+    searchData(){
       //输入考生姓名或证件号搜索相对应的考场 
       let params = new URLSearchParams();
-      if(isNaN(parseInt(this.inputVal))){
-          params.append("playerName", this.inputVal);
-        }else{
-          params.append("certificateNo", this.inputVal);
-        }
-        this.getData("/api/exam/status_list", { params }); 
+      params.append("userId", 1);
+      params.append("str", this.inputVal);
+      this.getData("/api/exam/status_list", { params }); 
     },
     changeProvince(data){
       let params = new URLSearchParams();
@@ -406,6 +379,7 @@ export default {
   },
   created(){
     //页面进入请求数据
+    // console.log("created")
     let params = new URLSearchParams();
     params.append("userId", 1);
     // params.append("playerName", '');

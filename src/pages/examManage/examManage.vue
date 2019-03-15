@@ -36,8 +36,11 @@ export default {
 
 <style rel='stylesheet/scss' lang="scss" >
 .exammanage {
-  width: 100%;
-  height: 916px;
+  // width: 100%;
+  overflow: hidden;
+  max-height: 926px;
+  margin-right: 319px;
+  padding-top: 12px;
 }
 </style>
 

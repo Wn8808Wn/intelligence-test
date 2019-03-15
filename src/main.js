@@ -18,7 +18,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 import  "./styles/commonStyle.scss"
 
 
-
 // ajax
 // import http from './config/api'
 
@@ -27,6 +26,10 @@ import store from './store/index'
 import axios from 'axios'
 Vue.prototype.$http = axios
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+
+import getTimeStyle from './utils/public'
+
+Vue.prototype.getTimeStyle = getTimeStyle
 
 Vue.use(ElementUI);
 

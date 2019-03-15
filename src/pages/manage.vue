@@ -76,7 +76,7 @@
             </div>
 
         </div>
-        <div class="right-box">
+        <div id="right-box">
             <router-view></router-view> 
         </div>
 
@@ -85,6 +85,7 @@
 
 
 <script>
+
 import "../assets/iconfont/iconfont.css"
 export default {
   data() {
@@ -106,13 +107,15 @@ export default {
 .fillcontain {
   width: 100%;
   height: 100%;
-  min-height: 820px;
+  min-height: 938px;
   background: #f0f0f0;
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow-y:auto;
   .left-box {
     width: 176px;
     height: 100%;
+    // min-height: 938px;
     float: left;
     margin-right: 13px;
     background: #07281f;
@@ -140,12 +143,6 @@ export default {
       padding-right: 0 !important;
       border-left: 3px solid #07281f;
       & > i {
-        margin-right: 19px;
-        margin-left: 18px;
-      }
-      & > img{
-        width: 18px;
-        height: 18px;
         margin-right: 19px;
         margin-left: 18px;
       }
@@ -179,12 +176,11 @@ export default {
       }
     }
   }
-  .right-box {
-    overflow: hidden;
-    margin-left: 0px;
-    height: 100%;
-    margin: 12px 319px 10px 13px;
+  #right-box {
+    margin-left:176px;
+    min-height: 938px;
     background: #f0f0f0;
+    // background: red;
   }
 }
 //白色三角形
@@ -195,9 +191,8 @@ export default {
     content: "";
     width: 0;
     height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-right: 12px solid #fff;
+    border: 12px  solid #fff;
+    border-color: transparent #fff transparent transparent;
     position: absolute;
     top: 16px;
     right: 0; //根据三角形的位置，可以随意更改。

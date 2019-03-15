@@ -133,8 +133,6 @@ export default {
 }
 </script>
 
-
-
 <style rel='stylesheet/scss' lang="scss" >
 .el-tab-pane {
   background: #f0f0f0;

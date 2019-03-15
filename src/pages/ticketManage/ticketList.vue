@@ -2,12 +2,12 @@
     <div class="ticketList">
         <div class="top">
             <div class="search">
-                <input type="text" placeholder="请输入考场姓名/证件号"  v-model.trim="nameNum">
+                <input type="text" placeholder="请输入考生姓名/证件号"  v-model.trim="nameNum">
                 <el-button circle @click="searchData">搜索</el-button>
             </div>
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
         </div>
-        
+            
         <div class="tabs-data" id="emailBox">     
             <el-table
             :data="tableData"
@@ -68,32 +68,15 @@
                 label="操作"
                >
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error iconfont icon-fasong"  @click.prevent="handlSent(scope.row.id)">发送</el-button>
+                    <el-button type="text" icon="el-icon-error iconfont icon-fasong"  @click.prevent="dialogFormVisible = true">发送</el-button>
                     <el-button type="text" icon="el-icon-error iconfont icon-xiangqing"  @click.prevent="handlDetails(scope.row.id)">详情</el-button>
                     
                     <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%' :modal= false>
                         <el-radio  v-model="radio" @click.native="checkedButton"><el-input  v-model="email" placeholder="同时发送至用户邮箱:"></el-input></el-radio>
                     <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="dialogFormVisible = false">发 送</el-button>
+                        <el-button type="primary" @click="handlSent(scope.row.id)">发 送</el-button>
                     </div>
                     </el-dialog>
-
-                    <el-dialog 
-                    class="ticketPage"
-                    :visible.sync="dialogVisible"
-                    :modal= false
-                    center
-                    width="50%"
-                    >
-                    <div class="titleTop">
-                        <span>准考证</span>
-                        <p>2019年中国围棋协会段级位标准化考试</p>
-                    </div>
-                    
-                    <span slot="footer" class="dialog-footer">
-                    </span>
-                    </el-dialog>
-
                 </template>
                 </el-table-column >
             </el-table>
@@ -106,131 +89,180 @@
             >
             </el-pagination>
         </div>
+
+        <div  class="ticketDetails" v-if="showDetailPage">
+            <div class="titleTop">
+                <div>准考证</div>
+                <p>2019年中国围棋协会段级位标准化考试</p>
+                <i class="el-icon-close" @click="closeBtn"></i>
+            </div>
+            <div class="examerInfo">
+                <div class="lf">
+                    <p>姓　　名:<span>{{this.examerInfo.playerName}}</span></p>
+                    <p>性　　别:<span>{{this.examerInfo.gender == 0? '女' : '男'}}</span> 证件类型:<span>{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
+                    <p>报考等级:<span>{{this.examerInfo.examLevel}}</span></p>
+                    <p><i class="threeLetter">证件号</i>:<span>{{this.examerInfo.certificateNo}}</span></p>
+                    <p>考试时间:<span>{{this.examerInfo.examTime}}</span></p>
+                    <p>考试地点:<span>{{this.examerInfo.address}}</span></p>
+                </div>
+                <div id="qrcode">
+
+                </div>
+            </div>
+             <div class="testInstructions">
+                <h3>考试须知:</h3>
+                <p>1、 考试可提前15分钟到场；迟到10分，考试资格作废，需重新报名。</p>
+                <p>2、 考试座位:无固定座位号，无人座位均可使用。</p>
+                <p>3、 考试流程</p>
+                    <li>(1) 找到座位</li>
+                    <li>(2) 确定考试设备开机</li>
+                    <li>(3) 准考证二维码对准镜头，进行身份认证</li>
+                    <li>(4) 扫码成功，开始答题</li>
+                    <div id="examSteps">
+                        <el-steps align-center>
+                        <el-step   description="找到座位"></el-step>
+                        <el-step   description="确认设备开机"></el-step>
+                        <el-step   description="准考证二维码扫描"></el-step>
+                        <el-step   description="答题"></el-step>
+                        </el-steps>
+                    </div>
+                <p>4、 现场除考试题相关问题，均可咨询监考老师。</p>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+import QRCode from 'qrcodejs2'
 export default {
     data(){
         return {
             tableData:[
-                {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:0
-                },
-                {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:1
-                },
-                {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:0
-                },
-                {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:1
-                },
-                 {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:0
-                },
-                {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:1
-                },
-                 {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:0
-                },
-                {
-                    manageUnit:'黑龙江省围棋协会',
-                    playerName: "刘强",
-                    certificateNo:21090419888121901234,
-                    chessLevel:"5级",
-                    phone:18210465511,
-                    examLevel:"1段",
-                    examTime:'2019-01-01 8:00',
-                    dataStatus:1
-                },
+                // {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // }
             ],
             title:'重新发送准考证，用户可在报名端已报考项目内查看',
             total:10,
             currentPage:1,
             nameNum:'',
             dialogFormVisible: false,
-            dialogVisible:false,
+            showDetailPage:false,
             email:'',
             radio:false,
+            examerInfo:{
+                playerName:'',
+                gender:'',
+                examLevel:'',
+                examTime:'',
+                address:'',
+                certificateType:'',
+                certificateNo:'',
+                examPermitNo:''
+            }
         }
     },
     methods:{
-        handlDetails(){
-            this.dialogVisible = true;
+        getData(url,params){
+            this.$http.get(url, params).then( (res) => {
+                console.log(res.data.data.rows)
+                let rst = res.data.data.rows 
+                this.tableData = rst 
+                this.tableData.forEach( (item,index) =>{
+                    item.examTime = this.getTimeStyle(item.examTime)
+                } )
+            }).catch( error =>{
+                console.log(error)
+            })
+        },
+        handlDetails(id){
+            this.showDetailPage = true;
+            let params = new URLSearchParams();
+            params.append("id",id);
+            params.append("userId", 1);
+            this.$http.get("/api/ticket/details_list", { params }).then( res => {
+                console.log(res.data.data)
+                let rst = res.data.data
+                this.examerInfo = rst;
+                this.examerInfo.examTime = this.getTimeStyle(rst.examTime)
+                this.getQrCode(this.examerInfo.examPermitNo)
+            } )
+        },
+        getQrCode(val) {
+            let qrcode = new QRCode('qrcode', {
+                width: 180,
+                height: 180,  // 高度  
+                text: val,  // 二维码内容
+            })
+	    },
+        closeBtn(){
+            this.showDetailPage = false;
         },
         handlSent(){
-            this.dialogFormVisible = true;
             if(this.radio){
+                var reg = new RegExp("^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$"); 
                 // 发送邮箱逻辑
+               if(this.email === ''){
+                   this.$message({
+                    message: '邮箱地址不能为空',
+                    type: 'warning'
+                    });
+                    return false
+               }
+               if( reg.test(this.email)) { 
+                   let params = new URLSearchParams();
+                   params.append("userId", 1);
+                   params.append("id", 1);
+                   params.append(email, this.email);
+                //    this.getData('/api/ /ticket/details_send',params) 
+               }else{
+                   //邮箱格式不正确
+               }
+            }else{
             }
+            this.dialogFormVisible = false;
         },
-        handleCurrentChange(val){
-
+        handleCurrentChange(val) {
+            let params = new URLSearchParams();
+            params.append("page",val);
+            params.append("userId", 1);
+            this.getData("/api/ticket/manage_list", { params });
         },
         searchData(){
-
-            
+            alert(this.nameNum)
+            let params = new URLSearchParams();
+            params.append("userId", 1);
+            params.append("id", 1);
+            params.append("str",this.nameNum)
+            this.getData('/api/ticket/manage_list', { params })
         },
         checkedButton(){
             this.radio =!this.radio
         }
+    },
+    watch:{
+        // radio(val,newval){
+        //     this.radio = newval; 
+        // }
+    },
+    mounted(){
+        let params = new URLSearchParams();
+        params.append("userId", 1);
+        params.append("id", 1);
+        this.getData('/api/ticket/manage_list', { params })
     }
-
 }
 </script>
 
 <style  lang="scss" scoped>
+
 .ticketList{
     #emailBox{
         .el-radio{
@@ -249,26 +281,135 @@ export default {
                 background: #B3E2ED;
             }
         }
-        .ticketPage{
-            .el-dialog__header{
-                padding: 0 30px 0 0;
+    }
+    .ticketDetails{
+        width: 690px;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 30%;
+        background: #ffffff;
+        z-index: 10;
+        .titleTop{
+            width: 100%;
+            height: calc( 14.4% - 55px);
+            padding: 17px  0 38px;
+            &>div{
+                width: 20%;
+                height: 80px;
+                line-height: 80px;
+                background: #000;
+                font-size: 34px;
+                color: #ffffff;
+                text-align: center;
+                float: left;
+                margin-left: 4.5%;
             }
-
-            .titleTop{
-                width: 100%;
-                height: 134px;
-                background: salmon;
-                &>span{
-                    display: inline;
-                    width: 200px;
-                    height: 200px;
-                    background: #1F91B5;
+            &>p{
+                font-size: 29px;
+                width: 42.6%;
+                float: left;
+                margin-left: 2%;
+                line-height: 41px;
+            }
+            &>i{
+                float: right;
+                margin-right: 2%;
+                font-size: 30px;
+                cursor: pointer;
+            }
+        }
+        .examerInfo{
+            width: 100%;
+            height: 40%;
+            background: #e5e5e5;
+            &>.lf{
+                width: 55.3%;
+                height: 81.5%;
+                margin-left: 6%;
+                padding: 27px 0 30px 0px;
+                float: left;
+                // background: sandybrown;
+                &>p{
+                    width: 100%;
+                    font-size: 20px;
+                    height: 48px;
+                    line-height: 48px;
+                    &>span:nth-of-type(1){
+                        margin-left: 26px
+                    }
+                    .threeLetter{
+                        letter-spacing:9px;
+                        margin-right:-9px;
+                    }
+                    
+                    &:nth-of-type(2){
+                       &>span:nth-of-type(1){
+                           margin-right: 20px
+                       }
+                    }
+                }
+            }
+            #qrcode{
+                width: 180px;
+                height: 180px;
+                float: left;
+                margin-top: 5%;
+                // background: red;
+                &>img{
+                    width: 100%;
+                    height: 100%;
+                    border: none;
                 }
             }
         }
+        .testInstructions{
+            width: calc( 100% -82px);
+            height: calc( 45.6% - 44px);
+            padding: 22px 41px;
+            &>h3{
+                width: 100%;
+                height: 44px;
+                line-height: 44px;
+                font-size: 20px;
+            }
+            &>p{
+                width: 100%;
+                height: 30px;
+                line-height: 30px;
+                font-size: 16px;
+                color: #838383;
+                
+            }
+            li{
+                width: calc(100% - 20px); 
+                height: 30px;
+                line-height: 30px;
+                font-size: 16px;
+                color: #838383;
+                list-style: none;
+                padding-left: 20px;
+                &:nth-of-type(4){
+                    margin-bottom: 20px;
+                }
+            }
+            #examSteps{
+                width: calc( 100% -20px);
+                padding-left: 20px;
+                & /deep/ .el-step__line{
+                    background-color:#838383;
+                }
+                 & /deep/ .el-step__head.is-wait {
+                    color:#838383;
+                    border-color: #838383;
+                }
+                 & /deep/ .el-step.is-center .el-step__description{
+                    padding-top: 15px;
+                    color:#838383;
+                }    
+            }
+
+        }
     }
 }
-
-
-
 </style>

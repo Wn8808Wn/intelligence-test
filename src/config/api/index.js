@@ -9,12 +9,12 @@ let errcallback;
 axios.interceptors.request.use(
   config => {
     // // 设置以 form 表单的形式提交参数，如果以 JSON 的形式提交表单，可忽略
-    if(config.method === 'post'){ 
-      // JSON 转换为 FormData 
-      const formData = new FormData();
-      Object.keys(config.data).forEach(key => formData.append(key, config.data[key])) 
-      config.data = formData 
-    }
+    // if(config.method === 'post'){ 
+    //   // JSON 转换为 FormData 
+    //   const formData = new FormData();
+    //   Object.keys(config.data).forEach(key => formData.append(key, config.data[key])) 
+    //   config.data = formData 
+    // }
     // 在发送请求之前做某件事
     // 若是有做鉴权token , 就给头部带上token
     // 若是需要跨站点,存放到 cookie 会好一点,限制也没那么多,有些浏览环境限制了 localstorage 的使用
@@ -39,55 +39,60 @@ axios.interceptors.request.use(
 // 返回状态判断(添加响应拦截器)
 axios.interceptors.response.use(
   res => {
-    lifeTime = JSON.parse(window.sessionStorage.getItem("lifeTime"));//秒
-    nowTime = parseInt(new Date().getTime() / 1000);// 当前时间(秒)
-    let refreshTime = Math.abs(lifeTime - Math.floor(nowTime));//还有多久过期
-    /* if (refreshTime <= 1800) {//连续调取数据30分钟，获取新的过期时间和token
-      let appId = sessionStorage.getItem('appid');
-      let appSecert = sessionStorage.getItem('appsecert');
-      let refreshToken = sessionStorage.getItem('refreshToken');
-      axios.post(`${getUrl}/v2/domian/GetUserRefreshTokenResponse`, {
-        "appid": appId,
-        "appsecert": appSecert,
-        "refreshToken": refreshToken
-      }).then((response) => {
-        res = response.data
-        if (res.status === 200 && res.ret === 0) {
-          let accessToken = res.data.accessToken;
-          let refreshToken = res.data.refreshToken;
-          let lifeTime = res.data.expiration;
-          sessionStorage.setItem('token', accessToken);//把token存到本地
-          sessionStorage.setItem('refreshToken', refreshToken)//获取的刷新token
-          sessionStorage.setItem('lifeTime', lifeTime);//过期时间戳
-        }
-      })
-    } */
+    // 设定过期时间，依据过期时间做判断是否从新回到登录页面需求()
+    // lifeTime = JSON.parse(window.sessionStorage.getItem("lifeTime"));//秒
+    // nowTime = parseInt(new Date().getTime() / 1000);// 当前时间(秒)
+    // let refreshTime = Math.abs(lifeTime - Math.floor(nowTime));//还有多久过期
+    //  if (refreshTime <= 1800) {//连续调取数据30分钟，获取新的过期时间和token
+    //   let appId = sessionStorage.getItem('appid');
+    //   let appSecert = sessionStorage.getItem('appsecert');
+    //   let refreshToken = sessionStorage.getItem('refreshToken');
+    //   axios.post(`${getUrl}/v2/domian/GetUserRefreshTokenResponse`, {
+    //     "appid": appId,
+    //     "appsecert": appSecert,
+    //     "refreshToken": refreshToken
+    //   }).then((response) => {
+    //     res = response.data
+    //     if (res.status === 200 && res.statusText === 'ok') {
+    //       let accessToken = res.data.accessToken;
+    //       let refreshToken = res.data.refreshToken;
+    //       let lifeTime = res.data.expiration;
+    //       sessionStorage.setItem('token', accessToken);//把token存到本地
+    //       sessionStorage.setItem('refreshToken', refreshToken)//获取的刷新token
+    //       sessionStorage.setItem('lifeTime', lifeTime);//过期时间戳
+    //     }
+    //   })
+    // } 
+
     // 若是接口访问的时候没有发现有鉴权的基础信息,直接返回登录页
     if (!window.sessionStorage.getItem("dsToken")) {
       //第一次登录时条件是成立的，但延时1秒跳转，此时还在login页，这个时间内又一次指向登录页，再跳转到首页不受影响
       router.push({ path: "/" });
      }
-    // if (res.data.status == 400 && res.data.ret == -1050) {
+      //如果没权限 跳转至登录页面（WN）
+    // if (res.status == 400 &&  ) {
     //   router.push({ path: "/" });
     //   Message({ //  饿了么的消息弹窗组件,类似toast
     //     showClose: true,
-    //     message: res.data.message,
+    //     message: res.message,
     //     type: "error"
     //   });
     // }
-   // 对响应数据做些事 下面是请求失败的时候提示
-    if (res.data.status == 400 && res.data.code == -1) {
+
+   // 对响应数据做些事 下面是请求成功的时候提示
+    if (res.status == 200 && res.statusText == 'ok') {
       return Promise.resolve(res);
     }
-    // if (res.data.ret != 0 && res.data.status != 200 && res.data.ret != -1 && res.data.status != 400) {
-    //   Message({ //  饿了么的消息弹窗组件,类似toast
-    //     showClose: true,
-    //     message: res.data.message,
-    //     type: "error"
-    //   });
-    //   return Promise.reject(res.data.message);
-    // }
-    // return res;
+  // 对响应数据做些事 下面是请求失败的时候提示
+    if (res.data && res.status !== 200 && res.statusText !== 'ok') {
+      Message({ //  饿了么的消息弹窗组件,类似toast
+        showClose: true,
+        // message: res.data.message,(未定义？？？)
+        type: "error"
+      });
+      return Promise.reject(res.message);
+    }
+    return res;
   },
   error => {
     // 用户登录的时候会拿到一个基础信息,比如用户名,token,过期时间戳 直接丢localStorage或者sessionStorage
@@ -156,20 +161,15 @@ class API {
     return axios.post(`${url}`, data).then(res => {
       console.log(res)
       //响应成功的处理
-      // if (res.code && res.code === 200) {
-      //   return callback(res)
-      // } else if (res.data === false) {
-      //   return callback(res)
-      // } else if (res.status === 500) {
-      //   return callback(res)
-      // } else if (res.status === 200) {
-      //   return callback(res)
-      // } else {
-      //   //响应失败的处理
-      //   //获取失败的返回值
-      //   errcallback && errcallback(res.message || {});
-      // }
-      // this.isLoading = false;
+      if (res.data && res.status === 200) {
+        return callback(res)
+      } 
+      else {
+        //响应失败的处理
+        //获取失败的返回值
+        errcallback && errcallback(res.message || {});
+      }
+      this.isLoading = false;
     }).catch(e => {
       console.log(e);
     });
