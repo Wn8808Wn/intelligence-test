@@ -1,6 +1,6 @@
 <template>
 <div id="orderDetails">
-    <common-top :titleTop="titleTop"></common-top>
+    <commonTop :titleTop="titleTop"></commonTop>
     <div class="tabs-data dataDetail" id="tableDetail">   
             <el-table
             :data="orderInfo"
@@ -38,6 +38,7 @@
                 </el-table-column>
             </el-table>    
     </div>
+
     <div class="examInfoBox" v-if="orderType == 0">
         <p>报考级别：<span>{{examLevel}}</span></p>
         <p>考试地点：<span>{{address}}</span>
@@ -53,7 +54,7 @@
 
     <div class="examerInfo" v-if="orderType == 0">
         <h3>考生信息</h3>
-        <div class="tabs-data" id="examerInfoDetail">   
+        <div class="tabs-data examerInfoDetail" id="orType0tabel">   
             <el-table
             :data="detailList"
             stripe
@@ -63,11 +64,17 @@
                 label="姓名"
                 width="106">
                 </el-table-column>
+
                 <el-table-column
-                prop="certificateType"
                 label="证件类型"
                 width="111">
+                 <template slot-scope="scope">
+                     <span v-if="scope.row.certificateType === 0">身份证</span>
+                     <span v-if="scope.row.certificateType === 1">港澳台身份证身份证</span>
+                 </template>
                 </el-table-column>
+
+
                 <el-table-column
                 prop="certificateNo"
                 label="证件号"
@@ -107,7 +114,7 @@
 
     <div class="examerInfo examInfoType2" v-if="orderType == 1">
         <h3>考生信息</h3>
-        <div class="tabs-data" id="examerInfoDetail">   
+        <div class="tabs-data examerInfoDetail">   
             <el-table
             :data="detailList"
             stripe
@@ -144,12 +151,12 @@
 </template>
 
 <script>
-import commonTop from "../../common/common-top";
+import commonTop from "../common/commonTop";
 export default {
   components: {
     commonTop,
   },
-  props:["sendId"],
+  props:["index"],
   data(){
       return{
           titleTop:'订单详情',
@@ -160,7 +167,7 @@ export default {
           orderInfo:null,
           detailList:null,
           refundList:null,
-          orderType:1
+          orderType:''
       }
   },
   methods:{
@@ -171,30 +178,23 @@ export default {
       this.$http.get(url,params).then(res => {
         //   console.log(res)
           console.log(res.data.data.orderInfo)
-        //   //console.log(res.data.data.detailList)
+          console.log(res.data.data.detailList)
         //   console.log(res.data.data.refundList)
 
         let orderInfo = res.data.data.orderInfo
         this.orderInfo.push(orderInfo)
+
+        this.orderType = this.orderInfo[0].orderType
           //创建时间
-        let createdTime = this.getTimeStyle(orderInfo.createdTime);
-        this.orderInfo[0].createdTime = createdTime 
-
+        this.orderInfo[0].createdTime = this.getTimeStyle(orderInfo.createdTime); 
           //付款时间
-        let payTime = this.getTimeStyle(orderInfo.payTime);
-        this.orderInfo[0].payTime = payTime
-          
+        this.orderInfo[0].payTime =this.getTimeStyle(orderInfo.payTime);
         //考试时间
-        let examTime = this.getTimeStyle(orderInfo.examTime);
-        this.examTime = examTime
-
+        this.examTime = this.getTimeStyle(orderInfo.examTime);
         this.examLevel = orderInfo.examLevel;
         this.address =orderInfo.address;
+        this.detailList = res.data.data.detailList;
 
-
-        //考生信息表  ？？？？？？？？？？？？？？循环遍历
-        let detailList = res.data.data.detailList;
-        this.detailList = detailList;
 
         //考生信息表  //判断有无退款？？？？？？？？？？？？
         let refundList = res.data.data.refundList;
@@ -213,7 +213,7 @@ export default {
   mounted(){
           let params = new URLSearchParams();
           params.append("userId", 1);
-          params.append("id", 1);
+          params.append("id", this.index);
           this.getData("/api/order/order_detail", { params });
   }
 }  
@@ -257,8 +257,13 @@ export default {
             height: 39px;
             line-height: 39px;
         }
-        #examerInfoDetail{
+        .examerInfoDetail{
             padding: 0;
+        }
+        #orType0tabel{
+            & .el-button--text{
+                color: red;
+            }
         }
     }
     .examInfoType2{

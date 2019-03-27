@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { _debounce } from "@/utils/public";
+import { _debounce } from "../../utils/public.js";
 export default {
   data() {
     return {
@@ -87,6 +87,7 @@ export default {
       tableData: []
     };
   },
+  props: ["SHOWTYPE"],
   methods: {
     getDate(url, params) {
       this.tableData = [];
@@ -113,8 +114,7 @@ export default {
     },
     freezedRoom() {
       //查看已冻结考场信息  1：冻结  0 ：正常
-      this.$emit("showFrozenRoom",true);
-      
+      this.$emit("showDiffPage",this.SHOWTYPE.FROZEN);
     },
     handleCurrentChange:_debounce(function(val) {
       //分页切换当前页
@@ -126,7 +126,7 @@ export default {
     },300),
     handleAddRoom() {
       //跳转新增考场页面
-      this.$router.push({ path: "/addroom" });
+      this.$emit("showDiffPage",this.SHOWTYPE.ADD);
     },
     freezeData(id) {
       //冻结考场操作
@@ -181,7 +181,5 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang="scss">
-
-
 
 </style>

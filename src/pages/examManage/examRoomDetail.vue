@@ -1,22 +1,7 @@
 <template>
     <div class="addroom">
         <div class="examRoomInfo">
-            <div class="createNumberTop">
-                <p>考场编号:<span>{{examRoomCode}}</span></p>
-                <div id="examNamed">
-                    <input type="text"  v-model="examRoomName" :disabled="disabled" >
-                    <span>考场命名:</span>
-                    <i class="el-icon-edit-outline"></i>
-                </div>
-            </div>
-            <div class="prov">
-                <span class="commontips">考生所在省份:</span>
-                <el-select v-model="province" :disabled="disabled">
-                    <el-option
-                    :value="province">
-                    </el-option>
-                </el-select>
-            </div>
+          
              <div class="prov unit">
                 <span class="commontips">管理单位:</span>
                 <el-select v-model="manageUnit"  :disabled="disabled">
@@ -33,6 +18,16 @@
                     </el-option>
                 </el-select>
             </div>
+
+            <div class="prov">
+                <span class="commontips">考场地址:(省)</span>
+                <el-select v-model="province"  :disabled="disabled">
+                    <el-option
+                    :value="province">
+                    </el-option>
+                </el-select>
+            </div>
+
 
              <div class="prov">
                 <span class="commontips">市</span>
@@ -57,6 +52,10 @@
                 <el-input v-model="address"   :disabled="disabled"></el-input>
             </div>
 
+            <div class="prov examNamed">
+                <span class="commontips">考场命名:</span>
+                <el-input  v-model="examRoomName" :disabled="disabled"></el-input>
+            </div>
 
              <div class="prov">
                 <span class="commontips">考场总座位数(个)</span>
@@ -69,18 +68,24 @@
                 <el-input v-model="spareSeatSize"  :disabled="disabled"></el-input>
             </div>
 
+
         </div>
-          <div style="text-align:center;width:100%;">
-               <el-button type="primary" round 
-                style="background:#1f91b5;
-                width:145px;
-                heiht:40px;
-                font-size:16px;
-                margin-top:38px;
-              "
-               @click="handleBack"
-              >完成</el-button>
-          </div>
+
+        <div class="createNumber">
+            <p>考场编号:{{examRoomCode}}</p>
+        </div>
+
+        <div style="text-align:center;width:100%;">
+              <el-button type="primary" round 
+              style="background:#1f91b5;
+              width:145px;
+              heiht:40px;
+              font-size:16px;
+              margin-top:38px;
+            "
+              @click="handleBack"
+            >完成</el-button>
+        </div>
     </div>
 </template>
 
@@ -98,7 +103,7 @@ export default {
             spareSeatSize: "",
             disabled: true,
             examRoomCode: "",
-            examRoomName: ""
+            examRoomName: "",
         }
     },
     methods:{
@@ -133,14 +138,14 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang="scss" >
+<style rel='stylesheet/scss' lang="scss"  scoped>
 .el-tab-pane {
   background: #f0f0f0;
 }
 .addroom {
   width: 952px;
-  height: 880px;
-  padding: 0 50px 0 40px;
+  min-height: 858px;
+  padding: 40px 50px 40px 40px;
   background: #ffffff;
   .examRoomInfo {
     padding-top: 20px;
@@ -166,7 +171,7 @@ export default {
       }
     }
     .unit {
-      width: 755px;
+      width: 100%;
       float: left;
       margin-right: 0px;
     }
@@ -174,8 +179,12 @@ export default {
       width: 100%;
     }
     .address {
-      width: 558px;
+      width: 360px;
       margin-right: 0px;
+    }
+    .examNamed{
+      width: 364px;
+      margin-right: 400px;
     }
   }
   .el-select {
@@ -204,17 +213,15 @@ export default {
   color: #000;
   height: 45px !important;
   font-size: 16px;
-  background: #f8f8f8;
+//   background-color: #f8f8f8;
 }
 .el-input.is-disabled .el-input__inner {
   color: #000;
 }
-</style>
-
-<style rel='stylesheet/scss' lang="scss" >
-.createNumberTop {
-  width: 952px;
-  height: 175px;
+.createNumber {
+  margin-top: 30px;
+  width: 100%;
+  height: 80px;
   text-align: center;
   & > p {
     width: 100%;
@@ -223,40 +230,9 @@ export default {
     font-size: 16px;
     color: #000;
   }
-  #examNamed {
-    width: 376px;
-    height: 43px;
-    margin: 0 auto;
-    position: relative;
-    &>input {
-      width: 285px;
-      height: 43px;
-      font-size: 16px;
-      color: #000;
-      position: absolute;
-      left: 0;
-      top: 0;
-      border: 1px solid #cccccc;
-      background: #f8f8f8;
-      padding-left: 90px;
-      border-radius: 4px;
-    }
-    & > p {
-      position: absolute;
-      font-size: 16px;
-      color: #000;
-      top: 16px;
-      left: 10px;
-    }
-    & > i {
-      position: absolute;
-      right: 13px;
-      top: 14px;
-      font-size: 24px;
-      color: #1f91b5;
-    }
-  }
 }
 </style>
+
+
 
 

@@ -8,7 +8,8 @@ export default new Router({
       path: '/',
       name: 'login',
       component: () => import('@/pages/login/login')
-    }, {
+    }, 
+    {
       path: '/manage',
       name: 'manage',
       component: () => import('@/pages/manage'),
@@ -18,17 +19,11 @@ export default new Router({
           component: () => import('@/pages/examManage/examManage'),
         },
         {
-          path: '/addRoom',
-          name: 'addRoom',
-          component: () => import('@/pages/exammanage/addRoom/addRoom'),
-        },
-        {
           path: '/examRoomDetail',
           name: 'examRoomDetail',
-          component: () => import('@/pages/exammanage/examRoomDetail/examRoomDetail'),
-        }
-
-        , {
+          component: () => import('@/pages/examManage/examRoomDetail'),
+        },
+        {
           path: '/standardManage', //考题标准
           name: 'standardManage',
           component: () => import('@/pages/standardManage/standardManage'),
@@ -74,15 +69,18 @@ export default new Router({
           path: '/planManage', //考试计划
           name: 'planManage',
           component: () => import('@/pages/planManage/planManage')
-        }, {
+        },
+        {
           path: '/orderManage', //订单管理
           name: 'orderManage',
           component: () => import('@/pages/orderManage/orderManage'),
-        },{
+        },
+        {
           path: '/examStatus',
           name: 'examStatus',
           component: () => import('@/pages/examStatus/examStatus')
-        }, {
+        },
+        {
           path: '/ticketManage',
           name: 'ticketManage',
           component: () => import('@/pages/ticketManage/ticketManage')
@@ -92,7 +90,6 @@ export default new Router({
           name: 'shortMessage',
           component: () => import('@/pages/shortMessage/shortMessage')
         }
-
       ]
     },
     {

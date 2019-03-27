@@ -1,6 +1,6 @@
 <template>
     <div>
-         <div class="examStatus">
+         <div class="examStatus commonRight">
             <el-tabs type="border-card">
                 <el-tab-pane>
                 <span slot="label"><i class="el-icon-date iconfont icon-kaoshizhuangtaichaxun-"></i>考试状态查询</span>
@@ -9,8 +9,8 @@
                         <input type="text" placeholder="请输入考生姓名/证件号"  v-model.trim ="inputVal">
                         <el-button circle @click="searchData">搜索</el-button>
                     </div>
-                    <el-button type="primary" round icon="el-icon-more iconfont icon-yijiandaochu">一键导出</el-button>
-                    <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
+                    <el-button  type="primary" round icon="el-icon-more iconfont icon-yijiandaochu" @click="handleDownload">一键导出</el-button>
+                    <p class="NoFloat">共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
                 </div>
                 <div class="top" id="topSearch">
                     <el-select  v-model="province" placeholder="全部省份" @change="changeProvince">
@@ -53,6 +53,7 @@
                         v-model="pickerTime"
                         type="daterange"
                         @change="changePickerTime"
+                        format="yyyy 年 MM 月 dd 日"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期">
@@ -111,7 +112,7 @@
 
                         <el-table-column
                         label="考试状态"
-                        width="100">
+                       >
                         <template slot-scope="scope">
                           <span v-if="scope.row.examResult== 0" style="color: red">待考试</span>
                           <span v-else-if="scope.row.examResult== 1" style="color: black">已通过</span>
@@ -208,16 +209,20 @@ export default {
       examResult:'',
       examResults:[
         {
+          value: 0,
+          label: "未考试"
+        },
+        {
           value: 1,
-          label: "待考试"
+          label: "未通过"
         },
         {
           value: 2,
-          label: "通过"
+          label: "通过未认证"
         },
         {
           value: 3,
-          label: "未通过"
+          label: "通过已认证"
         },
         {
           value: 4,
@@ -232,19 +237,19 @@ export default {
   methods: {
     getData(url,params){
       this.$http.get(url,params).then(res => {
-        // console.log(1111)
-        this.tableData =[];
-        // console.log(res.data.data)
-        this.total = res.data.data.total;
-        this.totalPage = res.data.data.totalPage;
-        this.pageSize = res.data.data.pageSize;
-        this.currentPage = res.data.data.page;
-        let rst = res.data.data.rows
+        if(res){
+          this.tableData =[];
+          this.total = res.data.data.total;
+          this.totalPage = res.data.data.totalPage;
+          this.pageSize = res.data.data.pageSize;
+          this.currentPage = res.data.data.page;
+          let rst = res.data.data.rows
           this.tableData = rst;
+          // console.log(this.tableData)
           this.tableData.forEach((item,index)=>{
-            item.examTime = this.getTimeStyle(item.examTime);
-          })
-        
+              item.examTime = this.getTimeStyle(item.examTime);
+            })
+        }
        
       })
     },
@@ -285,7 +290,6 @@ export default {
       this.getData("/api/exam/status_list", { params });
     },
     changeManageUnit(data){
-        // console.log(1111,data);
       let params = new URLSearchParams();
       if(this.province !== ''){
         params.append("province",this.province); 
@@ -372,23 +376,45 @@ export default {
       }
 
       if(this.pickerTime !== ''){
-        params.append("pickerTime","2019-02-20"); 
+        params.append("beginTime",this.pickerTime[0])
+        params.append("endTime",this.pickerTime[1])
       }
+
       this.getData("/api/exam/status_list", { params });
-    }
+    },
+    handleDownload() { 
+      let params = new URLSearchParams()
+      params.append("province",this.province)
+      params.append("manageUnit",this.manageUnit)
+      params.append("examLevel",this.examLevel)
+      params.append("examResult",this.examResult)  
+      params.append("beginTime",this.pickerTime[0])
+      params.append("endTime",this.pickerTime[1])
+      this.$http.get('/api/exam/export_list_all',{params}).then( res => {
+            console.log(res.data.data)
+            this.tableData = res.data.data
+            require.ensure([], () => { // 用 webpack Code Splitting xlsl还是很大的
+            const { export_json_to_excel } = require('@/vendor/Export2Excel');
+            const tHeader = ['省份', '管理单位', '姓名','证件号',
+                  '联系方式','级别','报考级别', '考试时间', '考试状态'
+                ]; // excel 表格头
+            const filterVal = ['province', 'manageUnit','playerName','certificateNo',
+                 'phone','chessLevel', 'examLevel', 'examTime','examResult'
+                ];
+            const list = this.tableData;
+            const data = this.formatJson(filterVal, list); // 自行洗数据 按序排序的一个array数组
+            export_json_to_excel(tHeader, data, '导出的excel表');
+          })
+      })
+  },
+    formatJson(filterVal, jsonData) {
+        return jsonData.map(v => filterVal.map(j => v[j]))
+    },
   },
   created(){
     //页面进入请求数据
-    // console.log("created")
     let params = new URLSearchParams();
     params.append("userId", 1);
-    // params.append("playerName", '');
-    // params.append("certificateNo", '');
-    // params.append("province", '');
-    // params.append("manageUnit", 0);
-    // params.append("examLevel", 0);
-    // params.append("examResult", 0);
-    // params.append("examTime", '');
     this.getData("/api/exam/status_list", { params });
   }
 };
@@ -396,9 +422,17 @@ export default {
 
 <style rel='stylesheet/scss' lang="scss" scoped>
 .examStatus{
-  width: 1130px;
+  width: 1176px;
+  & /deep/ .el-tabs--border-card > .el-tabs__content {
+      padding: 0px;
+  }
+  .top>.NoFloat{
+      float: none;
+      margin-right: 0;
+  }
   .top > .el-button.el-button--primary.is-round{
-    margin-left: 385px;
+    margin-left: 440px;
+    width: 145px;
   }
   #tableStatus{
     min-height: 695px;
@@ -411,9 +445,6 @@ export default {
     &:nth-of-type(1){
       margin-left: 23px;
     }
-  }
-  &>.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-    width: 282px;
   }
   //修改时间划过样式border变蓝色
   .el-input__inner{

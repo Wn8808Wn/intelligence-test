@@ -71,10 +71,10 @@
                     <el-button type="text" icon="el-icon-error iconfont icon-fasong"  @click.prevent="dialogFormVisible = true">发送</el-button>
                     <el-button type="text" icon="el-icon-error iconfont icon-xiangqing"  @click.prevent="handlDetails(scope.row.id)">详情</el-button>
                     
-                    <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%' :modal= false>
+                    <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%' >
                         <el-radio  v-model="radio" @click.native="checkedButton"><el-input  v-model="email" placeholder="同时发送至用户邮箱:"></el-input></el-radio>
                     <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="handlSent(scope.row.id)">发 送</el-button>
+                        <el-button class="sentButton" type="primary" @click="handlSent(scope.row.id)">发 送</el-button>
                     </div>
                     </el-dialog>
                 </template>
@@ -90,6 +90,11 @@
             </el-pagination>
         </div>
 
+        <el-dialog  id="detailPageDialog"
+        :visible.sync="showDetailPage"
+        top="0"
+        width="690px"
+        >
         <div  class="ticketDetails" v-if="showDetailPage">
             <div class="titleTop">
                 <div>准考证</div>
@@ -129,6 +134,14 @@
                 <p>4、 现场除考试题相关问题，均可咨询监考老师。</p>
             </div>
         </div>
+        
+        </el-dialog>
+
+
+
+
+
+        
     </div>
 </template>
 
@@ -139,6 +152,96 @@ export default {
         return {
             tableData:[
                 // {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                // {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
+                //     manageUnit:'黑龙江省围棋协会',
+                //     playerName: "刘强",
+                //     certificateNo:21090419888121901234,
+                //     chessLevel:"5级",
+                //     phone:18210465511,
+                //     examLevel:"1段",
+                //     examTime:'2019-01-01 8:00',
+                //     dataStatus:0
+                // },
+                //  {
                 //     manageUnit:'黑龙江省围棋协会',
                 //     playerName: "刘强",
                 //     certificateNo:21090419888121901234,
@@ -183,6 +286,7 @@ export default {
             })
         },
         handlDetails(id){
+
             this.showDetailPage = true;
             let params = new URLSearchParams();
             params.append("id",id);
@@ -247,11 +351,6 @@ export default {
             this.radio =!this.radio
         }
     },
-    watch:{
-        // radio(val,newval){
-        //     this.radio = newval; 
-        // }
-    },
     mounted(){
         let params = new URLSearchParams();
         params.append("userId", 1);
@@ -261,10 +360,12 @@ export default {
 }
 </script>
 
-<style  lang="scss" scoped>
-
+<style rel='stylesheet/scss' lang="scss" scoped>
 .ticketList{
+    // width: 100%;
+    // height: 100%;
     #emailBox{
+        min-height: 730px;
         .el-radio{
             width: 88%;
             & /deep/ .el-radio__inner{
@@ -281,135 +382,165 @@ export default {
                 background: #B3E2ED;
             }
         }
+        .sentButton{
+            width: 90px;
+            background: #1F91B5;
+            border-radius: 40px;
+            margin-right: 6px;
+        }
+
+        & /deep/ .el-dialog__footer{
+            padding: 4px 16px 9px
+        }
+
+
     }
-    .ticketDetails{
+    #detailPageDialog{
         width: 690px;
         height: 100%;
-        position: fixed;
-        top: 0;
-        left: 30%;
-        background: #ffffff;
-        z-index: 10;
-        .titleTop{
-            width: 100%;
-            height: calc( 14.4% - 55px);
-            padding: 17px  0 38px;
-            &>div{
-                width: 20%;
-                height: 80px;
-                line-height: 80px;
-                background: #000;
-                font-size: 34px;
-                color: #ffffff;
-                text-align: center;
-                float: left;
-                margin-left: 4.5%;
-            }
-            &>p{
-                font-size: 29px;
-                width: 42.6%;
-                float: left;
-                margin-left: 2%;
-                line-height: 41px;
-            }
-            &>i{
-                float: right;
-                margin-right: 2%;
-                font-size: 30px;
-                cursor: pointer;
-            }
+        margin: 0 auto;
+        & /deep/ .el-dialog__header{
+            padding: 0;
         }
-        .examerInfo{
-            width: 100%;
-            height: 40%;
-            background: #e5e5e5;
-            &>.lf{
-                width: 55.3%;
-                height: 81.5%;
-                margin-left: 6%;
-                padding: 27px 0 30px 0px;
-                float: left;
-                // background: sandybrown;
-                &>p{
-                    width: 100%;
-                    font-size: 20px;
-                    height: 48px;
-                    line-height: 48px;
-                    &>span:nth-of-type(1){
-                        margin-left: 26px
-                    }
-                    .threeLetter{
-                        letter-spacing:9px;
-                        margin-right:-9px;
-                    }
-                    
-                    &:nth-of-type(2){
-                       &>span:nth-of-type(1){
-                           margin-right: 20px
-                       }
-                    }
-                }
-            }
-            #qrcode{
-                width: 180px;
-                height: 180px;
-                float: left;
-                margin-top: 5%;
-                // background: red;
-                &>img{
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                }
-            }
+        & /deep/ .el-dialog{
+            width: calc( 100% - 40px);
+            height: calc( 100% - 60px);
         }
-        .testInstructions{
-            width: calc( 100% -82px);
-            height: calc( 45.6% - 44px);
-            padding: 22px 41px;
-            &>h3{
-                width: 100%;
-                height: 44px;
-                line-height: 44px;
-                font-size: 20px;
-            }
-            &>p{
-                width: 100%;
-                height: 30px;
-                line-height: 30px;
-                font-size: 16px;
-                color: #838383;
-                
-            }
-            li{
-                width: calc(100% - 20px); 
-                height: 30px;
-                line-height: 30px;
-                font-size: 16px;
-                color: #838383;
-                list-style: none;
-                padding-left: 20px;
-                &:nth-of-type(4){
-                    margin-bottom: 20px;
+        & /deep/ .el-dialog__body{
+            width: calc( 100% - 40px);
+            height: 100%;
+            position: relative;
+            .ticketDetails{
+                width: 690px;
+                height: 100%;
+                // margin: 0 auto;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: #ffffff;
+                .titleTop{
+                    width: 100%;
+                    height: calc( 14.4% - 55px);
+                    padding: 17px  0 38px;
+                    &>div{
+                        width: 20%;
+                        height: 80px;
+                        line-height: 80px;
+                        background: #000;
+                        font-size: 34px;
+                        color: #ffffff;
+                        text-align: center;
+                        float: left;
+                        margin-left: 4.5%;
+                    }
+                    &>p{
+                        font-size: 29px;
+                        width: 42.6%;
+                        float: left;
+                        margin-left: 2%;
+                        line-height: 41px;
+                    }
+                    &>i{
+                        float: right;
+                        margin-right: 2%;
+                        font-size: 30px;
+                        cursor: pointer;
+                    }
                 }
-            }
-            #examSteps{
-                width: calc( 100% -20px);
-                padding-left: 20px;
-                & /deep/ .el-step__line{
-                    background-color:#838383;
+                .examerInfo{
+                    width: 100%;
+                    height: 40%;
+                    background: #e5e5e5;
+                    &>.lf{
+                        width: 55.3%;
+                        height: 81.5%;
+                        margin-left: 6%;
+                        padding: 27px 0 30px 0px;
+                        float: left;
+                        // background: sandybrown;
+                        &>p{
+                            width: 100%;
+                            font-size: 20px;
+                            height: 48px;
+                            line-height: 48px;
+                            &>span:nth-of-type(1){
+                                margin-left: 26px
+                            }
+                            .threeLetter{
+                                letter-spacing:9px;
+                                margin-right:-9px;
+                            }
+                            
+                            &:nth-of-type(2){
+                            &>span:nth-of-type(1){
+                                margin-right: 20px
+                            }
+                            }
+                        }
+                    }
+                    #qrcode{
+                        width: 180px;
+                        height: 180px;
+                        float: left;
+                        margin-top: 5%;
+                        &>img{
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                        }
+                    }
                 }
-                 & /deep/ .el-step__head.is-wait {
-                    color:#838383;
-                    border-color: #838383;
+                .testInstructions{
+                    width: calc( 100% -82px);
+                    height: calc( 45.6% - 44px);
+                    padding: 22px 41px;
+                    &>h3{
+                        width: 100%;
+                        height: 44px;
+                        line-height: 44px;
+                        font-size: 20px;
+                    }
+                    &>p{
+                        width: 100%;
+                        height: 30px;
+                        line-height: 30px;
+                        font-size: 16px;
+                        color: #838383;
+                        
+                    }
+                    li{
+                        width: calc(100% - 20px); 
+                        height: 30px;
+                        line-height: 30px;
+                        font-size: 16px;
+                        color: #838383;
+                        list-style: none;
+                        padding-left: 20px;
+                        &:nth-of-type(4){
+                            margin-bottom: 20px;
+                        }
+                    }
+                    #examSteps{
+                        width: calc( 100% -20px);
+                        padding-left: 20px;
+                        & /deep/ .el-step__line{
+                            background-color:#838383;
+                        }
+                        & /deep/ .el-step__head.is-wait {
+                            color:#838383;
+                            border-color: #838383;
+                        }
+                        & /deep/ .el-step.is-center .el-step__description{
+                            padding-top: 15px;
+                            color:#838383;
+                        }    
+                    }
+
                 }
-                 & /deep/ .el-step.is-center .el-step__description{
-                    padding-top: 15px;
-                    color:#838383;
-                }    
             }
 
         }
     }
+    
 }
 </style>

@@ -34,7 +34,14 @@ export default {
 //  标签页样式
 .ticketmanage {
  width: 1188px;
- min-height: 916px;
- overflow-y: auto;
+ max-height: 926px;
+ margin-right: 319px;
+ padding-top: 12px;
+    .el-tabs--border-card{
+        background: #f0f0f0;
+    }
+    .el-tabs--border-card /deep/ .el-tabs__content{
+        padding: 0;
+    }
 }
 </style>

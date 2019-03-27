@@ -1,5 +1,5 @@
 <template>
-    <div class="shortMessage">
+    <div class="shortMessage commonRight">
         <el-tabs type="border-card">
             <el-tab-pane >
             <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi" ></i>短信通知</span>
@@ -33,7 +33,10 @@ export default {
 <style rel='stylesheet/scss' lang="scss" scoped>
 //  标签页样式
 .shortMessage {
- width: 100%;
- height: 916px;
+ width: 1232px;
+ height: 938px;
+  & /deep/ .el-tabs--border-card > .el-tabs__content {
+      padding: 0px;
+  }
 }
 </style>

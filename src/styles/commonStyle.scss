@@ -8,8 +8,18 @@
     clear: both;
 }
 
-
-
+.commonRight{
+  overflow: hidden;
+  max-height: 926px;
+  margin-right: 319px;
+  padding-top: 12px;
+  .el-tabs--border-card{
+    background: #f0f0f0;
+  }
+  .el-tabs--border-card /deep/ .el-tabs__content{
+    padding: 0;
+  }
+}
 
 
 // 表格,分页样式  
@@ -32,6 +42,9 @@
     font-size: 14px;
     color: #000;
     background-color: #f2f2f2;
+  }
+  .el-button--text{
+    color: #1f91b5;
   }
   // 控制表格的tr行高
   .el-table__body tr,
@@ -246,7 +259,7 @@
     .el-input__inner {
       color: #000;
       width: 180px;
-      height: 38px;
+      height: 40px;
       font-size: 16px;
       padding-left: 20px;
       background: #f8f8f8;
@@ -272,6 +285,7 @@
 
 
 
-
-
-
+//一键导出按钮样式重置
+.icon-yijiandaochu{
+  margin-right: 12px;
+}

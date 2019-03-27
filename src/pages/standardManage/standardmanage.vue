@@ -35,8 +35,15 @@ export default {
 <style rel='stylesheet/scss' lang="scss" scoped>
 //  标签页样式
 .standardmanage {
-  width: 100%;
-//   height: 916px;
-  height: 100%;
+  overflow: hidden;
+  max-height: 926px;
+  margin-right: 319px;
+  padding-top: 12px;
+  .el-tabs--border-card{
+    background: #f0f0f0;
+  }
+  .el-tabs--border-card /deep/ .el-tabs__content{
+    padding: 0;
+  }
 }
 </style>

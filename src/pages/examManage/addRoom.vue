@@ -1,20 +1,8 @@
 <template>
     <div class="addroom">
-        <common-top :titleTop="titleTop"></common-top>
+        <common-top-item :titleTop="titleTop"></common-top-item>
         <div class="examRoomInfo">
-            <create-number  v-if="showNum" :county='distric'  :number ='number' @sentExamName="getExamName"></create-number>
-            <div class="prov">
-                <span class="commontips">考生所在省份:</span>
-                <el-select v-model="province" placeholder="请选择" :disabled="disabled">
-                    <el-option
-                    v-for="item in options1"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-            </div>
-             <div class="prov unit">
+            <div class="prov unit">
                 <span class="commontips">管理单位:</span>
                 <el-select v-model="manageUnit" placeholder="请选择"  :disabled="disabled">
                     <el-option
@@ -25,9 +13,10 @@
                     </el-option>
                 </el-select>
             </div>
+
             <div class="prov invenunit">
                 <span class="commontips">投资单位:</span>
-                <el-select v-model="investUnit" multiple placeholder="请选择" :disabled="disabled">
+                <el-select v-model="investUnit" multiple  placeholder="请选择" :disabled="disabled">
                     <el-option
                     v-for="item in options3"
                     :key="item.value"
@@ -37,7 +26,19 @@
                 </el-select>
             </div>
 
-             <div class="prov">
+            <div class="prov">
+                <span class="commontips">考场地址:(省)</span>
+                <el-select v-model="province" placeholder="请选择" :disabled="disabled">
+                    <el-option
+                    v-for="item in options1"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+
+            <div class="prov">
                 <span class="commontips">市</span>
                 <el-select v-model="city" placeholder="请选择"  :disabled="disabled">
                     <el-option
@@ -52,11 +53,11 @@
 
             <div class="prov">
                 <span class="commontips">区/县</span>
-                <el-select v-model="distric" placeholder="请选择"  :disabled="disabled">
+                <el-select v-model="distric" placeholder="请选择"  :disabled="disabled" 
+                @change = changeDistric>
                     <el-option
                     v-for="item in options5"
                     :key="item.value"
-                    
                     :label="item.label"
                     :value="item.value">
                     </el-option>
@@ -68,54 +69,60 @@
                 <el-input v-model="address" placeholder="请输入地址"  :disabled="disabled"></el-input>
             </div>
 
-             <div class="prov">
+            <div class="prov examNamed">
+                <span class="commontips">考场命名:</span>
+                <el-input  v-model="examRoomName" :disabled="disabled"></el-input>
+            </div>
+
+            <div class="prov">
                 <span class="commontips">考场总座位数(个)</span>
                 <el-input v-model.number="seatSize"  :disabled="disabled"></el-input>
             </div>
  
-             <div class="prov">
+            <div class="prov">
                 <span class="commontips">备用座位数(个)</span>
                 <el-input v-model.number="spareSeatSize"  :disabled="disabled"></el-input>
             </div>
-
         </div>
-          <div style="text-align:center;width:100%;">
+
+        <div class="createNumber" v-if="showNum == true">
+          <p>考场编号:{{number}}</p>
+        </div>
+
+        <div style="text-align:center;width:100%;">
+            <el-button type="primary" round 
+                style="background:#1f91b5;
+                width:145px;
+                heiht:40px;
+                font-size:16px;
+                margin-top:38px;"
+                @click="handleput"  
+                v-if="showNum == false"
+              >提交</el-button>
+
               <el-button type="primary" round 
                 style="background:#1f91b5;
                 width:145px;
                 heiht:40px;
                 font-size:16px;
-                margin-top:38px;
-              "
-                @click="handleput"  
-                v-if="showNum == false"
-              >提交</el-button>
-
-               <el-button type="primary" round 
-                style="background:#1f91b5;
-                width:145px;
-                heiht:40px;
-                font-size:16px;
-                margin-top:38px;
-              "
+                margin-top:38px;"
                v-if="showNum == true"
                 @click="handlesent"
               >完成</el-button>
-          </div>
+        </div>
     </div>
 </template>
 
 <script>
-import commonTop from "../../common/common-top";
-import createNumber from "./createNumber";
+import commonTop from "../common/commonTop";
 export default {
   components: {
-    commonTop,
-    createNumber
+    "common-top-item": commonTop
   },
+  props: ["SHOWTYPE"],
   data() {
     return {
-      titleTop:'新增考场',
+      titleTop: "新增考场",
       options1: [
         {
           value: "黑龙江省",
@@ -188,7 +195,7 @@ export default {
       ],
       province: "",
       manageUnit: "",
-      investUnit: "",
+      investUnit: [],
       city: "",
       distric: "",
       address: "",
@@ -201,23 +208,18 @@ export default {
     };
   },
   methods: {
+    changeDistric(value) {
+      this.examRoomName = value + "考场";
+    },
     handleput() {
       //所有内容填写完成时，点击【提交】（1）内容不可再编辑，（2）生成考场编号，（3）出现【完成】按钮，（4）同时隐藏【提交】按钮；
-        this.showNum = true;
-        this.disabled = true;
-     
-    },
-    getExamName(res) {
-      this.examRoomName = res;
-      console.log(this.examRoomName)
-    },
-    handlesent() {      //点击【完成】  写入数据 跳转到当前模块页面
+      this.showNum = true;
+      this.disabled = true;
       if (this.showNum) {
-        let investUnitToString = this.investUnit.join(",");
         let params = new URLSearchParams();
         params.append("province", this.province);
         params.append("manageUnit", 2); //管理单位 int类型
-        params.append("investUnit", investUnitToString);
+        params.append("investUnit", this.investUnit.join(","));
         params.append("city", this.city);
         params.append("distric", this.distric);
         params.append("address", this.address);
@@ -225,14 +227,21 @@ export default {
         params.append("spareSeatSize", this.spareSeatSize);
         params.append("examRoomName", this.examRoomName);
         this.$http.post("/api/room/add_room", params).then(res => {
-          console.log(res);
+          if(res){
+            this.number = res.data.data;
+          }
         });
-        this.$router.push({path: "/exammanage"})
       }
     },
-    getProvinceList() {}
-  },
-  mounted() {}
+    handlesent() {
+      this.$router.go(0)
+      // this.$emit("showDiffPage",this.SHOWTYPE.LIST);
+    },
+    getProvinceList() {
+
+    },
+    
+  }
 };
 </script>
 
@@ -257,19 +266,23 @@ export default {
       height: 100px;
       float: left;
       margin-right: 30px;
-      .commontips {
-        width: 167px;
-        height: 17px;
-        display: block;
-        height: 15px;
-        color: #a3a3a3;
-        padding-top: 27px;
-        padding-bottom: 11px;
-        padding-left: 7px;
-      }
+      & /deep/ .el-input__inner {
+      background-color:#f8f8f8;
+    }
+
+    .commontips {
+      width: 167px;
+      height: 17px;
+      display: block;
+      height: 15px;
+      color: #a3a3a3;
+      padding-top: 27px;
+      padding-bottom: 11px;
+      padding-left: 7px;
+    }
     }
     .unit {
-      width: 755px;
+      width: 100%;
       float: left;
       margin-right: 0px;
     }
@@ -277,8 +290,12 @@ export default {
       width: 100%;
     }
     .address {
-      width: 558px;
+      width: 360px;
       margin-right: 0px;
+    }
+    .examNamed {
+      width: 364px;
+      margin-right: 400px;
     }
   }
   .el-select {
@@ -287,6 +304,17 @@ export default {
     border-color: #cccccc;
     border-radius: 4px;
     color: #000;
+    & /deep/ .el-tag__close.el-icon-close{
+        background-color: #1f91b5;
+    }
+    & /deep/ .el-input__inner {
+      padding: 0;
+      padding-left: 10px;
+      color: #000;
+      height: 45px !important;
+      font-size: 16px;
+      background-color:#f8f8f8;
+    }
   }
 }
 .el-select-dropdown__item {
@@ -301,15 +329,20 @@ export default {
   color: #000;
   font-weight: 400;
 }
-.el-input__inner {
-  padding: 0;
-  padding-left: 10px;
-  color: #000;
-  height: 45px !important;
-  font-size: 16px;
-  background: #f8f8f8;
-}
+
 .el-input.is-disabled .el-input__inner {
   color: #000;
+}
+.createNumber {
+  width: 100%;
+  height: 80px;
+  text-align: center;
+  & > p {
+    width: 100%;
+    height: 75px;
+    line-height: 75px;
+    font-size: 16px;
+    color: #000;
+  }
 }
 </style>

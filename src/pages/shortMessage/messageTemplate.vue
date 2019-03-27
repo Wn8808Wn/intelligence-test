@@ -12,25 +12,25 @@
                 label="代码"
                 type="index"
                 :index="indexMethod"
-                width="70"
+                width="60"
                 >
                 </el-table-column>
 
-                <el-table-column prop="msgType" label="服务类型" width="150">
+                <el-table-column prop="msgType" label="服务类型" width="146">
                     <template  slot-scope="scope">
                     <span v-if="messageTemplateList[scope.$index].editable">{{messageTemplateList[scope.$index].msgType}}</span>
                     <el-input  v-if="!messageTemplateList[scope.$index].editable"  v-model="messageTemplateList[scope.$index].msgType"></el-input>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="templateDetails" label="短信内容"  width="825">
+                <el-table-column prop="templateDetails" label="短信内容"  width="730">
                 <template  slot-scope="scope">
                     <span v-if="messageTemplateList[scope.$index].editable">{{messageTemplateList[scope.$index].templateDetails}}</span>
                     <el-input  v-if="!messageTemplateList[scope.$index].editable"  v-model="messageTemplateList[scope.$index].templateDetails"></el-input>
                 </template>
                 </el-table-column>
 
-                <el-table-column prop="updatedTime" label="修改时间"  width="150">
+                <el-table-column prop="updatedTime" label="修改时间"  width="165">
                 <template  slot-scope="scope">
                     <span>{{messageTemplateList[scope.$index].updatedTime}}</span>
                 </template>

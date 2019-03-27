@@ -1,0 +1,318 @@
+<template>
+    <div class="addPlanPages">   
+        <commonTop :titleTop="title"></commonTop>
+        <div class="examSelect">
+            <div class="prov">
+                    <span class="commontips">考场:</span>
+                    <el-select v-model="examRoom" placeholder="请选择考场">
+                        <el-option
+                        v-for="item in examRooms"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+            </div>
+            <p>座位数:<span>20个</span></p>
+        </div>
+
+        <div class="examSelect">
+            <div class="prov">
+                <span class="commontips">考场计划:</span>
+                <div class="btnGroup">
+                    <el-button type="primary" plain  @click="dialogFormVisible = true">新增</el-button>
+                    <el-button type="primary" plain>删除</el-button>
+                    <el-button type="primary" plain>撤销</el-button>
+                </div>
+            </div>
+        </div>
+        
+        <el-dialog title="新增计划" :visible.sync="dialogFormVisible" width="580px">
+                    <div class="setTop">
+                        <div class="setLev">
+                            <p>设置报考级别:</p>
+                            <el-select v-model="form.examLev" placeholder="请选择报考级别">
+                                    <el-option label="25级——10级  45分钟" value="1"></el-option>
+                                    <el-option label="9级——1级  45分钟" value="2"></el-option>
+                                    <el-option label="1段——5段  45分钟" value="3"></el-option>
+                            </el-select>
+                        </div>
+                        <div class="setLev mgrt0">
+                            <p>选择日期:</p>
+                            <el-date-picker
+                            v-model="selectDate"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                            </el-date-picker>
+                        </div>
+
+                         <div class="setLev">
+                            <p>设置考试时间:</p>
+                              <el-time-select
+                                placeholder="起始时间"
+                                v-model="startTime"
+                                format="HH 时 mm 分"
+                                :picker-options="{
+                                start: '08:30',
+                                step: '00:01',
+                                end: '18:30'
+                                }">
+                            </el-time-select>
+                            <el-time-select
+                            placeholder="结束时间"
+                            v-model="endTime"
+                          >
+                            </el-time-select>
+
+
+
+
+                            <!-- <el-time-picker
+                            :picker-options="{
+                                start: '08:30',
+                                step: '00:45',
+                                end: '18:30'
+                            }"
+                            v-model="value2"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            placeholder="请设置考试时间">
+                            </el-time-picker> -->
+                           
+                        </div>
+
+
+
+
+                    </div>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="dialogFormVisible = false">完 成</el-button>
+                    </div>
+                    </el-dialog>
+
+
+
+
+
+        <div class="tabs-data addPlanTabs">     
+            <el-table 
+            border
+            :data="tableData" 
+            style="width: 862px">
+
+            <el-table-column
+            label="日期"
+            width="153">
+            <template slot-scope="scope">
+                {{ scope.row.date}}
+            </template>
+            </el-table-column>
+
+            <el-table-column
+            prop="examTime"
+            label="考试时间"
+            width="102">
+            </el-table-column>
+
+            <el-table-column
+            prop="examLeve"
+            label="报考级别(考试时长)"
+            width="418">
+            </el-table-column>
+
+            <el-table-column
+            prop="openTime"
+            label="开放报名时间"
+            width="188">
+            </el-table-column>
+
+            </el-table>
+        </div>
+</div>
+
+</template>
+
+<script>
+import commonTop from "../common/commonTop";
+export default {
+  data() {
+    return {
+      title: "新增计划",
+      examRoom: "",
+      examRooms: "",
+      tableData: [
+          {
+              date:'2019-05-01',
+              examTime:'15:30',
+              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
+              openTime:'2019-05-15'
+          },
+           {
+              date:'2019-05-01',
+              examTime:'15:30',
+              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
+              openTime:'2019-05-15'
+          },
+           {
+              date:'2019-05-01',
+              examTime:'15:30',
+              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
+              openTime:'2019-05-15'
+          },
+           {
+              date:'2019-05-01',
+              examTime:'15:30',
+              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
+              openTime:'2019-05-15'
+          },
+           {
+              date:'2019-05-01',
+              examTime:'15:30',
+              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
+              openTime:'2019-05-15'
+          },
+           {
+              date:'2019-05-01',
+              examTime:'15:30',
+              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
+              openTime:'2019-05-15'
+          },
+
+      ],
+      date: "",
+      examTime: "",
+      examLeve: "",
+      openTime: "",
+      dialogFormVisible:false,
+      form:{
+          examLev:'',
+      },
+      selectDate:'',
+      value2: [new Date(2016, 9, 10, 8, 30), new Date(2016, 9, 10, 9, 30)],
+      stepTime:"45",
+      startTime:'',
+   
+
+    }
+  },
+  components: {
+    commonTop
+  },
+  computed:{
+      endTime(){
+        // var ct = new Date(this.startTime);
+        // console.log(typeof(this.startTime));
+        // var addMinute = 45;
+        // ct.setHours(ct.getMinutes() + addMinute);
+
+        
+      }
+  }
+};
+</script>
+
+
+<style lang="scss" scoped>
+.addPlanPages {
+  width: 960px;
+  height: 926px;
+  padding: 0 40px;
+  background: #ffffff;
+  .examSelect {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 20px;
+    .prov {
+      width: 317px;
+      height: 100px;
+      float: left;
+      margin-right: 30px;
+      & /deep/ .el-input__inner {
+        width: 317px;
+        background-color: #f8f8f8;
+      }
+      .el-button {
+        width: 84px;
+        height: 38px;
+        font-size: 14px;
+        background: #1f91b5;
+        border-radius: 18px;
+        // margin-right: 13px;
+        color: #ffffff;
+      }
+      .btnGroup {
+        margin-top: 10px;
+        & > .el-button:nth-last-child(1) {
+          background: #c3c3c3;
+          color: #333333;
+        }
+      }
+    }
+    .commontips {
+      width: 310px;
+      height: 17px;
+      display: block;
+      height: 15px;
+      color: #a3a3a3;
+      padding-top: 27px;
+      padding-bottom: 11px;
+      padding-left: 7px;
+      font-size: 16px;
+      font-family: MicrosoftYaHei;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 1);
+      line-height: 17px;
+      opacity: 0.5;
+    }
+    & > p {
+      float: left;
+      width: 104px;
+      height: 17px;
+      margin-top: 62px;
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 1);
+      line-height: 22px;
+      opacity: 0.99;
+    }
+  }
+  .addPlanTabs{
+      padding: 0;
+      & /deep/ .el-table tr{
+          background-color: #ffffff;
+      }
+     & /deep/ .el-table__header {
+        box-sizing: border-box;
+        border-collapse: collapse;
+    }
+  }
+
+  .setTop{
+      width:  100% ;
+      &>.setLev{
+          width: 260px;
+          float: left;
+          margin-right: 18px;
+          &>p{
+            height:17px;
+            font-size:16px;
+            color:rgba(0,0,0,1);
+            line-height:17px;
+            opacity:0.5;
+            margin-bottom: 10px;
+          }
+      & /deep/ .el-input__inner{
+          width: 260px;
+      }
+      }
+      & >.mgrt0{
+          margin-right: 0;
+      }
+
+
+  }
+}
+</style>

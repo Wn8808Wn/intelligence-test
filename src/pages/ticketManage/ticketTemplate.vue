@@ -1,9 +1,7 @@
 <template>
     <div class="ticketTemplate">
         <commonTop :titleTop="title"></commonTop>
-        <el-button @click="editButton" v-if="showButton">修改</el-button>
-        <el-button @click="completeButton" v-if="showButton">完成</el-button>
-      
+        <!-- <el-button @click="editButton" v-if="showButton">修改</el-button> -->
             <div  class="ticketDetails">
                 <div class="titleTop">
                     <div>准考证</div>
@@ -13,10 +11,10 @@
                     <div class="lf">
                         <p>姓　　名:<span>{{name}}</span></p>
                         <p>性　　别:<span>女</span> 证件类型:<span>身份证</span></p>
-                        <p>报考等级:<span>25级</span></p>
-                        <p><i class="threeLetter">证件号</i>:<span>KCHLJ0015d191200001</span></p>
-                        <p>考试时间:<span>2019-01-01  9:00 - 10:00</span></p>
-                        <p>考试地点:<span>黑龙江省哈尔滨市围棋协会尔滨市围棋协会市围棋协</span></p>
+                        <p>报考等级:<span>XX级</span></p>
+                        <p><i class="threeLetter">证件号</i>:<span>XXXXXXXXXXXXXXXXXX</span></p>
+                        <p>考试时间:<span>XXXX-XX-XX  X:XX - XX:XX</span></p>
+                        <p>考试地点:<span>XXX省XXX市围棋协会</span></p>
                     </div>
                     <div class="QRCode">
                         <img src="../../assets/ewm.png" alt="">
@@ -47,7 +45,7 @@
 </template>
 
 <script>
-import commonTop from '../../pages/common/common-top'
+import commonTop from '../../pages/common/commonTop'
 export default {
     components:{
         commonTop
@@ -55,7 +53,7 @@ export default {
     data(){
         return{
             title:'模板修改',
-            name: '刘盼',
+            name: 'XX',
             showButton:false
         }
     },
@@ -72,10 +70,11 @@ export default {
 
 <style lang='scss' scoped>
 .ticketTemplate{
-    width: 1000px;
+    width: 965px;
+    padding: 0 35px;
     position: relative;
     height: 100%;
-    // background: skyblue;
+    background: #ffffff;
     & /deep/ .el-button{
         width: 80px;
         height: 40px;
@@ -87,135 +86,130 @@ export default {
         color: #000;
         background: #1f91b5;
     }
-    // .ticketBox{
-    //     width: 100%;
-    //     height: 790px;
-    //     overflow-y: auto;
-        .ticketDetails{
-            width: 800px;
-            height: 978px;
-            margin: 20px auto;
-            border: 1px solid #000;
-            // position: absolute;
-            // top: 140px;
-            // left: 2%;
-            background: #ffffff;
-            // z-index: 10;
-            .titleTop{
-                width: 100%;
-                height: calc( 14.4% - 55px);
-                padding: 17px  0 38px;
-                &>div{
-                    width: 20%;
-                    height: 80px;
-                    line-height: 80px;
-                    background: #000;
-                    font-size: 34px;
-                    color: #ffffff;
-                    text-align: center;
-                    float: left;
-                    margin-left: 15%;
-                }
+  
+    .ticketDetails{
+        width: 800px;
+        height: 978px;
+        margin: 30px 0;
+        // margin-left: 20px;
+        border: 1px solid #000;
+        background: #ffffff;
+        .titleTop{
+            width: 100%;
+            height: calc( 14.4% - 55px);
+            padding: 17px  0 38px;
+            &>div{
+                width: 20%;
+                height: 80px;
+                line-height: 80px;
+                background: #000;
+                font-size: 34px;
+                color: #ffffff;
+                text-align: center;
+                float: left;
+                margin-left: 15%;
+            }
+            &>p{
+                font-size: 29px;
+                width: 42.6%;
+                float: left;
+                margin-left: 2%;
+                line-height: 41px;
+            }
+        }
+        .examerInfo{
+            width: 100%;
+            height: 40%;
+            background: #e5e5e5;
+            &>.lf{
+                width: 55.3%;
+                height: 81.5%;
+                margin-left: 6%;
+                padding: 27px 0 30px 0px;
+                float: left;
+                // background: sandybrown;
                 &>p{
-                    font-size: 29px;
-                    width: 42.6%;
-                    float: left;
-                    margin-left: 2%;
-                    line-height: 41px;
-                }
-            }
-            .examerInfo{
-                width: 100%;
-                height: 40%;
-                background: #e5e5e5;
-                &>.lf{
-                    width: 55.3%;
-                    height: 81.5%;
-                    margin-left: 6%;
-                    padding: 27px 0 30px 0px;
-                    float: left;
-                    // background: sandybrown;
-                    &>p{
-                        width: 100%;
-                        font-size: 20px;
-                        height: 48px;
-                        line-height: 48px;
-                        &>span:nth-of-type(1){
-                            margin-left: 26px
-                        }
-                        .threeLetter{
-                            letter-spacing:9px;
-                            margin-right:-9px;
-                        }
-                        
-                        &:nth-of-type(2){
-                        &>span:nth-of-type(1){
-                            margin-right: 20px
-                        }
-                        }
-                    }
-                }
-                &>.QRCode{
-                    width: 29.3%;
-                    height: 52.6%;
-                    float: left;
-                    margin-top: 5%;
-                    background: #000;
-                    &>img{
-                        width: 100%;
-                        height: 100%;
-                        border: none;
-                    }
-                }
-            }
-            .testInstructions{
-                width: calc( 100% -82px);
-                height: calc( 45.6% - 44px);
-                padding: 22px 41px;
-                &>h3{
                     width: 100%;
-                    height: 44px;
-                    line-height: 44px;
                     font-size: 20px;
-                }
-                &>p{
-                    width: 100%;
-                    height: 30px;
-                    line-height: 30px;
-                    font-size: 16px;
-                    color: #838383;
+                    height: 48px;
+                    line-height: 48px;
+                    &>span:nth-of-type(1){
+                        margin-left: 26px
+                    }
+                    .threeLetter{
+                        letter-spacing:9px;
+                        margin-right:-9px;
+                    }
                     
-                }
-                li{
-                    width: calc(100% - 20px); 
-                    height: 30px;
-                    line-height: 30px;
-                    font-size: 16px;
-                    color: #838383;
-                    list-style: none;
-                    padding-left: 20px;
-                    &:nth-of-type(4){
-                        margin-bottom: 20px;
+                    &:nth-of-type(2){
+                    &>span:nth-of-type(1){
+                        margin-right: 20px
+                    }
                     }
                 }
-                #examSteps{
-                    width: calc( 100% -20px);
-                    padding-left: 20px;
-                    & /deep/ .el-step__line{
-                        background-color:#838383;
-                    }
-                    & /deep/ .el-step__head.is-wait {
-                        color:#838383;
-                        border-color: #838383;
-                    }
-                    & /deep/ .el-step.is-center .el-step__description{
-                        padding-top: 15px;
-                        color:#838383;
-                    }    
+            }
+            &>.QRCode{
+                // width: 29.3%;
+                // height: 52.6%;
+                width: 200px;
+                height: 200px;
+                float: left;
+                margin-top: 8%;
+                margin-left: 2%;
+                background: #000;
+                &>img{
+                    width: 100%;
+                    height: 100%;
+                    border: none;
                 }
             }
         }
-    // }
-    
+        .testInstructions{
+            width: calc( 100% -82px);
+            height: calc( 45.6% - 44px);
+            padding: 22px 41px;
+            &>h3{
+                width: 100%;
+                height: 44px;
+                line-height: 44px;
+                font-size: 20px;
+            }
+            &>p{
+                width: 100%;
+                height: 30px;
+                line-height: 30px;
+                font-size: 16px;
+                color: #838383;
+                
+            }
+            li{
+                width: calc(100% - 20px); 
+                height: 30px;
+                line-height: 30px;
+                font-size: 16px;
+                color: #838383;
+                list-style: none;
+                padding-left: 20px;
+                &:nth-of-type(4){
+                    margin-bottom: 20px;
+                }
+            }
+            #examSteps{
+                width: calc( 100% -20px);
+                padding-left: 20px;
+                & /deep/ .el-step__line{
+                    background-color:#838383;
+                }
+                & /deep/ .el-step__head.is-wait {
+                    color:#838383;
+                    border-color: #838383;
+                }
+                & /deep/ .el-step.is-center .el-step__description{
+                    padding-top: 15px;
+                    color:#838383;
+                }    
+            }
+        }
+    }
 }
 </style>

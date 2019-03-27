@@ -38,7 +38,7 @@
                 <el-table-column
                 prop="userName"
                 label="用户名"
-                width="140">
+                width="170">
                 </el-table-column>
                 <el-table-column
                 prop="phone"
@@ -205,9 +205,9 @@ export default {
       params.append("userId", 1);
       this.getData("/api/order/order_list", { params });
     },
-    handldetails(id) {
+    handldetails(val) {
       //查看详细页
-      this.$emit("hanleShow", true);
+      this.$emit("hanleShow", {boolean:true,index:val});
     }
   },
   computed:{

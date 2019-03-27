@@ -2,7 +2,7 @@
 <div id="standardTemplateBox">
     <div class="standardTemplate">
           <div class="addStandard">
-            <common-top :titleTop="titleTop"></common-top>
+            <commonTop :titleTop="titleTop"></commonTop>
                 <!-- 新增标准内容 -->
             <div class="standardBody">
                 <div class="testLevel">
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import commonTop from "../../common/common-top";
+import commonTop from "../../common/commonTop";
 export default {
   components: {
     commonTop

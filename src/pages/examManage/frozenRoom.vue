@@ -47,7 +47,7 @@
                 <el-table-column
                 label="管理操作">
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error iconfont icon-huifu" @click.prevent="unFreezeData(scope.row.id)" :disabled="isDisable">恢复</el-button>
+                    <el-button class="recoverBtn" type="text" icon="el-icon-error iconfont icon-huifu" @click.prevent="unFreezeData(scope.row.id)" :disabled="isDisable">恢复</el-button>
                     <el-button type="text" icon="el-icon-error" @click.prevent="handldetails(scope.row.id)">详情</el-button>
                 </template>
                 </el-table-column >
@@ -65,8 +65,8 @@
 </template>
 
 <script>
-import commonTop from '../common/common-top'
-import { _debounce } from "@/utils/public";
+import commonTop from '../common/commonTop.vue'
+import { _debounce } from "../../utils/public.js";
 export default {
   components:{
         commonTop
@@ -176,6 +176,11 @@ export default {
   height: calc(100% - 20px);
   min-height: 762px;
   padding: 0 0 20px 0;
+  }
+  .recoverBtn{
+    & /deep/ span{
+      color:#96a324;
+    }
   }
 }
 </style>

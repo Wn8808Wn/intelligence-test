@@ -1,15 +1,16 @@
 <template>
-    <div class="planmanage">
+    <div class="planmanage commonRight">
         <el-tabs type="border-card">
             <el-tab-pane >
-            <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi"></i>无门槛考级设计</span>
+            <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi"></i>限报设置</span>
                 <!-- 显示子页面 -->
-                <plansListCom></plansListCom>
+                <limiteRegistrationSet></limiteRegistrationSet>
             </el-tab-pane> 
             <el-tab-pane >
             <span  slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli"></i>考试计划</span>
                 <!-- 显示子页面 -->
-                 <plansListCom></plansListCom>
+                <plansList v-if="showList"></plansList>
+                <addPlan v-if="!showList"></addPlan>
             </el-tab-pane> 
         </el-tabs>
        
@@ -17,15 +18,19 @@
 </template>
 
 <script>
-import plansListCom from './plansList'
-// import ticketTemplateCom from './plansList'
+import plansList from './plansList'
+import addPlan  from './addPlan'
+import limiteRegistrationSet from './limiteRegistrationSet'
 export default {
   data() {
-    return {};
+    return {
+        showList:false,
+    };
   },
   components:{
-      plansListCom,
-    //   ticketTemplateCom
+      plansList,
+      limiteRegistrationSet,
+      addPlan,
   }
 };
 </script>
@@ -33,7 +38,10 @@ export default {
 <style rel='stylesheet/scss' lang="scss" scoped>
 //  标签页样式
 .planmanage {
- width: 1188px;
- height: 916px;
+ width: 1429px;
+ min-height: 926px;
+ height: 926px;
+//  background: skyblue;
 }
+
 </style>
