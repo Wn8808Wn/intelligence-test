@@ -14,6 +14,7 @@
         
          <div class="tabs-data">     
             <el-table
+            stripe
             :data="tableData"
             style="width: 100%">
                 <el-table-column
@@ -30,7 +31,7 @@
                 label="无证限报级别"
                 width="152">
                 <template slot-scope="scope">
-                    <el-select v-model="scope.row.NolimitLev" class="evenStyle" >
+                    <el-select v-model="scope.row.NolimitLev">
                         <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -124,28 +125,27 @@ export default {
 .limitRegistrationSet{
     width: 677px;
     .tabs-data{
-       
-        .el-table__row{
-            & /deep/ .el-input__inner{
-                border: none;
-                background: #f2f2f2;
-            }
-        }
-        .el-table__row--striped{
-            
-            background: #ff0fff;
+        & /deep/ .el-table__row{
+            background: #ffffff;
             & /deep/ .el-input__inner{
                 border: none;
             }
-
+            & /deep/.el-input__prefix, .el-input__suffix{
+            left: 40px;
+        }
+        }
+        & /deep/ .el-table__row--striped{
+            background: #f2f2f2;
+            // opacity: 0.95;
+            & /deep/ .el-input__inner{
+                border: none;
+                background: #FAFAFA;;
+               
+            }
+        }
+        & /deep/ .el-icon-arrow-up:before {
+            color: #000;
         }
     }
-    .evenStyle{
-        & /deep/ .el-input__inner{
-            border: none;
-            background-color: #f2f2f2;
-        }
-    }
-   
 }
 </style>
