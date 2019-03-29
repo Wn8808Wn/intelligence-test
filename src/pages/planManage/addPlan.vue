@@ -28,13 +28,16 @@
         </div>
         
         <el-dialog title="新增计划" :visible.sync="dialogFormVisible" width="580px">
-                    <div class="setTop">
+                    <div class="setTop clearfix">
                         <div class="setLev">
                             <p>设置报考级别:</p>
                             <el-select v-model="form.examLev" placeholder="请选择报考级别">
-                                    <el-option label="25级——10级  45分钟" value="1"></el-option>
-                                    <el-option label="9级——1级  45分钟" value="2"></el-option>
-                                    <el-option label="1段——5段  45分钟" value="3"></el-option>
+                                <el-option
+                                    v-for="item in examLevClassify"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
                             </el-select>
                         </div>
                         <div class="setLev mgrt0">
@@ -47,55 +50,19 @@
                             end-placeholder="结束日期">
                             </el-date-picker>
                         </div>
-
-                         <div class="setLev">
-                            <p>设置考试时间:</p>
-                              <el-time-select
-                                placeholder="起始时间"
-                                v-model="startTime"
-                                format="HH 时 mm 分"
-                                :picker-options="{
-                                start: '08:30',
-                                step: '00:01',
-                                end: '18:30'
-                                }">
-                            </el-time-select>
-                            <el-time-select
-                            placeholder="结束时间"
-                            v-model="endTime"
-                          >
-                            </el-time-select>
-
-
-
-
-                            <!-- <el-time-picker
-                            :picker-options="{
-                                start: '08:30',
-                                step: '00:45',
-                                end: '18:30'
-                            }"
-                            v-model="value2"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="请设置考试时间">
-                            </el-time-picker> -->
-                           
+                        <div class="setTimer">
+                            <p>设置考试时间:</p> 
+                            <setTimeItem :examLev="form.examLev" :curIndex="index" :item="item" @delCurTimeEmitter="delCurTimeEmitter" 
+                                v-for="(item,index) in timeList" :key="index"
+                                >
+                            </setTimeItem>
+                            <el-button type="primary" @click="addTimeEvent" icon="el-icon-plus" round>增加</el-button>
                         </div>
-
-
-
-
                     </div>
                     <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="dialogFormVisible = false">完 成</el-button>
+                        <el-button type="primary" @click="dialogFormVisible = false" round>完 成</el-button>
                     </div>
                     </el-dialog>
-
-
-
-
 
         <div class="tabs-data addPlanTabs">     
             <el-table 
@@ -137,6 +104,7 @@
 
 <script>
 import commonTop from "../common/commonTop";
+import setTimeItem from '../common/setTime';
 export default {
   data() {
     return {
@@ -144,73 +112,81 @@ export default {
       examRoom: "",
       examRooms: "",
       tableData: [
-          {
-              date:'2019-05-01',
-              examTime:'15:30',
-              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
-              openTime:'2019-05-15'
-          },
-           {
-              date:'2019-05-01',
-              examTime:'15:30',
-              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
-              openTime:'2019-05-15'
-          },
-           {
-              date:'2019-05-01',
-              examTime:'15:30',
-              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
-              openTime:'2019-05-15'
-          },
-           {
-              date:'2019-05-01',
-              examTime:'15:30',
-              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
-              openTime:'2019-05-15'
-          },
-           {
-              date:'2019-05-01',
-              examTime:'15:30',
-              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
-              openTime:'2019-05-15'
-          },
-           {
-              date:'2019-05-01',
-              examTime:'15:30',
-              examLeve:'25级 / 20级 / 10级 / 5级 （45分钟)',
-              openTime:'2019-05-15'
-          },
-
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-15"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-15"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-15"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-15"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-15"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-15"
+        }
+      ],
+      examLevClassify: [
+        {
+          label: "25级——10级  45分钟",
+          value: 45
+        },
+        {
+          label: "9级——1级  60分钟",
+          value: 60
+        },
+        {
+          label: "1段——5段  90分钟",
+          value: 90
+        }
       ],
       date: "",
       examTime: "",
       examLeve: "",
       openTime: "",
-      dialogFormVisible:false,
-      form:{
-          examLev:'',
+      dialogFormVisible: false,
+      form: {
+        examLev: 45
       },
-      selectDate:'',
-      value2: [new Date(2016, 9, 10, 8, 30), new Date(2016, 9, 10, 9, 30)],
-      stepTime:"45",
-      startTime:'',
-   
-
-    }
+      selectDate: "",
+      timeList:[],
+    };
   },
   components: {
-    commonTop
+    commonTop,
+    setTimeItem
   },
-  computed:{
-      endTime(){
-        // var ct = new Date(this.startTime);
-        // console.log(typeof(this.startTime));
-        // var addMinute = 45;
-        // ct.setHours(ct.getMinutes() + addMinute);
-
-        
-      }
-  }
+  methods:{
+      addTimeEvent() {
+         this.timeList.push({})
+      },
+      delCurTimeEmitter(index){
+          this.timeList.splice(index,1);
+      },
+  },
 };
 </script>
 
@@ -279,40 +255,68 @@ export default {
       opacity: 0.99;
     }
   }
-  .addPlanTabs{
-      padding: 0;
-      & /deep/ .el-table tr{
-          background-color: #ffffff;
-      }
-     & /deep/ .el-table__header {
-        box-sizing: border-box;
-        border-collapse: collapse;
+  .addPlanTabs {
+    padding: 0;
+    & /deep/ .el-table tr {
+      background-color: #ffffff;
+    }
+    & /deep/ .el-table__header {
+      box-sizing: border-box;
+      border-collapse: collapse;
     }
   }
 
-  .setTop{
-      width:  100% ;
-      &>.setLev{
-          width: 260px;
-          float: left;
-          margin-right: 18px;
-          &>p{
-            height:17px;
-            font-size:16px;
-            color:rgba(0,0,0,1);
-            line-height:17px;
-            opacity:0.5;
+  .setTop {
+    width: 100%;
+    & > .setLev {
+      width: 260px;
+      float: left;
+      margin-right: 18px;
+      margin-bottom: 10px;
+      & > p {
+        height: 17px;
+        font-size: 16px;
+        color: rgba(0, 0, 0, 1);
+        line-height: 17px;
+        opacity: 0.5;
+        margin-bottom: 10px;
+      }
+      & /deep/ .el-input__inner {
+        width: 260px;
+      }
+    }
+    & > .mgrt0 {
+      margin-right: 0;
+    }
+    .setTimer{
+        width: 100%;
+        float: left;
+        &>p{
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+            color: #000;
+            line-height: 40px;
             margin-bottom: 10px;
-          }
-      & /deep/ .el-input__inner{
-          width: 260px;
-      }
-      }
-      & >.mgrt0{
-          margin-right: 0;
-      }
-
-
+        }
+        &>.el-button.is-round{
+          padding: 10px 10px;
+          width: 84px;
+          height: 37px;
+          background: #1f91b5;
+        }
+    }
+  }
+  & /deep/ .el-dialog__body{
+      height: 500px;
+  }
+  .dialog-footer{
+    &>.el-button--primary{
+      padding: 10px 10px;
+      width: 84px;
+      height: 37px;
+      background: #1f91b5;
+    }
   }
 }
 </style>
