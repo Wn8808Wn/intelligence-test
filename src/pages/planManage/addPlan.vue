@@ -21,8 +21,8 @@
                 <span class="commontips">考场计划:</span>
                 <div class="btnGroup">
                     <el-button type="primary" plain  @click="dialogFormVisible = true">新增</el-button>
-                    <el-button type="primary" plain>删除</el-button>
-                    <el-button type="primary" plain>撤销</el-button>
+                    <el-button type="primary" @click="showDelIconEvent" plain>删除</el-button>
+                    <el-button type="primary" plain @click="returnBack">撤销</el-button>
                 </div>
             </div>
         </div>
@@ -52,12 +52,15 @@
                         </div>
                         <div class="setTimer">
                             <p>设置考试时间:</p> 
-                            <setTimeItem :examLev="form.examLev" :curIndex="index" :item="item" @delCurTimeEmitter="delCurTimeEmitter" 
+                            <setTimeItem :examLev="form.examLev" :curIndex="index"  @delCurTimeEmitter="delCurTimeEmitter" 
                                 v-for="(item,index) in timeList" :key="index"
                                 >
                             </setTimeItem>
                             <el-button type="primary" @click="addTimeEvent" icon="el-icon-plus" round>增加</el-button>
                         </div>
+                        
+                        <p>开放报名时间: 提前两周，当日早上8：00开放报名</p>
+                        
                     </div>
                     <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="dialogFormVisible = false" round>完 成</el-button>
@@ -88,7 +91,12 @@
             prop="examLeve"
             label="报考级别(考试时长)"
             width="418">
+              <template slot-scope="scope">
+                  {{ scope.row.examLeve}} 
+                  <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.$index)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
+              </template>
             </el-table-column>
+           
 
             <el-table-column
             prop="openTime"
@@ -104,7 +112,7 @@
 
 <script>
 import commonTop from "../common/commonTop";
-import setTimeItem from '../common/setTime';
+import setTimeItem from '../common/setExamTime';
 export default {
   data() {
     return {
@@ -116,37 +124,37 @@ export default {
           date: "2019-05-01",
           examTime: "15:30",
           examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-15"
+          openTime: "2019-05-05"
         },
         {
           date: "2019-05-01",
           examTime: "15:30",
           examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-15"
+          openTime: "2019-05-06"
         },
         {
           date: "2019-05-01",
           examTime: "15:30",
           examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-15"
+          openTime: "2019-05-07"
         },
         {
           date: "2019-05-01",
           examTime: "15:30",
           examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-15"
+          openTime: "2019-05-08"
         },
         {
           date: "2019-05-01",
           examTime: "15:30",
           examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-15"
+          openTime: "2019-05-09"
         },
         {
           date: "2019-05-01",
           examTime: "15:30",
           examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-15"
+          openTime: "2019-05-10"
         }
       ],
       examLevClassify: [
@@ -173,6 +181,8 @@ export default {
       },
       selectDate: "",
       timeList:[],
+      showDelIcon:false,
+      delTabs:[]
     };
   },
   components: {
@@ -180,8 +190,40 @@ export default {
     setTimeItem
   },
   methods:{
+      showDelIconEvent(){
+        this.showDelIcon = !this.showDelIcon;
+
+      },
+      delCurRow(index){
+
+        this.delTabs.push(this.tableData[index]);
+        this.delTabs.splice(0,this.delTabs.length-1)
+        this.tableData.splice(index,1);
+      },
+      //撤销 删除的数据重新存入一个新数组delTabs，当点击时拿到数组中最后一个回填至tableData中。
+      returnBack(){
+        if(this.delTabs.length <= 0){
+          this.$message({
+            showClose:true,
+            type:'warning',
+            message:'抱歉,只能撤销一步'
+
+          })
+        }
+        this.tableData.push(this.delTabs[this.delTabs.length-1])
+        this.delTabs.pop()
+      },
       addTimeEvent() {
-         this.timeList.push({})
+        //  this.timeList.push({'stTime':this.startExamTime,'endTime':this.endExamTime});
+         this.timeList.push({});
+         if(this.timeList.length >=6){
+            this.$message({
+              showClose: true,
+              message: '每天最多只能添加6场考试',
+              type: 'warning'
+            });
+            this.timeList.length = 6;
+         }
       },
       delCurTimeEmitter(index){
           this.timeList.splice(index,1);
@@ -284,6 +326,15 @@ export default {
       & /deep/ .el-input__inner {
         width: 260px;
       }
+    }
+    &>p{
+      width: 100%;
+      height: 17px;
+      float: left;
+      font-size: 16px;
+      color: #000;
+      line-height: 17px;
+      margin-top: 20px;
     }
     & > .mgrt0 {
       margin-right: 0;
