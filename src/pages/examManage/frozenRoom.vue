@@ -84,7 +84,7 @@ export default {
     };
   },
   methods: {
-    getDate(url, params) {
+    getData(url, params) {
       this.tableData = [];
       this.$http.get(url, params).then(res => {
           // 分页
@@ -111,7 +111,7 @@ export default {
       params.append("dataStatus", 1);
       params.append("userId", 1);
       params.append("page", val);
-      this.getDate("/api/room/room_list", { params });
+      this.getData("/api/room/room_list", { params });
     },200),
     unFreezeData(id){
        //恢复考场操作
@@ -151,7 +151,7 @@ export default {
     let params = new URLSearchParams();
     params.append("userId", 1);
     params.append("dataStatus", 1);
-    this.getDate("/api/room/room_list", { params });
+    this.getData("/api/room/room_list", { params });
   }
 };
 </script>

@@ -22,7 +22,7 @@
                 <div class="btnGroup">
                     <el-button type="primary" plain  @click="dialogFormVisible = true">新增</el-button>
                     <el-button type="primary" @click="showDelIconEvent" plain>删除</el-button>
-                    <el-button type="primary" plain @click="returnBack">撤销</el-button>
+                    <el-button type="primary" plain @click="UNDO">撤销</el-button>
                 </div>
             </div>
         </div>
@@ -75,10 +75,8 @@
 
             <el-table-column
             label="日期"
+            prop="date"
             width="153">
-            <template slot-scope="scope">
-                {{ scope.row.date}}
-            </template>
             </el-table-column>
 
             <el-table-column
@@ -88,11 +86,10 @@
             </el-table-column>
 
             <el-table-column
-            prop="examLeve"
             label="报考级别(考试时长)"
             width="418">
               <template slot-scope="scope">
-                  {{ scope.row.examLeve}} 
+                  <span>{{scope.row.examLeve}}</span>
                   <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.$index)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
               </template>
             </el-table-column>
@@ -192,16 +189,15 @@ export default {
   methods:{
       showDelIconEvent(){
         this.showDelIcon = !this.showDelIcon;
-
       },
       delCurRow(index){
-
-        this.delTabs.push(this.tableData[index]);
+        this.delTabs.push(this.tableData[index])
         this.delTabs.splice(0,this.delTabs.length-1)
         this.tableData.splice(index,1);
+        console.log(this.tableData)
       },
       //撤销 删除的数据重新存入一个新数组delTabs，当点击时拿到数组中最后一个回填至tableData中。
-      returnBack(){
+      UNDO(){
         if(this.delTabs.length <= 0){
           this.$message({
             showClose:true,
@@ -209,9 +205,12 @@ export default {
             message:'抱歉,只能撤销一步'
 
           })
+        }else{
+          this.tableData.push(this.delTabs.pop())
+          console.log(this.tableData,this.delTabs)
         }
-        this.tableData.push(this.delTabs[this.delTabs.length-1])
-        this.delTabs.pop()
+        // this.tableData.push(this.delTabs[this.delTabs.length-1])
+        // this.delTabs.pop()
       },
       addTimeEvent() {
         //  this.timeList.push({'stTime':this.startExamTime,'endTime':this.endExamTime});

@@ -21,19 +21,19 @@
 
             <el-select  v-model="manageUnit" placeholder="全部管理单位" @change="changeManageUnit">
                 <el-option
-                v-for="item in manageUnits"
+                v-for="item in unitsList"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :label="item.unitName"
+                :value="item.unitCode">
                 </el-option>
             </el-select>
 
             <el-select  v-model="examRoom" placeholder="全部考场" @change="changeExamRoom">
                 <el-option
-                    v-for="item in examRooms"
+                    v-for="item in roomList"
                     :key="item.value"
-                    :value="item.value"
-                    :label="item.label">
+                    :value="item.examRoomCode"
+                    :label="item.examRoomName">
                 </el-option>
             </el-select>
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
@@ -45,7 +45,7 @@
                     stripe
                     style="width: 100%">
                         <el-table-column
-                        prop="sequence"
+                        prop="id"
                         label="序号"
                         width="55">
                         </el-table-column>
@@ -57,7 +57,7 @@
                         </el-table-column>
 
                         <el-table-column
-                        prop="examName"
+                        prop="examRoomCode"
                         label="考场名称"
                         width="105">
                         </el-table-column>
@@ -88,8 +88,9 @@
                           </template>
                         </el-table-column>
                         
-                        <el-table-column
-                        prop="openTime"
+                        <!-- 开放报名时间 有两部分组成 signOpenDate + signOpenTime 组成新的字符串 -->
+                        <el-table-column 
+                        prop="openTime" 
                         label="开放报名时间"
                         width="160">
                         </el-table-column>
@@ -102,7 +103,7 @@
 
 
                         <el-table-column
-                        prop="author"
+                        prop="createdUser"
                         label="作者"
                         width="115">
                         </el-table-column>
@@ -124,11 +125,6 @@
                     @current-change="handleCurrentChange">
                     </el-pagination>
                 </div>  
-
-
-
-
-
     </div>
 </template>
 
@@ -140,112 +136,93 @@ export default {
             total:10,
             pickerTime:'',
             manageUnit:'',
-            manageUnits:[],
+            unitsList:[],
             examRoom:'',
-            examRooms:[],
-            tableData:[
-                {
-                    sequence:1,
-                    manageUnit:'河北省围棋协会',
-                    examName:'动力区考场',
-                    examDate:'2018-11-04',
-                    examTime:'9:30',
-                    timeLong:'45分钟',
-                    examLevel:'25K',
-                    openTime:'2019-09-09 9:30',
-                    createdTime:'2019-03-22  14:22',
-                    author:'王老师',
-                },
-                 {
-                    sequence:2,
-                    manageUnit:'河北省围棋协会',
-                    examName:'动力区考场',
-                    examDate:'2018-11-04',
-                    examTime:'9:30',
-                    timeLong:'45分钟',
-                    examLevel:'25K',
-                    openTime:'2019-09-09 9:30',
-                    createdTime:'2019-03-22  14:22',
-                    author:'王老师',
-                },
-                 {
-                    sequence:3,
-                    manageUnit:'河北省围棋协会',
-                    examName:'动力区考场',
-                    examDate:'2018-11-04',
-                    examTime:'9:30',
-                    timeLong:'45分钟',
-                    examLevel:'25K',
-                    openTime:'2019-09-09 9:30',
-                    createdTime:'2019-03-22  14:22',
-                    author:'王老师',
-                },
-                 {
-                    sequence:4,
-                    manageUnit:'河北省围棋协会',
-                    examName:'动力区考场',
-                    examDate:'2018-11-04',
-                    examTime:'9:30',
-                    timeLong:'45分钟',
-                    examLevel:'25K',
-                    openTime:'2019-09-09 9:30',
-                    createdTime:'2019-03-22  14:22',
-                    author:'王老师',
-                },
-                 {
-                    sequence:5,
-                    manageUnit:'河北省围棋协会',
-                    examName:'动力区考场',
-                    examDate:'2018-11-04',
-                    examTime:'9:30',
-                    timeLong:'45分钟',
-                    examLevel:'25K',
-                    openTime:'2019-09-09 9:30',
-                    createdTime:'2019-03-22  14:22',
-                    author:'王老师',
-                },
-
-            ],
-            sequence:'',
+            roomList:[],
+            tableData:[],
+            id:'',
             manageUnit:'',
-            examName:'',
+            examRoomCode:'',
             examDate:'',
             examTime:'',
             timeLong:'',
             examLevel:'',
             openTime:'',
             createdTime:'',
-            author:'',
+            createdUser:'',
             currentPage:1,
         }
 
     },
     methods:{
+        getData( url, params){
+            this.$http.get(url, params).then(res => {
+            this.tableData = [];
+            if(res){
+                this.total = res.data.data.total;
+                this.totalPage = res.data.data.totalPage;
+                this.pageSize = res.data.data.pageSize;
+                this.currentPage = res.data.data.page;
+                // console.log(res.data.data)
+                let rst = res.data.data;
+                this.unitsList = rst.unitsList
+                this.roomList = rst.roomList
+                this.tableData = rst.planPage.rows
+                // this.tableData.forEach((item, index) => {
+                //     item.createdTime = this.getTimeStyle(item.createdTime);
+                // });
+               
+            }
+            });
+        },
         handleAddPlan(){
             this.$router.push('')
 
         },
         searchData(){
-
+            let params = new URLSearchParams();
+            params.append("userId", 1);
+            params.append("str", this.inputVal);
+            this.getData("/api//plan/plan_list", { params }); 
         },
         changePickerTime(){
+            let params = new URLSearchParams();
+            if(this.manageUnit !== ''){
+                params.append("manageUnit",this.manageUnit); 
+            }
+            if(this.pickerTime !== ''){
+                params.append("beginTime",this.pickerTime[0])
+                params.append("endTime",this.pickerTime[1])
+            }
+            this.getData("/api/exam/status_list", { params });
 
         },
-        changeManageUnit(){
-
+        changeManageUnit(val){
+            console.log(val)
+        },  
+        changeExamRoom(val){
+            console.log(val)
         },
-        changeExamRoom(){
-
-        },
-        modifyData(){
+        modifyData(val){
+            let parmas = new UrlSearchParams()
+            params.append('id',val)
+            this.$http.get('/api/plan/plan_detail',{params}).then()
 
         },
         handldetails(){
 
         },
-        handleCurrentChange(){
-            
+        handleCurrentChange(val){
+            let params = new URLSearchParams();
+            params.append("page", val);
+            this.getData("/api/plan/plan_list", { params });
         }
+    },
+    mounted(){
+         let params = new URLSearchParams();
+         params.append("userId", 1);
+         this.getData("/api/plan/plan_list", { params });
+
     }
     
 }
@@ -255,7 +232,6 @@ export default {
 .planList{
     width: 100%;
     height: 926px;
-    // background: skyblue;
     #searchPart{   
         height: 66px;
         width: 100%;

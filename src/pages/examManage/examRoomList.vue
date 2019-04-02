@@ -89,7 +89,7 @@ export default {
   },
   props: ["SHOWTYPE"],
   methods: {
-    getDate(url, params) {
+    getData(url, params) {
       this.tableData = [];
       this.$http.get(url, params).then(res => {
           // 分页
@@ -100,7 +100,7 @@ export default {
           this.currentPage = res.data.data.page;
           //列表数据
           let rst = res.data.data.rows;
-          // console.log(rst)
+          console.log(rst)
           //转换日期格式  地址缩写
           this.tableData = rst;
           this.tableData.forEach( (item,index) => {
@@ -122,7 +122,7 @@ export default {
       params.append("dataStatus", 0);
       params.append("userId", 1);
       params.append("page", val);
-      this.getDate("/api/room/room_list", { params });
+      this.getData("/api/room/room_list", { params });
     },300),
     handleAddRoom() {
       //跳转新增考场页面
@@ -163,7 +163,7 @@ export default {
       params.append("examRoomCode", this.RoomCode);
       params.append("dataStatus", 0);
       params.append("userId", 1);
-      this.getDate("/api/room/room_list", { params });
+      this.getData("/api/room/room_list", { params });
     },
     handldetails(id) {
       //查看详细页
@@ -175,7 +175,7 @@ export default {
     let params = new URLSearchParams();
     params.append("userId", 1);
     params.append("dataStatus", 0);
-    this.getDate("/api/room/room_list", { params });
+    this.getData("/api/room/room_list", { params });
   }
 };
 </script>

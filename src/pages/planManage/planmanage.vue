@@ -18,19 +18,19 @@
 </template>
 
 <script>
-import plansList from './plansList'
-import addPlan  from './addPlan'
-import limiteRegistrationSet from './limiteRegistrationSet'
+import plansList from "./plansList";
+import addPlan from "./addPlan";
+import limiteRegistrationSet from "./limiteRegistrationSet";
 export default {
   data() {
     return {
-        showList:false,
+      showList: true
     };
   },
-  components:{
-      plansList,
-      limiteRegistrationSet,
-      addPlan,
+  components: {
+    plansList,
+    limiteRegistrationSet,
+    addPlan
   }
 };
 </script>
@@ -38,10 +38,11 @@ export default {
 <style rel='stylesheet/scss' lang="scss" scoped>
 //  标签页样式
 .planmanage {
- width: 1429px;
- min-height: 926px;
- height: 926px;
-//  background: skyblue;
+  width: 1429px;
+  min-height: 926px;
+  height: 926px;
+  & /deep/ .el-tabs--border-card > .el-tabs__content {
+    padding: 0px;
+  }
 }
-
 </style>
