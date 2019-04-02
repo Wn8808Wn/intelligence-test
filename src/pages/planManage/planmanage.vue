@@ -9,7 +9,7 @@
             <el-tab-pane >
             <span  slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli"></i>考试计划</span>
                 <!-- 显示子页面 -->
-                <plansList v-if="showList"></plansList>
+                <plansList v-if="showList" @showAddPlanPage ="showAddPlanPage" ></plansList>
                 <addPlan v-if="!showList"></addPlan>
             </el-tab-pane> 
         </el-tabs>
@@ -24,13 +24,18 @@ import limiteRegistrationSet from "./limiteRegistrationSet";
 export default {
   data() {
     return {
-      showList: true
+      showList: true,
     };
   },
   components: {
     plansList,
     limiteRegistrationSet,
     addPlan
+  },
+  methods:{
+    showAddPlanPage(val){
+      this.showList = val;
+    }
   }
 };
 </script>

@@ -107,31 +107,23 @@ export default {
     methods:{
         getData( url, params){
             this.$http.get(url, params).then(res => {
-            console.log(res)
-            if(res.status == 200 && res.data.code == 1){
-                this.tableData = [];
-                this.total = res.data.data.total;
-                this.totalPage = res.data.data.totalPage;
-                this.pageSize = res.data.data.pageSize;
-                this.currentPage = res.data.data.page;
-                console.log(res.data.data.rows)
-                var rst = res.data.data.rows;
+            // console.log(res)
+                if(res.status == 200 && res.data.code == 1){
+                    this.tableData = [];
+                    this.total = res.data.data.total;
+                    this.totalPage = res.data.data.totalPage;
+                    this.pageSize = res.data.data.pageSize;
+                    this.currentPage = res.data.data.page;
+                    // console.log(res.data.data.rows)
+                    var rst = res.data.data.rows;
 
-            }else{
-                console.log(res.data.msg)
-            }
-            // if (rst) {
-            // this.tableData = rst;
-            // this.tableData.forEach((item, index) => {
-            //     item.createdTime = this.getTimeStyle(item.createdTime);
-            // });
-            // } else {
-            // console.log("err");
-            // }
+                }else{
+                    console.log(res.data.msg)
+                }
             });
         },
         changeSearch(val){
-            console.log(val)
+            // console.log(val)
             let params = new URLSearchParams();
             params.append('manageUnit',val)
             // this.getData('/api/sign_limit/list', { params })

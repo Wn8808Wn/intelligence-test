@@ -4,16 +4,16 @@
         <div class="examSelect">
             <div class="prov">
                     <span class="commontips">考场:</span>
-                    <el-select v-model="examRoom" placeholder="请选择考场">
+                    <el-select v-model="examRoom" placeholder="请选择考场" @change="chooseRoom">
                         <el-option
-                        v-for="item in examRooms"
+                        v-for="item in roomList"
                         :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        :label="item.examRoomName"
+                        :value="item.id">
                         </el-option>
                     </el-select>
             </div>
-            <p>座位数:<span>20个</span></p>
+            <p>座位数:<span>{{spareSeatSize}}个</span></p>
         </div>
 
         <div class="examSelect">
@@ -22,7 +22,7 @@
                 <div class="btnGroup">
                     <el-button type="primary" plain  @click="dialogFormVisible = true">新增</el-button>
                     <el-button type="primary" @click="showDelIconEvent" plain>删除</el-button>
-                    <el-button type="primary" plain @click="UNDO">撤销</el-button>
+                    <el-button type="primary" plain @click="UNDO" :class="{'deactive': currStatus === 0 ,'active': currStatus === 1}">撤销</el-button>
                 </div>
             </div>
         </div>
@@ -93,15 +93,20 @@
                   <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.$index)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
               </template>
             </el-table-column>
-           
 
             <el-table-column
             prop="openTime"
             label="开放报名时间"
             width="188">
             </el-table-column>
-
             </el-table>
+
+            <el-pagination
+                background
+                layout="prev, pager, next"
+                :current-page="currentPage"
+                @current-change="handleCurrentChange">
+            </el-pagination>
         </div>
 </div>
 
@@ -115,7 +120,8 @@ export default {
     return {
       title: "新增计划",
       examRoom: "",
-      examRooms: "",
+      roomList: [],
+      spareSeatSize:'',
       tableData: [
         {
           date: "2019-05-01",
@@ -179,7 +185,9 @@ export default {
       selectDate: "",
       timeList:[],
       showDelIcon:false,
-      delTabs:[]
+      delTabs:[],
+      currentPage:1,
+      currStatus:0
     };
   },
   components: {
@@ -187,8 +195,18 @@ export default {
     setTimeItem
   },
   methods:{
+      chooseRoom(val){
+       var obj = this.roomList.filter(item => item.id === val)
+       console.log(obj)
+       this.spareSeatSize = obj[0].spareSeatSize;
+       // 选择切换考场获取当前考场的考试列表
+       
+      },
       showDelIconEvent(){
         this.showDelIcon = !this.showDelIcon;
+      },
+      handleCurrentChange(){
+
       },
       delCurRow(index){
         this.delTabs.push(this.tableData[index])
@@ -228,6 +246,26 @@ export default {
           this.timeList.splice(index,1);
       },
   },
+  watch:{
+      delTabs(){
+        if(this.delTabs.length <= 0){
+          this.currStatus = 0;
+        }else{
+          this.currStatus = 1;
+        }
+      }
+  },
+  mounted(){
+      let params = new URLSearchParams();
+      params.append("userId", 1);
+      this.$http.get("/api/plan/plan_list", { params }).then( res =>{
+        // console.log(res.data.data.roomList)
+        if(res.status === 200 && res.data.code ===0){
+          this.roomList = res.data.data.roomList
+        }
+      })
+
+  }
 };
 </script>
 
@@ -263,8 +301,16 @@ export default {
       .btnGroup {
         margin-top: 10px;
         & > .el-button:nth-last-child(1) {
-          background: #c3c3c3;
+          border-color: #c3c3c3;
           color: #333333;
+        }
+        .active{
+          background: #1f91b5;
+          color: #000
+        }
+        .deactive{
+           background: #c3c3c3;
+           border-color: #c3c3c3;
         }
       }
     }
@@ -297,6 +343,8 @@ export default {
     }
   }
   .addPlanTabs {
+    height: 100px;
+    max-height: 330px;
     padding: 0;
     & /deep/ .el-table tr {
       background-color: #ffffff;

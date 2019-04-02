@@ -24,7 +24,7 @@
                 v-for="item in unitsList"
                 :key="item.value"
                 :label="item.unitName"
-                :value="item.unitCode">
+                :value="item.id">
                 </el-option>
             </el-select>
 
@@ -32,8 +32,8 @@
                 <el-option
                     v-for="item in roomList"
                     :key="item.value"
-                    :value="item.examRoomCode"
-                    :label="item.examRoomName">
+                    :label="item.examRoomName"
+                    :value="item.id">
                 </el-option>
             </el-select>
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
@@ -158,7 +158,8 @@ export default {
         getData( url, params){
             this.$http.get(url, params).then(res => {
             this.tableData = [];
-            if(res){
+            console.log(res)
+            if(res.status === 200 && res.data.code ===0){
                 this.total = res.data.data.total;
                 this.totalPage = res.data.data.totalPage;
                 this.pageSize = res.data.data.pageSize;
@@ -172,18 +173,19 @@ export default {
                 //     item.createdTime = this.getTimeStyle(item.createdTime);
                 // });
                
+            }else{
+                console.log(res.data.msg)
             }
             });
         },
         handleAddPlan(){
-            this.$router.push('')
-
+            this.$emit('showAddPlanPage',false)
         },
         searchData(){
             let params = new URLSearchParams();
-            params.append("userId", 1);
+            // params.append("userId", 1);
             params.append("str", this.inputVal);
-            this.getData("/api//plan/plan_list", { params }); 
+            this.getData("/api/plan/plan_list", { params }); 
         },
         changePickerTime(){
             let params = new URLSearchParams();
@@ -194,19 +196,34 @@ export default {
                 params.append("beginTime",this.pickerTime[0])
                 params.append("endTime",this.pickerTime[1])
             }
-            this.getData("/api/exam/status_list", { params });
+            this.getData("/api/plan/plan_list", { params });
 
         },
         changeManageUnit(val){
-            console.log(val)
+            let params = new URLSearchParams();
+            if(this.examRoom){
+               params.append('examRoom',this.examRoom)
+            }
+            params.append('manageUnit',val)
+            console.log(params)
+            this.getData("/api/plan/plan_list", { params });
         },  
         changeExamRoom(val){
             console.log(val)
+             let params = new URLSearchParams();
+            if(this.manageUnit){
+                params.append('manageUnit',this.manageUnit)
+            }
+            params.append('examRoom',val)
+            console.log(params)
+            this.getData("/api/plan/plan_list", { params });
         },
         modifyData(val){
-            let parmas = new UrlSearchParams()
+            let params = new URLSearchParams();
             params.append('id',val)
-            this.$http.get('/api/plan/plan_detail',{params}).then()
+            this.$http.get('/api/plan/plan_detail',{params}).then( res =>{
+                console.log(res)
+            })
 
         },
         handldetails(){
