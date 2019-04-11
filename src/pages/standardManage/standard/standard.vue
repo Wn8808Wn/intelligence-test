@@ -2,12 +2,12 @@
     <div class="standard">
         <div class="top">
             <el-button type="primary" icon="el-icon-plus"  round @click="handleAddStandard">新增标准</el-button>
-            <el-select  v-model="value" placeholder="全部管理单位" @change="changeSearch">
+            <el-select  v-model="currManageUnit" placeholder="全部管理单位" @change="changeSearch">
                 <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in unitsList"
+                :key="item.id"
+                :label="item.unitName"
+                :value="item.id">
                 </el-option>
             </el-select>
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
@@ -98,33 +98,11 @@
 export default {
   data() {
     return {
-      tableData: [
-       
-      ],
-      options: [
-        {
-          value: "中国围棋协会",
-          label: "中国围棋协会"
-        },
-        {
-          value: "上海围棋协会",
-          label: "上海围棋协会"
-        },
-        {
-          value: "河北围棋协会",
-          label: "河北围棋协会"
-        },
-        {
-          value: "河南围棋协会",
-          label: "河南围棋协会"
-        },
-        {
-          value: "北京围棋协会",
-          label: "北京围棋协会"
-        }
-      ],
+      tableData: [],
+      unitsList:[],
+      levelList:[],
       total: null,
-      value: "",
+      currManageUnit: "",
       dataType:1,
       currentPage: 1,
       pageSize: 10,
@@ -133,6 +111,25 @@ export default {
     };
   },
   methods: {
+    getData(url,params){
+        this.$http.get(url,params).then(res => {
+            this.tableData=[];
+            console.log(res,1111)
+            this.total = res.data.data.standPage.total;
+            this.currentPage = res.data.data.standPage.page;
+            this.pageSize = res.data.data.standPage.pageSize;
+            this.totalPage = res.data.data.standPage.totalPage;
+            this.tableData = res.data.data.standPage.rows;;
+            this.unitsList  = res.data.data.unitsList;
+            this.levelList = res.data.data.levelList;
+            console.log(this.unitsList,this.levelList)
+            this.tableData.forEach( (item,index) =>{
+                item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
+                item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
+                item.itemDifficulty = this.levelList.filter( (val) => val.id == item.itemDifficulty)[0].levelName
+            } )
+        })
+    },
     handleAddStandard() {
       this.$router.push({path: '/addStandard' })
     },
@@ -143,48 +140,12 @@ export default {
       params.append("page", val);
       this.getData("/api/standard/standard_list", { params });
     },
-    getData(url,params){
-        this.tableData=null;
-        this.$http.get(url,params).then(res => {
-            // console.log(res.data.data);
-            this.total = res.data.data.total;
-            let rst = res.data.data.rows;
-            this.tableData = rst;
-            //处理数据
-            for(let i = 0 ;  i< this.tableData.length; i++){
-              this.tableData[i].examLevel = rst[i].examLevel +'级'
-              this.tableData[i].itemDifficulty = rst[i].itemDifficulty +'级'
-              this.tableData[i].knowledgeHierarchy = rst[i].knowledgeHierarchy.replace(/,/g,'/')
-              // this.tableData[i].updatedUser = rst[i].updatedUser  
-              //处理时间
-              let time = rst[i].updatedTime;
-              let d = new Date(time);
-              let times =
-                  d.getFullYear() +"-" +(d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1): d.getMonth() + 1) +
-                    "-" +
-                  (d.getDate() < 10 ? "0" + d.getDate() : d.getDate() + 1);
-               this.tableData[i].updatedTime = times 
-            }
-        })
-    },
     changeSearch(val){
-       let params = new URLSearchParams();
-       if(val =='中国围棋协会'){
-         val = 0;
-         console.log(val)
-       }else if(val =='上海围棋协会'){
-         val = 1;
-       }else if(val =='河北围棋协会'){
-         val = 2;
-       }else if(val =='河南围棋协会'){
-         val = 3;
-       }else{
-         val = 4;
-       }
+      let params = new URLSearchParams();
        params.append("userId", 1);
+       params.append("dataType", this.dataType);
        params.append("manageUnit", val);    // 管理单位对应的数字编码
        this.getData("/api/standard/standard_list", { params });
-      
     },
     // 修改对应的数据
     modifyData(id){
@@ -197,8 +158,7 @@ export default {
       // console.log(id)
     }
   },
-  
-  created(){
+  mounted(){
     //进入页面显示考题标准信息
     let params = new URLSearchParams();
     params.append("userId", 1);

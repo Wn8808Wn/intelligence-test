@@ -84,7 +84,8 @@ export default {
       totalPage: null,
       total: null,
       isDisable: false,
-      tableData: []
+      tableData: [],
+      unitsList:[]
     };
   },
   props: ["SHOWTYPE"],
@@ -93,20 +94,23 @@ export default {
       this.tableData = [];
       this.$http.get(url, params).then(res => {
           // 分页
-          // console.log(res.data.data);
-          this.total = res.data.data.total;
-          this.totalPage = res.data.data.totalPage;
-          this.pageSize = res.data.data.pageSize;
-          this.currentPage = res.data.data.page;
+          // console.log(res);
+          this.total = res.data.data.roomPage.total;
+          this.totalPage = res.data.data.roomPage.totalPage;
+          this.pageSize = res.data.data.roomPage.pageSize;
+          this.currentPage = res.data.data.roomPage.page;
           //列表数据
-          let rst = res.data.data.rows;
-          console.log(rst)
+          let rst = res.data.data.roomPage.rows;
           //转换日期格式  地址缩写
           this.tableData = rst;
+          this.unitsList = res.data.data.unitsList;
           this.tableData.forEach( (item,index) => {
             item.buildDate = this.getTimeStyle(item.buildDate)
             item.addressabbr = item.province + item.city + item.distric;
+            //管理单位code码转换为名字
+            item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
           })
+
         })
         .catch(err => {
           console.log(err);
@@ -170,7 +174,7 @@ export default {
       this.$router.push({ name: "examRoomDetail", query: { id: id } });
     }
   },
-  created() {
+  mounted() {
     //页面进入请求数据
     let params = new URLSearchParams();
     params.append("userId", 1);

@@ -7,13 +7,13 @@
                 <el-select v-model="examRoom" placeholder="请选择考场" @change="chooseRoom">
                     <el-option
                     v-for="item in roomList"
-                    :key="item.id"
+                    :key="item.value"
                     :label="item.examRoomName"
                     :value="item.id">
                     </el-option>
                 </el-select>
             </div>
-            <p>座位数:<span>{{realSeatings}}个</span></p>  
+            <p>座位数:<span>{{spareSeatSize}}个</span></p>
         </div>
 
         <div class="examSelect">
@@ -31,7 +31,7 @@
             <div class="setTop clearfix">
                 <div class="setLev">
                     <p>设置报考级别:</p>
-                    <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeTimes">
+                    <el-select v-model="form.examLev" placeholder="请选择报考级别">
                         <el-option
                             v-for="item in examLevClassify"
                             :key="item.value"
@@ -67,26 +67,6 @@
             </div>
         </el-dialog>
 
-
-        <el-dialog
-        title="提示"
-        :visible.sync="dialogVisible"
-        width="30%"
-        >
-        <p><span>本次新增2条</span>  <span>成功2条</span>  <span>失败2条</span></p>
-        <p>失败如下:</p>
-        <p v-for="(item,index) in errorList" :key="index">
-            <span>日期</span> <span>时间</span>
-
-        </p>
-
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">完 成(5)</el-button>
-        </span>
-      </el-dialog>
-
-
-
         <div class="tabs-data" id="addPlanTabs">     
             <el-table 
             border
@@ -95,10 +75,8 @@
 
             <el-table-column
             label="日期"
+            prop="date"
             width="153">
-            <template slot-scope="scope">
-              <span style="margin-right:10px">{{scope.row.examDate}}</span>  <span>周{{"日一二三四五六".charAt(new Date(scope.row.examDate).getDay())}}</span>
-            </template> 
             </el-table-column>
 
             <el-table-column
@@ -111,8 +89,7 @@
             label="报考级别(考试时长)"
             width="418">
               <template slot-scope="scope">
-                  <span>{{scope.row.levelStr.replace(/,/g,'/')}}</span>
-                  <span style="margin-left:10px">({{scope.row.timeStr}}钟)</span>
+                  <span>{{scope.row.examLeve}}</span>
                   <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.$index)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
               </template>
             </el-table-column>
@@ -125,14 +102,11 @@
             </el-table>
 
             <p style="margin-top:20px" v-if="tableData.length>0">共有{{total}}条结果</p>
-            <!-- 分页 -->
             <el-pagination
-            background
-            :total="total" 
-            layout="prev, pager, next"
-            :current-page="currentPage"
-            @current-change="handleCurrentChange"
-            >
+                background
+                layout="prev, pager, next"
+                :current-page="currentPage"
+                @current-change="handleCurrentChange">
             </el-pagination>
         </div>
     </div>
@@ -144,27 +118,60 @@ import setTimeItem from "../common/setExamTime";
 export default {
   data() {
     return {
-      title: "新增计划",
+      title: "修改计划",
       examRoom: "",
       roomList: [],
-      realSeatings:'', //真实座位数 
-      provinceCode:"",  // 根据考场列表获取当前的考场省份Code
-      seatSize:"",
       spareSeatSize: "",
       tableData: [
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-05"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-06"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-07"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-08"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-09"
+        },
+        {
+          date: "2019-05-01",
+          examTime: "15:30",
+          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
+          openTime: "2019-05-10"
+        }
       ],
       examLevClassify: [
         {
-          label: "25级 — 10级  45分钟",
-          value: 1
+          label: "25级——10级  45分钟",
+          value: 45
         },
         {
-          label: "5级 — 2段  60分钟",
-          value: 2
+          label: "9级——1级  60分钟",
+          value: 60
         },
         {
-          label: "3段 —7段  90分钟",
-          value: 3
+          label: "1段——5段  90分钟",
+          value: 90
         }
       ],
       date: "",
@@ -173,18 +180,15 @@ export default {
       openTime: "",
       dialogFormVisible: false,
       form: {
-        examLev: 1
+        examLev: 45
       },
       selectDate: "",
       timeList: [],
       showDelIcon: false,
       delTabs: [],
       currentPage: 1,
-      total:0,
-      currStatus: 0,// 通过状态码来控制撤销状态
-      dialogVisible:false,
-      errorList:[
-      ]
+      total:'',
+      currStatus: 0 // 通过状态码来控制撤销状态
     };
   },
   components: {
@@ -192,30 +196,11 @@ export default {
     setTimeItem
   },
   methods: {
-    changeTimes(val){
-      console.log(val)
-    },
     chooseRoom(val) {
-      console.log(val)
       var obj = this.roomList.filter(item => item.id === val);
-      this.realSeatings = obj[0].seatSize-obj[0].spareSeatSize
-      let params = new URLSearchParams();
-      params.append("roomId", val);
-      this.$http.get("/api/plan/room_plan", { params }).then( res =>{
-        console.log(res)
-        if(res){
-          this.total = res.data.data.total;
-          this.totalPage = res.data.data.totalPage;
-          this.pageSize = res.data.data.pageSize;
-          this.currentPage = res.data.data.page;
-          let rst = res.data.data.rows
-          console.log(rst)
-          this.tableData = rst;
-          this.tableData.forEach((item, index) => {
-              item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
-          })
-        }
-      })
+      console.log(obj);
+      this.spareSeatSize = obj[0].spareSeatSize;
+      // 选择切换考场获取当前考场的考试列表 接口？？？？
     },
     showDelIconEvent() {
       this.showDelIcon = !this.showDelIcon;
@@ -229,20 +214,13 @@ export default {
     handleCurrentChange(val) {
       let params = new URLSearchParams();
       params.append("page", val);
-      this.getData("/api/plan/room_plan", { params });
+      this.getData("/api/plan/plan_list", { params });
     },
-    //删除当前行
     delCurRow(index) {
       this.delTabs.push(this.tableData[index]);
       this.delTabs.splice(0, this.delTabs.length - 1);
-      // this.tableData.splice(index, 1);
-      let params = new URLSearchParams()
-      params.append('id',index)
-      this.$http.post("/api/plan/del_plan",params).then( res =>{
-          console.log(res)
-      })
+      this.tableData.splice(index, 1);
       console.log(this.tableData);
-     
     },
     //撤销 删除的数据重新存入一个新数组delTabs，当点击时拿到数组中最后一个回填至tableData中。
     UNDO() {
@@ -254,7 +232,7 @@ export default {
         });
       } else {
         this.tableData.push(this.delTabs.pop());
-        // console.log(this.tableData, this.delTabs);
+        console.log(this.tableData, this.delTabs);
       }
       // this.tableData.push(this.delTabs[this.delTabs.length-1])
       // this.delTabs.pop()
@@ -262,7 +240,7 @@ export default {
     addTimeEvent() {
       //  this.timeList.push({'stTime':this.startExamTime,'endTime':this.endExamTime});
       this.timeList.push({});
-      if (this.timeList.length > 6) {
+      if (this.timeList.length >= 6) {
         this.$message({
           showClose: true,
           message: "每天最多只能添加6场考试",
@@ -285,10 +263,16 @@ export default {
       params.append("beginDate", this.selectDate[0]);
       params.append("endDate", this.selectDate[1]);
       params.append("timeStrs", JSON.stringify(this.timeList));
-      console.log(params)
+      // this.$http.post('/api/plan/add_plan',{
+      //     examLevel:this.form.examLev,
+      //     beginDate:this.selectDate[0],
+      //     endDate:this.selectDate[1],
+      //     timeStrs:JSON.stringify(this.timeList)
+      // }).then( res =>{
+      //   console.log(res)
+      // })
       this.$http.post("/api/plan/add_plan", params).then(res => {
         console.log(res);
-        this.dialogVisible = true;
       });
     }
   },
@@ -304,16 +288,16 @@ export default {
   mounted() {
     let params = new URLSearchParams();
     params.append("userId", 1);
-    params.append("provinceCode",110000) //后期更改 目前传值1
-    this.$http.get("/api/room/get_room_by_province", { params }).then(res => {
-      console.log(res)
+    this.$http.get("/api/plan/plan_list", { params }).then(res => {
+      // console.log(res.data.data.roomList)
       if (res.status === 200 && res.data.code === 0) {
-        this.roomList = res.data.data;
+        this.roomList = res.data.data.roomList;
       }
     });
   }
 };
 </script>
+
 
 <style lang="scss" scoped>
 .addPlanPages {

@@ -2,14 +2,16 @@
     <div class="standardmanage">
         <el-tabs type="border-card">
             <el-tab-pane >
-            <span @click='handleStandard' slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhun" ></i>考场标准</span>
+            <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhun" ></i>考场标准</span>
                 <!-- 显示子页面 -->
-                    <router-view></router-view>
+                    <!-- <router-view></router-view> -->
+                    <standardPage></standardPage>
             </el-tab-pane> 
             <el-tab-pane >
-            <span @click='handleStandardTemplate' slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhunmoban" ></i>考场标准模板</span>
+            <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhunmoban" ></i>考场标准模板</span>
                 <!-- 显示子页面 -->
-                    <router-view></router-view>
+                    <!-- <router-view></router-view> -->
+                    <standardTemplatePage></standardTemplatePage>
             </el-tab-pane> 
         </el-tabs>
        
@@ -17,17 +19,18 @@
 </template>
 
 <script>
+import standardPage from './standard/standard'
+import standardTemplatePage from './standardTemplate/standardTemplate' 
 export default {
+  components:{
+    standardPage,
+    standardTemplatePage
+  },
   data() {
     return {};
   },
   methods:{
-    handleStandard(){
-     this.$router.push({name:'standard'})
-    },
-    handleStandardTemplate(){
-     this.$router.push({name:'standardTemplate'})
-    }
+   
   }
 };
 </script>

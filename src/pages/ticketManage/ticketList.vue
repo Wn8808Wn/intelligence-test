@@ -150,111 +150,14 @@ import QRCode from 'qrcodejs2'
 export default {
     data(){
         return {
-            tableData:[
-                // {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                // {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // },
-                //  {
-                //     manageUnit:'黑龙江省围棋协会',
-                //     playerName: "刘强",
-                //     certificateNo:21090419888121901234,
-                //     chessLevel:"5级",
-                //     phone:18210465511,
-                //     examLevel:"1段",
-                //     examTime:'2019-01-01 8:00',
-                //     dataStatus:0
-                // }
-            ],
+            tableData:[],
+            unitsList:[],  //管理单位数组
+            levelList:[],  // 考试级别数组
             title:'重新发送准考证，用户可在报名端已报考项目内查看',
-            total:10,
-            currentPage:1,
+            currentPage: null,
+            pageSize: 10,
+            totalPage: null,
+            total: null,
             nameNum:'',
             dialogFormVisible: false,
             showDetailPage:false,
@@ -275,27 +178,40 @@ export default {
     methods:{
         getData(url,params){
             this.$http.get(url, params).then( (res) => {
-                console.log(res.data.data.rows)
-                let rst = res.data.data.rows 
-                this.tableData = rst 
-                this.tableData.forEach( (item,index) =>{
-                    item.examTime = this.getTimeStyle(item.examTime)
-                } )
+               console.log(res,111111)
+                if(res){
+                    this.pageSize = res.data.data.examPermit.pageSize
+                    this.totalPage = res.data.data.examPermit.totalPage
+                    this.total = res.data.data.examPermit.total
+                    this.currentPage = res.data.data.examPermit.page
+                    let rst = res.data.data.examPermit.rows 
+                    this.tableData = rst
+                    this.unitsList = res.data.data.unitsList;
+                    this.levelList = res.data.data.levelList;
+                    this.tableData.forEach( (item,index) =>{
+                        item.examTime = this.getTimeStyle(item.examTime)
+                        item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
+                        item.chessLevel = this.levelList.filter( (value) => value.id === item.chessLevel)[0].levelName
+                        item.examLevel = this.levelList.filter( (value) => value.id === item.examLevel)[0].levelName
+                    } )
+
+                }
             }).catch( error =>{
                 console.log(error)
             })
         },
         handlDetails(id){
-
             this.showDetailPage = true;
             let params = new URLSearchParams();
             params.append("id",id);
             params.append("userId", 1);
             this.$http.get("/api/ticket/details_list", { params }).then( res => {
-                console.log(res.data.data)
+                console.log(res.data.data,111112)
                 let rst = res.data.data
                 this.examerInfo = rst;
+                this.examerInfo.examLevel = this.levelList.filter( (value) => value.id === this.examerInfo.examLevel)[0].levelName
                 this.examerInfo.examTime = this.getTimeStyle(rst.examTime)
+                // this.examerInfo.examTime = this.getTimeStyle(rst.examTime)
                 this.getQrCode(this.examerInfo.examPermitNo)
             } )
         },

@@ -177,4 +177,4 @@ export function export_json_to_excel(th, jsonData, defaultTitle) {
   }), title + ".xlsx")
 }
 
-Export2Excel.js
+// Export2Excel.js

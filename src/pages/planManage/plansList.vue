@@ -39,7 +39,7 @@
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
         </div>
 
-         <div class="tabs-data" id="tableStatus">     
+         <div class="tabs-data">     
                     <el-table
                     :data="tableData"
                     stripe
@@ -84,7 +84,7 @@
                           label="级别"
                           width="180">
                           <template slot-scope="scope">
-                            <p>{{ scope.row.examLevel[scope.row.examLevel.length-1] === 'k'  ? parseInt(scope.row.examLevel,10)+"级" : parseInt(scope.row.examLevel,10) +"段"}}</p>
+                            <p>{{ scope.row.examLevel}}</p>
                           </template>
                         </el-table-column>
                         
@@ -111,8 +111,7 @@
                         <el-table-column
                         label="管理操作">
                         <template slot-scope="scope">
-                            <el-button type="text" icon="el-icon-error iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" >修改</el-button>
-                            <el-button type="text" icon="el-icon-error iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                            <el-button type="text" icon="el-icon-error iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" :disabled=" scope.row.status ? true : false">修改</el-button>
                         </template>
                         </el-table-column >
                     </el-table>
@@ -130,11 +129,12 @@
 
 <script>
 export default {
+    props:["CurrentPages"],
     data(){
         return{
             inputVal:'',
             total:10,
-            pickerTime:'',
+            pickerTime:[],
             manageUnit:'',
             unitsList:[],
             examRoom:'',
@@ -145,20 +145,39 @@ export default {
             examRoomCode:'',
             examDate:'',
             examTime:'',
-            timeLong:'',
+            timeLong:'', //先写死后期调整
             examLevel:'',
             openTime:'',
             createdTime:'',
             createdUser:'',
             currentPage:1,
+            disabled:false,
+            nowTimetamp:null
         }
 
     },
     methods:{
+        getDataList(){
+            setInterval(()=>{
+                this.intervalFunc();
+            },1000)
+            this.tableData.push({openTime:'2019-4-10 22:22'},{openTime:'2019-4-10 22:09'});
+            this.tableData.forEach((item,index)=>{
+                this.$set(item,'status',false);
+            })
+        },
+        intervalFunc(){
+            console.log(this.nowTimetamp);
+            this.nowTimetamp = Number(new Date());
+            this.tableData.forEach((item,index)=>{
+                if(this.nowTimetamp - Number(Date.parse(item.openTime.replace(/-/g,'/'))) > 0){
+                    item.status = true;
+                }
+            })
+        },
         getData( url, params){
-            this.$http.get(url, params).then(res => {
+            this.$http.get(url, {params}).then(res => {
             this.tableData = [];
-            console.log(res)
             if(res.status === 200 && res.data.code ===0){
                 this.total = res.data.data.total;
                 this.totalPage = res.data.data.totalPage;
@@ -169,22 +188,39 @@ export default {
                 this.unitsList = rst.unitsList
                 this.roomList = rst.roomList
                 this.tableData = rst.planPage.rows
-                // this.tableData.forEach((item, index) => {
-                //     item.createdTime = this.getTimeStyle(item.createdTime);
-                // });
+                this.tableData.forEach((item, index) => {
+                    item.createdTime = this.getTimeStyle(item.createdTime);
+                    item.timeLong = '45分钟';
+                    item.manageUnit = this.unitsList.filter(itemVal => itemVal.id === item.manageUnit)[0].unitName
+                    // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime) //转换时间样式 由两部分组成
+                    item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
+
+                    let timetamp4 = Number(Date.parse(item.openTime.replace(/-/g,'/')))
+                    let timetamp3 = Number(new Date())
+                    // console.log(timetamp4-timetamp3>0)
+                    if(timetamp4-timetamp3 >= 0){
+                        item.disabled = false
+                        // console.log(11)
+                    }else{
+                        item.disabled = true
+                    }
+                });
                
             }else{
                 console.log(res.data.msg)
             }
+            }).catch((err)=>{
+                console.log()
             });
         },
         handleAddPlan(){
-            this.$emit('showAddPlanPage',false)
+            this.$emit('showPage',this.CurrentPages.ADD_PLAN)
+            // this.$router.push({ path: '/addPlan' })  //走路由方式
         },
         searchData(){
             let params = new URLSearchParams();
             // params.append("userId", 1);
-            params.append("str", this.inputVal);
+            params.append("paramStr", this.inputVal);
             this.getData("/api/plan/plan_list", { params }); 
         },
         changePickerTime(){
@@ -193,8 +229,11 @@ export default {
                 params.append("manageUnit",this.manageUnit); 
             }
             if(this.pickerTime !== ''){
-                params.append("beginTime",this.pickerTime[0])
-                params.append("endTime",this.pickerTime[1])
+                params.append("begin",this.pickerTime[0])
+                params.append("end",this.pickerTime[1])
+            }else{
+                params.delete("begin")
+                params.delete("end")
             }
             this.getData("/api/plan/plan_list", { params });
 
@@ -219,11 +258,12 @@ export default {
             this.getData("/api/plan/plan_list", { params });
         },
         modifyData(val){
-            let params = new URLSearchParams();
-            params.append('id',val)
-            this.$http.get('/api/plan/plan_detail',{params}).then( res =>{
-                console.log(res)
-            })
+            // let params = new URLSearchParams();
+            // params.append('id',val)
+            // this.$http.get('/api/plan/plan_detail',{params}).then( res =>{
+            //     console.log(res)
+            // })
+            this.$emit("showPage",this.currentPage.EDIT_PLAN)
 
         },
         handldetails(){
@@ -236,10 +276,15 @@ export default {
         }
     },
     mounted(){
-         let params = new URLSearchParams();
-         params.append("userId", 1);
-         this.getData("/api/plan/plan_list", { params });
-
+        this.intervalFunc();
+        this.getDataList();
+        let params = {
+            userId:1
+        }
+        // this.getData( "/api/plan/plan_list",params)
+    },
+    beforeDestroy(){
+        
     }
     
 }
@@ -270,6 +315,11 @@ export default {
         &>p{
             padding-top: 20px;
             margin-right: 20px;
+        }
+    }
+    .tabs-data{
+       .el-button.is-disabled.el-button--text {
+            color: #c0c4cc;
         }
     }
 }

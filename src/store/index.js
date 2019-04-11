@@ -5,7 +5,7 @@ import orderManageData from './mudoles/orderManageDate'
 Vue.use(Vuex)
 
 const state = { 
-
+    examPlanEditID:0
 }
 
 const  mutations = {
@@ -26,7 +26,7 @@ export default new  Vuex.Store({
     mutations,
     getters,
     actions,
-    modules:{
-        orderManageData,
-    }
+    // modules:{
+    //     orderManageData,
+    // }
 })

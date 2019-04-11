@@ -68,7 +68,24 @@ export default new Router({
         {
           path: '/planManage', //考试计划
           name: 'planManage',
-          component: () => import('@/pages/planManage/planManage')
+          component: () => import('@/pages/planManage/planManage'),
+          children:[
+            {
+              path: '/plansList', //考试计划 
+              name: 'plansList',
+              component: () => import('@/pages/planManage/plansList')
+            },
+            {
+              path: '/addPlan', //考试计划 
+              name: 'addPlan',
+              component: () => import('@/pages/planManage/addPlan')
+            },
+            {
+              path: '/editPlan', //考试计划 
+              name: 'editPlan',
+              component: () => import('@/pages/planManage/editPlan')
+            }
+          ]
         },
         {
           path: '/orderManage', //订单管理

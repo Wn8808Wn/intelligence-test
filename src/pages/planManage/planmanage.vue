@@ -6,11 +6,12 @@
                 <!-- 显示子页面 -->
                 <limiteRegistrationSet></limiteRegistrationSet>
             </el-tab-pane> 
-            <el-tab-pane >
-            <span  slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli"></i>考试计划</span>
+            <el-tab-pane>
+            <span slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli"></i>考试计划</span>
                 <!-- 显示子页面 -->
-                <plansList v-if="showList" @showAddPlanPage ="showAddPlanPage" ></plansList>
-                <addPlan v-if="!showList"></addPlan>
+                <plansList :CurrentPages="CurrentPages" v-if="defaultVal == CurrentPages.LIST_PLAN "  @showPage="showPage"></plansList>
+                <addPlan  :CurrentPages="CurrentPages"  v-else-if="defaultVal == CurrentPages.ADD_PLAN" @showPage="showPage"></addPlan>
+                <editPlan  :CurrentPages="CurrentPages" v-else="defaultVal == CurrentPages.EDIT_PLAN"  @showPage="showPage"></editPlan>
             </el-tab-pane> 
         </el-tabs>
        
@@ -18,23 +19,31 @@
 </template>
 
 <script>
-import plansList from "./plansList";
-import addPlan from "./addPlan";
-import limiteRegistrationSet from "./limiteRegistrationSet";
+import editPlan from "./editPlan"
+import plansList from "./plansList"
+import addPlan from "./addPlan"
+import limiteRegistrationSet from "./limiteRegistrationSet"
+import editPlanVue from './editPlan.vue'
 export default {
   data() {
     return {
-      showList: true,
+      CurrentPages:{
+        ADD_PLAN: "add",
+        EDIT_PLAN:"edit",
+        LIST_PLAN:'list'
+      },
+      defaultVal:'list'
     };
   },
   components: {
     plansList,
     limiteRegistrationSet,
-    addPlan
+    addPlan,
+    editPlan
   },
   methods:{
-    showAddPlanPage(val){
-      this.showList = val;
+    showPage(val){
+      this.defaultVal = val;
     }
   }
 };

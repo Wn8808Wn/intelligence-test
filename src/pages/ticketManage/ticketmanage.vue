@@ -9,7 +9,7 @@
             <el-tab-pane >
             <span  slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli" ></i>准考证模板管理</span>
                 <!-- 显示子页面 -->
-                  <ticketTemplateCom></ticketTemplateCom>
+                <ticketTemplateCom></ticketTemplateCom>
             </el-tab-pane> 
         </el-tabs>
        

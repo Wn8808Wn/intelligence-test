@@ -4,9 +4,9 @@
             <el-select  v-model="manageUnit" placeholder="全部管理单位" @change="changeSearch">
                 <el-option
                 v-for="item in unitsList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.id"
+                :label="item.unitName"
+                :value="item.id">
                 </el-option>
             </el-select>
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
@@ -33,10 +33,10 @@
                 <template slot-scope="scope">
                     <el-select v-model="scope.row.limitLevel" @change='changeNolimitLevEvent(scope.row)'>
                         <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            v-for="item in levelList"
+                            :key="item.id"
+                            :label="item.levelName"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </template>
@@ -68,55 +68,26 @@ export default {
         return{
             manageUnit:'',
             unitsList:[],
+            levelList:[],
             total:5,
             limitLevel:'',
-            tableData:[
-                {   
-                    id:1,
-                    manageUnit:1,
-                    limitLevel:15,
-                    limitAge:18
-                },
-                {   
-                    id:2,
-                    manageUnit:1,
-                    limitLevel:15,
-                    limitAge:20
-                }
-            ],
-            options:[
-                {
-                    value:'25',
-                    label:'25级'
-                },
-                {
-                    value:'20',
-                    label:'20级'
-                },
-                {
-                    value:'15',
-                    label:'15级'
-                },
-                {
-                    value:'10',
-                    label:'10级'
-                },
-            ]
+            tableData:[]
         }
     },
     methods:{
         getData( url, params){
             this.$http.get(url, params).then(res => {
             // console.log(res)
-                if(res.status == 200 && res.data.code == 1){
-                    this.tableData = [];
-                    this.total = res.data.data.total;
-                    this.totalPage = res.data.data.totalPage;
-                    this.pageSize = res.data.data.pageSize;
-                    this.currentPage = res.data.data.page;
-                    // console.log(res.data.data.rows)
-                    var rst = res.data.data.rows;
-
+                if(res){
+                    let rst = res.data.data.list;
+                    this.tableData = rst;
+                    this.unitsList = res.data.data.unitsList;
+                    this.levelList = res.data.data.levelList;
+                    this.tableData.forEach( (item,index) =>{
+                        item.examTime = this.getTimeStyle(item.examTime)
+                        item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
+                        item.limitLevel = this.levelList.filter( (value) => value.id === item.limitLevel)[0].levelName
+                    } )
                 }else{
                     console.log(res.data.msg)
                 }

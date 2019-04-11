@@ -4,7 +4,7 @@
         <el-time-picker
             v-model="startExamTime"
             format="HH 时 mm 分"
-            blur= "blurEvent"
+            @blur= "blurEvent"
             :picker-options="{
             selectableRange: '8:00:00 - 18:00:00'
             }"
@@ -33,28 +33,43 @@ export default {
     endExamTime() {
       if (this.startExamTime) {
         var date = new Date(this.startExamTime);
-        return date.setMinutes(date.getMinutes() + this.examLev);
+        switch(this.examLev){
+          case 1:{
+            return date.setMinutes(date.getMinutes() + 45);
+          }
+          case 2:{
+            return date.setMinutes(date.getMinutes() + 60);
+          }
+          case 3:{
+            return date.setMinutes(date.getMinutes() + 90);
+          }
+        }
+        
       } else {
         return
       }
     }
   },
-  watch:{
-    endExamTime(newVal,oldVal){
-      // console.log(newVal,oldVal)
-       var date = new Date(newVal);
-      // this.startExamTime = date.setMinutes(date.getMinutes() + 15);
-    }
-
-  },
   methods: {
+      formatFn(val){ 
+        var now = new Date(val);
+        var hh = now.getHours();         //时
+        var ii = now.getMinutes();       //分
+        var clock = "";
+        if(hh < 10) clock += "0";
+        clock += hh + ":";
+        if (ii < 10) clock += '0'; 
+        clock += ii;
+        return clock;
+     },
     delCurTime() {
       this.$emit("delCurTimeEmitter", this.curIndex);
     },
     blurEvent(){
-      let obj = {"stTime" :this.startExamTime, 'endTime':this.endExamTime};
-      console.log(obj)
-      
+      //先将时间戳转为Date对象，然后才能使用Date的方法
+      let obj = {"startTime" :this.formatFn(this.startExamTime), "endTime":this.formatFn(this.endExamTime)};
+      this.$emit("addData",obj)
+      // console.log(obj)
     }
   }
 };
