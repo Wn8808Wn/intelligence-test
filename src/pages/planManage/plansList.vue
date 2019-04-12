@@ -111,7 +111,7 @@
                         <el-table-column
                         label="管理操作">
                         <template slot-scope="scope">
-                            <el-button type="text" icon="el-icon-error iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" :disabled=" scope.row.status ? true : false">修改</el-button>
+                            <el-button type="text" icon="el-icon-error iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" :disabled ="scope.row.status">修改</el-button>
                         </template>
                         </el-table-column >
                     </el-table>
@@ -161,23 +161,24 @@ export default {
             setInterval(()=>{
                 this.intervalFunc();
             },1000)
-            this.tableData.push({openTime:'2019-4-10 22:22'},{openTime:'2019-4-10 22:09'});
+            // this.tableData.push({openTime:'2019-4-10 22:22'},{openTime:'2019-4-10 22:09'});
             this.tableData.forEach((item,index)=>{
                 this.$set(item,'status',false);
             })
         },
         intervalFunc(){
-            console.log(this.nowTimetamp);
-            this.nowTimetamp = Number(new Date());
-            this.tableData.forEach((item,index)=>{
-                if(this.nowTimetamp - Number(Date.parse(item.openTime.replace(/-/g,'/'))) > 0){
-                    item.status = true;
-                }
-            })
+            // console.log(this.nowTimetamp);
+            // this.nowTimetamp = Number(new Date());
+            // this.tableData.forEach((item,index)=>{
+            //     if(this.nowTimetamp - Number(Date.parse(item.openTime.replace(/-/g,'/'))) > 0){
+            //         item.status = true;
+            //     }
+            // })
         },
         getData( url, params){
             this.$http.get(url, {params}).then(res => {
             this.tableData = [];
+            console.log(res,1111)
             if(res.status === 200 && res.data.code ===0){
                 this.total = res.data.data.total;
                 this.totalPage = res.data.data.totalPage;
@@ -192,17 +193,16 @@ export default {
                     item.createdTime = this.getTimeStyle(item.createdTime);
                     item.timeLong = '45分钟';
                     item.manageUnit = this.unitsList.filter(itemVal => itemVal.id === item.manageUnit)[0].unitName
-                    // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime) //转换时间样式 由两部分组成
+                    // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime)  //转换时间样式 由两部分组成
                     item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
-
                     let timetamp4 = Number(Date.parse(item.openTime.replace(/-/g,'/')))
                     let timetamp3 = Number(new Date())
                     // console.log(timetamp4-timetamp3>0)
                     if(timetamp4-timetamp3 >= 0){
-                        item.disabled = false
+                        item.status = false
                         // console.log(11)
                     }else{
-                        item.disabled = true
+                        item.status = true
                     }
                 });
                
@@ -258,16 +258,7 @@ export default {
             this.getData("/api/plan/plan_list", { params });
         },
         modifyData(val){
-            // let params = new URLSearchParams();
-            // params.append('id',val)
-            // this.$http.get('/api/plan/plan_detail',{params}).then( res =>{
-            //     console.log(res)
-            // })
-            this.$emit("showPage",this.currentPage.EDIT_PLAN)
-
-        },
-        handldetails(){
-
+            this.$emit("showPage",this.CurrentPages.EDIT_PLAN)
         },
         handleCurrentChange(val){
             let params = new URLSearchParams();
@@ -281,7 +272,7 @@ export default {
         let params = {
             userId:1
         }
-        // this.getData( "/api/plan/plan_list",params)
+        this.getData( "/api/plan/plan_list",params)
     },
     beforeDestroy(){
         
