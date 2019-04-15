@@ -22,16 +22,19 @@ export default {
                 this.$router.go(0)
            }else if(this.$route.path == "/exammanage"){
                 this.$router.go(0)
+           }else if(this.$route.path == "/planmanage"){
+                this.$router.go(0)
+           }else if(this.$route.path == "/ordermanage"){
+                this.$router.go(0)
+           }else if(this.$route.path == "/ticketmanage"){
+                this.$router.go(0)
            }
            else{
-               
                this.$router.go(-1)
            }
         }
-    },
-    beforeRouteEnter (to, from, next) {
-
-    },
+    }
+   
 }
 </script>
 

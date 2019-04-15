@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     handleAddStandardTemplate() {
-      this.$router.push({path: '/addStandardTemplate' })
+      this.$router.push({name: 'addStandardTemplate' })
     },
     getData(url,params){
         this.$http.get(url,params).then(res => {
@@ -124,7 +124,6 @@ export default {
             this.tableData = res.data.data.standPage.rows;;
             this.unitsList  = res.data.data.unitsList;
             this.levelList = res.data.data.levelList;
-            console.log(this.unitsList,this.levelList)
             this.tableData.forEach( (item,index) =>{
                 item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
                 item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
@@ -148,12 +147,12 @@ export default {
     },
     // 修改对应的数据
     modifyData(id){
-      this.$router.push({path:'/updateStandardTemplate',query: { id: id }})
+      this.$router.push({name:'updateStandardTemplate',query: { id: id }})
       // console.log(id)
     },
     //查看详情页
     handldetails(id){
-      this.$router.push({path:'/standardDetail',query: { id: id }})
+      this.$router.push({name:'standardDetail',query: { id: id }})
       // console.log(id)
     }
   },

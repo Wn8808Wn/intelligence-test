@@ -94,10 +94,9 @@ export default {
             });
         },
         changeSearch(val){
-            // console.log(val)
             let params = new URLSearchParams();
             params.append('manageUnit',val)
-            // this.getData('/api/sign_limit/list', { params })
+            this.getData('/api/sign_limit/list', { params })
         },
         changeNolimitLevEvent(val){
             // console.log(val)

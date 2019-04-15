@@ -7,13 +7,14 @@ export default new Router({
   routes: [{
       path: '/',
       name: 'login',
-      component: () => import('@/pages/login/login')
+      component: () => import('@/pages/login/login'),
     }, 
     {
       path: '/manage',
       name: 'manage',
       component: () => import('@/pages/manage'),
-      children: [{
+      children: [
+        {
           path: '/examManage',
           name: 'examManage',
           component: () => import('@/pages/examManage/examManage'),
@@ -26,43 +27,44 @@ export default new Router({
         {
           path: '/standardManage', //考题标准
           name: 'standardManage',
+          redirect:'/standardManage/standard',
           component: () => import('@/pages/standardManage/standardManage'),
-          children: [{
-              path: '/standardManage', //考题标准
+          children: [
+            {
+              path: 'standard', //考题标准
               name: 'standard',
               component: () => import('@/pages/standardManage/standard/standard'),
             },
             {
-              path: '/addStandard', //增加考题标准
+              path: 'addStandard', //增加考题标准
               name: 'addStandard',
               component: () => import('@/pages/standardManage/addStandard/addStandard'),
             },
             {
-              path: '/standardTemplate', //考题模板
+              path: 'standardTemplate', //考题模板
               name: 'standardTemplate',
               component: () => import('@/pages/standardManage/standardTemplate/standardTemplate'),
             },
             {
-              path: '/addStandardTemplate', //增加考题模板
+              path: 'addStandardTemplate', //增加考题模板
               name: 'addStandardTemplate',
               component: () => import('@/pages/standardManage/addStandard/addStandardTemplate'),
             },
             {
-              path: '/standardDetail', //考题详情
+              path: 'standardDetail', //考题详情
               name: 'standardDetail',
               component: () => import('@/pages/standardManage/standardDetail/standardDetail'),
             },
             {
-              path: '/updateStandard', //修改考题
+              path: 'updateStandard', //修改考题
               name: 'updateStandard',
               component: () => import('@/pages/standardManage/updateStandard/updateStandard'),
             },
             {
-              path: '/updateStandardTemplate', //修改考题模板
+              path: 'updateStandardTemplate', //修改考题模板
               name: 'updateStandardTemplate',
               component: () => import('@/pages/standardManage/updateStandard/updateStandardTemplate'),
             }
-
           ]
         },
         {

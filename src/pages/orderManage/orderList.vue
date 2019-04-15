@@ -210,11 +210,6 @@ export default {
       this.$emit("hanleShow", {boolean:true,index:val});
     }
   },
-  computed:{
-    ...mapState({
-        
-    })
-  },
   mounted() {
     //页面进入请求数据
     let params = new URLSearchParams();

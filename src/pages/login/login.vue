@@ -87,7 +87,8 @@ export default {
       let password = this.form.password;
       this.$refs[form].validate(valid => {
         if (valid) {
-          // 如果验证通过
+          // 如果验证通过 存用户的id provent
+          
 
           if (this.remember === true) {
             // 记住密码按钮勾选

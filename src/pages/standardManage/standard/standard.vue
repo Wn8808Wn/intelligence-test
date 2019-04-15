@@ -114,7 +114,7 @@ export default {
     getData(url,params){
         this.$http.get(url,params).then(res => {
             this.tableData=[];
-            console.log(res,1111)
+            // console.log(res,1111)
             this.total = res.data.data.standPage.total;
             this.currentPage = res.data.data.standPage.page;
             this.pageSize = res.data.data.standPage.pageSize;
@@ -122,7 +122,7 @@ export default {
             this.tableData = res.data.data.standPage.rows;;
             this.unitsList  = res.data.data.unitsList;
             this.levelList = res.data.data.levelList;
-            console.log(this.unitsList,this.levelList)
+            // console.log(this.unitsList,this.levelList)
             this.tableData.forEach( (item,index) =>{
                 item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
                 item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
@@ -131,7 +131,7 @@ export default {
         })
     },
     handleAddStandard() {
-      this.$router.push({path: '/addStandard' })
+      this.$router.push({name: 'addStandard' })
     },
     handleCurrentChange(val) {
       let params = new URLSearchParams();
@@ -149,16 +149,16 @@ export default {
     },
     // 修改对应的数据
     modifyData(id){
-      this.$router.push({path:'/updateStandard',query: { id: id }})
+      this.$router.push({name:'updateStandard',query: { id: id }})
       // console.log(id)
     },
     //查看详情页
     handldetails(id){
-      this.$router.push({path:'/standardDetail',query: { id: id }})
+      this.$router.push({name:'standardDetail',query: { id: id }})
       // console.log(id)
     }
   },
-  mounted(){
+  created(){
     //进入页面显示考题标准信息
     let params = new URLSearchParams();
     params.append("userId", 1);

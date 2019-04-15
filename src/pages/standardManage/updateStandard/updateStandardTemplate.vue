@@ -213,7 +213,7 @@ export default {
         this.$http.post("/api/standard/edit_standard", params).then(res => {
           console.log(res);
         });
-        this.$router.push({path: "/standardTemplate"})
+        this.$router.push({name: "standardTemplate"})
     }
   },
   created(){
