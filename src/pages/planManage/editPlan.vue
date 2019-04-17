@@ -4,16 +4,10 @@
         <div class="examSelect">
             <div class="prov">
                 <span class="commontips">考场:</span>
-                <el-select v-model="examRoom" placeholder="请选择考场" @change="chooseRoom">
-                    <el-option
-                    v-for="item in roomList"
-                    :key="item.value"
-                    :label="item.examRoomName"
-                    :value="item.id">
-                    </el-option>
+                <el-select v-model="examRoomId" disabled>
                 </el-select>
             </div>
-            <p>座位数:<span>{{spareSeatSize}}个</span></p>
+            <p>座位数:<span>{{realSeatings}}个</span></p>  
         </div>
 
         <div class="examSelect">
@@ -31,7 +25,7 @@
             <div class="setTop clearfix">
                 <div class="setLev">
                     <p>设置报考级别:</p>
-                    <el-select v-model="form.examLev" placeholder="请选择报考级别">
+                    <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeTimes">
                         <el-option
                             v-for="item in examLevClassify"
                             :key="item.value"
@@ -67,16 +61,37 @@
             </div>
         </el-dialog>
 
+
+        <!-- <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="30%"
+        >
+        <p><span>本次新增2条</span>  <span>成功2条</span>  <span>失败2条</span></p>
+        <p>失败如下:</p>
+        <p v-for="(item,index) in errorList" :key="index">
+            <span>日期</span> <span>时间</span>
+
+        </p>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="dialogVisible = false">完 成(5)</el-button>
+        </span>
+      </el-dialog> -->
+
         <div class="tabs-data" id="addPlanTabs">     
             <el-table 
             border
-            :data="tableData" 
+            :data="tableData"
+            :row-class-name="tableRowClassName"
             style="width: 862px">
 
             <el-table-column
             label="日期"
-            prop="date"
             width="153">
+            <template slot-scope="scope">
+              <span style="margin-right:10px">{{scope.row.examDate}}</span>  <span>周{{"日一二三四五六".charAt(new Date(scope.row.examDate).getDay())}}</span>
+            </template> 
             </el-table-column>
 
             <el-table-column
@@ -89,7 +104,8 @@
             label="报考级别(考试时长)"
             width="418">
               <template slot-scope="scope">
-                  <span>{{scope.row.examLeve}}</span>
+                  <span>{{scope.row.levelStr.replace(/,/g,'/')}}</span>
+                  <span style="margin-left:10px">({{scope.row.timeStr}}钟)</span>
                   <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.$index)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
               </template>
             </el-table-column>
@@ -102,105 +118,95 @@
             </el-table>
 
             <p style="margin-top:20px" v-if="tableData.length>0">共有{{total}}条结果</p>
+            <!-- 分页 -->
             <el-pagination
-                background
-                layout="prev, pager, next"
-                :current-page="currentPage"
-                @current-change="handleCurrentChange">
+            background
+            :total="total" 
+            :page-size="pageSize"
+            layout="prev, pager, next"
+            :current-page="page"
+            @current-change="handleCurrentChange"
+            >
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
 import commonTop from "../common/commonTop";
 import setTimeItem from "../common/setExamTime";
 export default {
+  components: {
+    commonTop,
+    setTimeItem
+  },
   data() {
     return {
       title: "修改计划",
-      examRoom: "",
+      examRoomId: "",
       roomList: [],
-      spareSeatSize: "",
-      tableData: [
-        {
-          date: "2019-05-01",
-          examTime: "15:30",
-          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-05"
-        },
-        {
-          date: "2019-05-01",
-          examTime: "15:30",
-          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-06"
-        },
-        {
-          date: "2019-05-01",
-          examTime: "15:30",
-          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-07"
-        },
-        {
-          date: "2019-05-01",
-          examTime: "15:30",
-          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-08"
-        },
-        {
-          date: "2019-05-01",
-          examTime: "15:30",
-          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-09"
-        },
-        {
-          date: "2019-05-01",
-          examTime: "15:30",
-          examLeve: "25级 / 20级 / 10级 / 5级 （45分钟)",
-          openTime: "2019-05-10"
-        }
-      ],
+      realSeatings:'', //真实座位数 
+      provinceCode:"",  // 根据考场列表获取当前的考场省份Code
+      tableData: [],
       examLevClassify: [
         {
-          label: "25级——10级  45分钟",
-          value: 45
+          label: "25级 — 10级  45分钟",
+          value: 1
         },
         {
-          label: "9级——1级  60分钟",
-          value: 60
+          label: "5级 — 2段  60分钟",
+          value: 2
         },
         {
-          label: "1段——5段  90分钟",
-          value: 90
+          label: "3段 —7段  90分钟",
+          value: 3
         }
       ],
-      date: "",
-      examTime: "",
-      examLeve: "",
-      openTime: "",
       dialogFormVisible: false,
       form: {
-        examLev: 45
+        examLev: 1
       },
       selectDate: "",
       timeList: [],
       showDelIcon: false,
       delTabs: [],
-      currentPage: 1,
-      total:'',
-      currStatus: 0 // 通过状态码来控制撤销状态
+      page: 1,
+      page:null,
+      total:null,
+      totalPage:null,
+      pageSize:6,
+      currStatus: 0,// 通过状态码来控制撤销状态
+      dialogVisible:false,
+      errorList:[]
     };
   },
-  components: {
-    commonTop,
-    setTimeItem
+   computed:{
+    ...mapState({
+      examPlanEditId: state => state.examPlanEditId,
+      roomId: state => state.roomId
+    })
   },
   methods: {
-    chooseRoom(val) {
-      var obj = this.roomList.filter(item => item.id === val);
-      console.log(obj);
-      this.spareSeatSize = obj[0].spareSeatSize;
-      // 选择切换考场获取当前考场的考试列表 接口？？？？
+    changeTimes(val){
+      console.log(val)
+    },
+    getData(url,params){
+        this.$http.get(url,params).then(res =>{
+          console.log(res)
+          if(res){
+            this.total = res.data.data.total;
+            this.totalPage = res.data.data.totalPage;
+            this.pageSize = res.data.data.pageSize;
+            this.page = res.data.data.page;
+            let rst = res.data.data.rows
+            // console.log(rst)
+            this.tableData = rst;
+            this.tableData.forEach((item, index) => {
+                item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
+            })
+          }
+        })
     },
     showDelIconEvent() {
       this.showDelIcon = !this.showDelIcon;
@@ -213,14 +219,24 @@ export default {
     },
     handleCurrentChange(val) {
       let params = new URLSearchParams();
+      params.append("userId", 1);
       params.append("page", val);
-      this.getData("/api/plan/plan_list", { params });
+      params.append("roomId", this.roomId)
+      params.append("provinceCode",110000) //后期更改 目前传值1
+      this.getData("/api/plan/room_plan", { params })
     },
+    //删除当前行
     delCurRow(index) {
       this.delTabs.push(this.tableData[index]);
       this.delTabs.splice(0, this.delTabs.length - 1);
-      this.tableData.splice(index, 1);
+      // this.tableData.splice(index, 1);
+      let params = new URLSearchParams()
+      params.append('id',index)
+      this.$http.post("/api/plan/del_plan",params).then( res =>{
+          console.log(res)
+      })
       console.log(this.tableData);
+     
     },
     //撤销 删除的数据重新存入一个新数组delTabs，当点击时拿到数组中最后一个回填至tableData中。
     UNDO() {
@@ -232,7 +248,7 @@ export default {
         });
       } else {
         this.tableData.push(this.delTabs.pop());
-        console.log(this.tableData, this.delTabs);
+        // console.log(this.tableData, this.delTabs);
       }
       // this.tableData.push(this.delTabs[this.delTabs.length-1])
       // this.delTabs.pop()
@@ -240,7 +256,7 @@ export default {
     addTimeEvent() {
       //  this.timeList.push({'stTime':this.startExamTime,'endTime':this.endExamTime});
       this.timeList.push({});
-      if (this.timeList.length >= 6) {
+      if (this.timeList.length > 6) {
         this.$message({
           showClose: true,
           message: "每天最多只能添加6场考试",
@@ -258,22 +274,22 @@ export default {
     },
     submitBtn() {
       let params = new URLSearchParams();
-      params.append("roomId", 1);
+      params.append("roomId", this.roomId);
       params.append("examLevel", this.form.examLev);
       params.append("beginDate", this.selectDate[0]);
       params.append("endDate", this.selectDate[1]);
       params.append("timeStrs", JSON.stringify(this.timeList));
-      // this.$http.post('/api/plan/add_plan',{
-      //     examLevel:this.form.examLev,
-      //     beginDate:this.selectDate[0],
-      //     endDate:this.selectDate[1],
-      //     timeStrs:JSON.stringify(this.timeList)
-      // }).then( res =>{
-      //   console.log(res)
-      // })
+      console.log(params)
       this.$http.post("/api/plan/add_plan", params).then(res => {
         console.log(res);
+        this.dialogVisible = true;
       });
+    },
+    tableRowClassName({row, rowIndex}) {
+        if (row.id === this.examPlanEditId) {
+          return 'success-row';
+        } 
+        return '';
     }
   },
   watch: {
@@ -283,21 +299,37 @@ export default {
       } else {
         this.currStatus = 1;
       }
-    }
+    },
+   
   },
   mounted() {
     let params = new URLSearchParams();
     params.append("userId", 1);
-    this.$http.get("/api/plan/plan_list", { params }).then(res => {
-      // console.log(res.data.data.roomList)
-      if (res.status === 200 && res.data.code === 0) {
-        this.roomList = res.data.data.roomList;
-      }
-    });
+    params.append("provinceCode",110000) //后期更改 目前传值1
+    this.$http.get("/api/room/get_room_by_province", { params }).then( res =>{
+       if (res.status === 200 && res.data.code === 0) {
+            this.roomList = res.data.data;
+            var obj = this.roomList.filter(item => item.id === this.roomId);
+            this.realSeatings =obj[0].seatSize-obj[0].spareSeatSize
+            this.examRoomId = obj[0].examRoomName
+        }
+    })
+    params.append("roomId", this.roomId)
+    this.$http.get("/api/plan/room_plan", { params }).then( res =>{
+        console.log(res,111)
+        this.total = res.data.data.total;
+        this.totalPage = res.data.data.totalPage;
+        this.pageSize = res.data.data.pageSize;
+        this.page = res.data.data.page;
+        let rst = res.data.data.rows
+        this.tableData = rst;
+        this.tableData.forEach((item, index) => {
+            item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
+        })
+    })
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 .addPlanPages {
@@ -456,3 +488,9 @@ export default {
   }
 }
 </style>
+<style>
+ .el-table .success-row {
+    background: skyblue!important;
+  }
+</style>
+

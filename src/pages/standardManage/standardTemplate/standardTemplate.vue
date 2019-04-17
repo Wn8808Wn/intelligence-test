@@ -128,6 +128,7 @@ export default {
                 item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
                 item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
                 item.itemDifficulty = this.levelList.filter( (val) => val.id == item.itemDifficulty)[0].levelName
+                item.updatedTime = item.updatedTime.split(' ')[0]
             } )
         })
     },

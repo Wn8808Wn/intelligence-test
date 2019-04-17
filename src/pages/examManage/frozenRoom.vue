@@ -68,19 +68,20 @@
 import commonTop from '../common/commonTop.vue'
 import { _debounce } from "../../utils/public.js";
 export default {
+  inject:['reload'],
   components:{
         commonTop
   },
   data() {
     return {
       titleTop:'已冻结考场',
-      RoomCode: "",
       currentPage: null,
       pageSize: 10,
       totalPage: null,
       total: null,
       isDisable: false,
-      tableData: []
+      tableData: [],
+      unitsList:[]
     };
   },
   methods: {
@@ -88,17 +89,19 @@ export default {
       this.tableData = [];
       this.$http.get(url, params).then(res => {
           // 分页
-          // console.log(res.data.data);
-          this.total = res.data.data.total;
-          this.totalPage = res.data.data.totalPage;
-          this.pageSize = res.data.data.pageSize;
-          this.currentPage = res.data.data.page;
+          console.log(res,11111);
+          this.total = res.data.data.roomPage.total;
+          this.totalPage = res.data.data.roomPage.totalPage;
+          this.pageSize = res.data.data.roomPage.pageSize;
+          this.currentPage = res.data.data.roomPage.page;
           //列表数据
-          let rst = res.data.data.rows;
+          this.unitsList = res.data.data.unitsList;
+          let rst = res.data.data.roomPage.rows;
           this.tableData = rst 
           this.tableData.forEach( (item,index) =>{
               item.buildDate = this.getTimeStyle(item.buildDate)
               item.addressabbr = item.province+item.city+item.distric
+              item.manageUnit = this.unitsList.filter((value,index) => value.id = item.manageUnit)[0].unitName;
           })
     })
       .catch(err => {
@@ -128,11 +131,19 @@ export default {
           let params = new URLSearchParams();
           params.append("id", id);
           params.append("dataStatus", 0);
-          this.$http.post("/api/room/update_status", params);
-          this.$message({
-            type: "success",
-            message: "恢复成功!"
-          });
+          this.$http.post("/api/room/update_status", params).then( res =>{
+
+            let params = new URLSearchParams();
+            params.append("userId", 1);
+            params.append("dataStatus", 1);
+            this.getData("/api/room/room_list", { params });
+            this.$message({
+              type: "success",
+              message: "恢复成功!"
+            });
+                    
+          })
+          // this.reload();
         })
         .catch(() => {
           this.$message({
@@ -146,7 +157,7 @@ export default {
       this.$router.push({ name: "examRoomDetail", query: { id: id } });
     }
   },
-  created() {
+  mounted() {
     //页面进入请求数据
     let params = new URLSearchParams();
     params.append("userId", 1);

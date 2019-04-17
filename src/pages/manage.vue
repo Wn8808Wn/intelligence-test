@@ -17,19 +17,19 @@
             active-text-color="#fff"
             router
             style="border-right: none">   
-                <el-menu-item index="/exammanage">
+                <el-menu-item index="/examManage">
                     <i class="iconfont icon-kaochangguanli-"></i>
                     <span slot="title">考场管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/standardmanage">
+                <el-menu-item  index="/standardManage">
                      <i class="iconfont icon-kaotibiaozhunguanli-"></i>
                     <span slot="title">考题标准管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/planmanage">
+                <el-menu-item  index="/planManage">
                      <i class="iconfont icon-kaoshijihuaguanli-"></i>
                     <span slot="title">考题计划管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/ordermanage">
+                <el-menu-item  index="/orderManage">
                      <i class="iconfont icon-dingdanguanli-"></i>
                     <span slot="title">订单管理</span>
                 </el-menu-item>
@@ -37,7 +37,7 @@
                     <i class="iconfont icon-kaoshizhuangtaichaxun-"></i>
                     <span slot="title">考试状态查询</span>
                 </el-menu-item>
-                <el-menu-item index="/ticketmanage">
+                <el-menu-item index="/ticketManage">
                    <i class="iconfont icon-zhuankaozhengguanli-"></i>
                     <span slot="title">准考证管理</span>
                 </el-menu-item>

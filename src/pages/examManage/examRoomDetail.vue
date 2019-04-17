@@ -116,11 +116,10 @@ export default {
         console.log(id)
         let params = new URLSearchParams();
             params.append('userId',1)
-            params.append('dataStatus',0);
             params.append('id',id);
             this.$http.get('/api/room/room_detail',{params})
             .then( res => {
-               console.log(res.data.data)
+               console.log(res)
                 let rst = res.data.data
                 this.province = rst.province
                 this.manageUnit = rst.manageUnit

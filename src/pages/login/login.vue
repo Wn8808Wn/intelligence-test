@@ -10,20 +10,19 @@
             :rules="rules"
             ref="form">
 
-                <div class="input-bg"><span v-show="showtips">密码错误!</span></div>
-                <el-form-item prop="username" label="用户名:">
+                <div class="input-bg"><span v-show="showtips">{{tipsTitle===1?'账号不存在,请重新输入':'密码错误,请重新输入'}}</span></div>
+                <el-form-item prop="username" label="用户名:" :class="{'redBorder':tipsTitle===1}">
                     <el-input type="username"
                     v-model="form.username">
                     </el-input>
                 </el-form-item>
 
-                <el-form-item prop="password" label="密　码:">
+                <el-form-item prop="password" label="密　码:" :class="{'redBorder':tipsTitle===2}">
                     <el-input type="password"
                     v-model="form.password">
                     </el-input>
                 </el-form-item>
 
-                <div class=""></div>
                 <div class="remember">
                     <label class="check-box">
                     <input type="checkbox"
@@ -65,6 +64,7 @@ export default {
     return {
       remember: false,
       showtips: false,
+      tipsTitle:0,
       forget: 1,
       form: {
         username: "",
@@ -76,11 +76,6 @@ export default {
       }
     };
   },
-  computed: {
-    // chatContent() {
-    //   return this.username !== "" && this.password !== "";
-    // }
-  },
   methods: {
     submit(form) {
       let username = this.form.username;
@@ -88,8 +83,6 @@ export default {
       this.$refs[form].validate(valid => {
         if (valid) {
           // 如果验证通过 存用户的id provent
-          
-
           if (this.remember === true) {
             // 记住密码按钮勾选
             Cookies.set("dsName", username, { expires: 7 });
@@ -103,10 +96,8 @@ export default {
           dataStr.append("loginName", username);
           dataStr.append("passWord", password);
 
-          this.$http
-            .post("/api/login", dataStr)
-            .then(res => {
-              // console.log(res)
+          this.$http.post("/api/login", dataStr).then(res => {
+              console.log(res,321)
               if (res.status === 200 && res.data.code === 0) {
                 // console.log(111)
                 res = res.data.data;
@@ -115,33 +106,39 @@ export default {
                 let expiration = res.expiration;
                 sessionStorage.setItem("dsToken", token); // 存token
                 sessionStorage.setItem("lifeTime", expiration); // 存过期时间
+                this.showtips =false;
+                this.tipsTitle=0;
                 this.$message({
                   showClose: true,
                   type: "success",
                   message: "登录成功",
                   duration: 800
                 });
+                
                 setTimeout(() => {
                   this.$router.push({ path: "/exammanage" });
                 }, 1000);
               }
               if (res.status === 200 && res.data.code === 10002) {
-                // 颜色变化
-                this.$message({
-                  showClose: true,
-                  type: "error",
-                  message: "账号不存在",
-                  duration: 1000
-                });
+                 this.showtips = true;
+                this.tipsTitle = 1;
+                // this.$message({
+                //   showClose: true,
+                //   type: "error",
+                //   message: "账号不存在",
+                //   duration: 1000
+                // });
               }
               if (res.status === 200 && res.data.code === 10003) {
                 //
-                this.$message({
-                  showClose: true,
-                  type: "error",
-                  message: "密码错误",
-                  duration: 1000
-                });
+                this.showtips = true;
+                this.tipsTitle = 2;
+                // this.$message({
+                //   showClose: true,
+                //   type: "error",
+                //   message: "密码错误",
+                //   duration: 1000
+                // });
               }
             })
             .catch(res => {
@@ -285,6 +282,12 @@ export default {
   }
   & > div:nth-of-type(3) {
     margin-bottom: 18px;
+  }
+  .redBorder{
+    border-color:red;
+    &>label{
+      color:red;
+    }
   }
 }
 </style>

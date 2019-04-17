@@ -18,15 +18,15 @@ export default {
     },
     methods:{
         handleBack(){
-           if(this.$route.path == "/ordermanage"){
+           if(this.$route.path == "/orderManage"){
                 this.$router.go(0)
-           }else if(this.$route.path == "/exammanage"){
+           }else if(this.$route.path == "/examManage"){
                 this.$router.go(0)
-           }else if(this.$route.path == "/planmanage"){
+           }else if(this.$route.path == "/planManage"){
                 this.$router.go(0)
-           }else if(this.$route.path == "/ordermanage"){
+           }else if(this.$route.path == "/orderManage"){
                 this.$router.go(0)
-           }else if(this.$route.path == "/ticketmanage"){
+           }else if(this.$route.path == "/ticketManage"){
                 this.$router.go(0)
            }
            else{

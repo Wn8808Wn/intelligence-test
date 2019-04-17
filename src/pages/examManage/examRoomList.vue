@@ -76,6 +76,7 @@
 <script>
 import { _debounce } from "../../utils/public.js";
 export default {
+  inject:['reload'],
   data() {
     return {
       RoomCode: "",
@@ -147,11 +148,12 @@ export default {
           let params = new URLSearchParams();
           params.append("id", id);
           params.append("dataStatus", 1);
-          this.$http.post("/api/room/update_status", params);
+          this.$http.post("/api/room/update_status", params)
           this.$message({
             type: "success",
             message: "冻结成功!"
           });
+          this.reload();
         })
         .catch(() => {
           this.$message({

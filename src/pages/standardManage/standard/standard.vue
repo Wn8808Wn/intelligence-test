@@ -114,7 +114,7 @@ export default {
     getData(url,params){
         this.$http.get(url,params).then(res => {
             this.tableData=[];
-            // console.log(res,1111)
+            // console.log(res,222)
             this.total = res.data.data.standPage.total;
             this.currentPage = res.data.data.standPage.page;
             this.pageSize = res.data.data.standPage.pageSize;
@@ -127,6 +127,7 @@ export default {
                 item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
                 item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
                 item.itemDifficulty = this.levelList.filter( (val) => val.id == item.itemDifficulty)[0].levelName
+                item.updatedTime = item.updatedTime.split(' ')[0]
             } )
         })
     },

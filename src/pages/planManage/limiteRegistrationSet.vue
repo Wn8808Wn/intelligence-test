@@ -118,9 +118,9 @@ export default {
         }
     },
     mounted(){
-        let params = new URLSearchParams();
-        params.append('userId',1)
-        this.getData('/api/sign_limit/list', { params })
+        // let params = new URLSearchParams();
+        // params.append('userId',1)
+        // this.getData('/api/sign_limit/list', { params })
     }
     
 }
