@@ -45,8 +45,9 @@
                     stripe
                     style="width: 100%">
                         <el-table-column
-                        prop="id"
                         label="序号"
+                        type="index"
+                        :index="indexMethod"
                         width="55">
                         </el-table-column>
 
@@ -57,7 +58,7 @@
                         </el-table-column>
 
                         <el-table-column
-                        prop="roomId"
+                        prop="roomIdName"
                         label="考场名称"
                         width="120">
                         </el-table-column>
@@ -145,10 +146,14 @@ export default {
             total:null,
             totalPage:null,
             pageSize:null,
+            tableData1:[]
         }
 
     },
     methods:{
+        indexMethod(index){
+            return index+1+this.pageSize*(this.currentPage-1);
+        },
         // getDataList(){
         //     setInterval(()=>{
         //         this.intervalFunc();
@@ -170,7 +175,7 @@ export default {
         getData( url, params){
             this.$http.get(url, params).then(res => {
             this.tableData = [];
-            // console.log(res,1111)
+            console.log(res,1111)
             if(res.status === 200 && res.data.code ===0){
                 this.total = res.data.data.planPage.total;
                 this.totalPage = res.data.data.planPage.totalPage;
@@ -184,7 +189,7 @@ export default {
                 this.tableData.forEach((item, index) => {
                     item.createdTime = this.getTimeStyle(item.createdTime);
                     item.manageUnit = this.unitsList.filter(itemVal => itemVal.id === item.manageUnit)[0].unitName
-                    item.roomId = this.roomList.filter(itemVal => itemVal.id === item.roomId)[0].examRoomName
+                    item.roomIdName = this.roomList.filter(itemVal => itemVal.id === item.roomId)[0].examRoomName
                     // // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime)  //转换时间样式 由两部分组成
                     item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
                     //判断修改的状态
@@ -286,15 +291,8 @@ export default {
             }
             this.getData("/api/plan/plan_list", { params });
         },
-        // ...mapMutations({
-        //     modifyData: 'modifyData' 
-        // }),
-        // ...mapActions({
-        //      'modifyData'
-        // })
-
         modifyData(val){
-            // console.log(val)
+            console.log(val)
             let timetamp4 = Number(Date.parse(val.openTime.replace(/-/g,'/')))
             let timetamp3 = Number(new Date())
                     console.log(timetamp4-timetamp3,111111)
@@ -307,7 +305,7 @@ export default {
                 //刷新页面更改状态
             }else{
                 this.$emit("showPage",this.CurrentPages.EDIT_PLAN)
-                this.$store.dispatch('modifyDate',val.id)
+                this.$store.dispatch('modifyDate',{'currentId':val.id,'storeRoomId':val.roomId})
             }
         },
         handleCurrentChange(val){
@@ -342,11 +340,7 @@ export default {
         params.append("userId",1);
         params.append("provinceId",110000);
         this.getData( "/api/plan/plan_list",{params})
-    },
-    beforeDestroy(){
-        
     }
-    
 }
 </script>
 

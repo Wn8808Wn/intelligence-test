@@ -94,7 +94,8 @@ export default {
     data(){
         return{
             province: "",
-            manageUnit: "",
+            manageUnit: null,
+            unitsList:[],
             investUnit: "",
             city: "",
             distric: "",
@@ -111,26 +112,27 @@ export default {
            this.$router.push({path:'/examManage'})
         }
     },
-    created(){
-        let  id = this.$route.query.id
-        console.log(id)
+    mounted(){
+        let  currentId = this.$route.query.id
+        console.log(currentId)
         let params = new URLSearchParams();
-            params.append('userId',1)
-            params.append('id',id);
-            this.$http.get('/api/room/room_detail',{params})
-            .then( res => {
-               console.log(res)
-                let rst = res.data.data
-                this.province = rst.province
-                this.manageUnit = rst.manageUnit
-                this.investUnit = rst.investUnit
-                this.city=rst.city
-                this.distric=rst.distric
-                this.address=rst.address
-                this.seatSize= rst.seatSize
-                this.spareSeatSize= rst.spareSeatSize
-                this.examRoomCode= rst.examRoomCode
-                this.examRoomName=rst.examRoomName
+        params.append('userId',1)
+        params.append('id',currentId);
+        this.$http.get('/api/room/room_detail',{params}).then( res => {
+            // console.log(res)
+            // console.log(res.data.data.unitsList)
+            this.unitsList = res.data.data.unitsList;
+            let rst = res.data.data.list[0]
+            this.province = rst.province
+            this.manageUnit = this.unitsList.filter(item => item.id === rst.manageUnit)[0].unitName;
+            this.investUnit = rst.investUnit
+            this.city=rst.city
+            this.distric=rst.distric
+            this.address=rst.address
+            this.seatSize= rst.seatSize
+            this.spareSeatSize= rst.spareSeatSize
+            this.examRoomCode= rst.examRoomCode
+            this.examRoomName=rst.examRoomName
             })
             
     }

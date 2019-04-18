@@ -95,7 +95,7 @@ export default {
       this.tableData = [];
       this.$http.get(url, params).then(res => {
           // 分页
-          // console.log(res);
+          // console.log(res,'212313');
           this.total = res.data.data.roomPage.total;
           this.totalPage = res.data.data.roomPage.totalPage;
           this.pageSize = res.data.data.roomPage.pageSize;

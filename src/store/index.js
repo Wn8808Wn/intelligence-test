@@ -5,8 +5,8 @@ import orderManageData from './mudoles/orderManageDate'
 Vue.use(Vuex)
 
 const state = { 
-    examPlanEditId:16,
-    roomId:1,
+    examPlanEditId:null,
+    roomId:null,
     deleCurrentRowId:null,
 }
 
@@ -17,20 +17,27 @@ const getters = {
 
 const  mutations = {
     modifyData(state,val){
-        state.examPlanEditId = val;
-        console.log(state.examPlanEditId)
+        state.examPlanEditId = val.currentId;
+        state.roomId =val.storeRoomId
+        console.log(state.examPlanEditId,state.roomId)
     },
     deleCurrentRow(state,val){
+        state.deleCurrentRowId = val;
+    },
+    resetDeledeleCurrentRowId(state,val){
         state.deleCurrentRowId = val;
     }
 }
 
 const actions = {
-    modifyDate({commit},currentId){
-        commit('modifyData',currentId)
+    modifyDate({commit},obj){
+        commit('modifyData',obj)
     },
-    deleCurrentRow({commit},delcurrenId){
-        commit('deleCurrentRow',delcurrenId)
+    deleCurrentRow({commit},delCurrenId){
+        commit('deleCurrentRow',delCurrenId)
+    },
+    resetDeledeleCurrentRowId({commit},resetCurrenId){
+        commit('resetDeledeleCurrentRowId',resetCurrenId)
     }
 }
 

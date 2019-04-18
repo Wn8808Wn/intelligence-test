@@ -20,7 +20,8 @@
             stripe
             style="width: 100%">
                 <el-table-column
-                prop="id"
+                type="index"
+                :index="indexMethod"
                 label="序号"
                 width="74">
                 </el-table-column>
@@ -111,6 +112,9 @@ export default {
     };
   },
   methods: {
+    indexMethod(index){
+        return index+1+this.pageSize*(this.currentPage-1);
+    },
     handleAddStandardTemplate() {
       this.$router.push({name: 'addStandardTemplate' })
     },

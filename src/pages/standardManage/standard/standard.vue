@@ -20,7 +20,8 @@
             stripe
             style="width: 100%">
                 <el-table-column
-                prop="id"
+                type="index"
+                :index="indexMethod"
                 label="序号"
                 width="74">
                 </el-table-column>
@@ -111,6 +112,9 @@ export default {
     };
   },
   methods: {
+    indexMethod(index){
+            return index+1+this.pageSize*(this.currentPage-1);
+    },
     getData(url,params){
         this.$http.get(url,params).then(res => {
             this.tableData=[];
@@ -119,14 +123,14 @@ export default {
             this.currentPage = res.data.data.standPage.page;
             this.pageSize = res.data.data.standPage.pageSize;
             this.totalPage = res.data.data.standPage.totalPage;
-            this.tableData = res.data.data.standPage.rows;;
+            this.tableData = res.data.data.standPage.rows;
             this.unitsList  = res.data.data.unitsList;
             this.levelList = res.data.data.levelList;
             // console.log(this.unitsList,this.levelList)
             this.tableData.forEach( (item,index) =>{
                 item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
                 item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
-                item.itemDifficulty = this.levelList.filter( (val) => val.id == item.itemDifficulty)[0].levelName
+                item.itemDifficulty = this.levelList.filter( (val) => val.id === parseInt(item.itemDifficulty))[0].levelName
                 item.updatedTime = item.updatedTime.split(' ')[0]
             } )
         })

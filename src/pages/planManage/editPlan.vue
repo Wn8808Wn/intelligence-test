@@ -14,9 +14,9 @@
             <div class="prov">
                 <span class="commontips">考场计划:</span>
                 <div class="btnGroup">
-                    <el-button type="primary" plain  @click="dialogFormVisible = true">新增</el-button>
-                    <el-button type="primary" @click="showDelIconEvent" plain>删除</el-button>
-                    <el-button type="primary" plain @click="UNDO" :class="{'deactive': currStatus === 0 ,'active': currStatus === 1}">撤销</el-button>
+                    <el-button type="primary" plain  @click="dialogFormVisible = true" :disabled="addStatus===0"  :class="{'deactive': addStatus === 0 ,'active': addStatus === 1}" >新增</el-button>
+                    <el-button type="primary" @click="showDelIconEvent" plain  :disabled="delStatus===0" :class="{'deactive': delStatus === 0 ,'active': delStatus === 1}">删除</el-button>
+                    <el-button type="primary" plain @click="UNDO"  :disabled="recoveryStatus===0" :class="{'deactive': recoveryStatus === 0 ,'active': recoveryStatus === 1}">撤销</el-button>
                 </div>
             </div>
         </div>
@@ -62,22 +62,20 @@
         </el-dialog>
 
 
-        <!-- <el-dialog
+        <el-dialog
         title="提示"
         :visible.sync="dialogVisible"
         width="30%"
         >
-        <p><span>本次新增2条</span>  <span>成功2条</span>  <span>失败2条</span></p>
-        <p>失败如下:</p>
-        <p v-for="(item,index) in errorList" :key="index">
-            <span>日期</span> <span>时间</span>
-
-        </p>
-
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">完 成(5)</el-button>
-        </span>
-      </el-dialog> -->
+          <p><span>本次新增2条</span>  <span>成功2条</span>  <span>失败2条</span></p>
+          <p>失败如下:</p>
+          <p v-for="(item,index) in errorList" :key="index">
+              <span>日期</span> <span>时间</span>
+          </p>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogVisible = false">完 成({{timeOff}})</el-button>
+          </span>
+        </el-dialog>
 
         <div class="tabs-data" id="addPlanTabs">     
             <el-table 
@@ -106,7 +104,7 @@
               <template slot-scope="scope">
                   <span>{{scope.row.levelStr.replace(/,/g,'/')}}</span>
                   <span style="margin-left:10px">({{scope.row.timeStr}}钟)</span>
-                  <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.$index)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
+                  <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.row)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
               </template>
             </el-table-column>
 
@@ -117,7 +115,7 @@
             </el-table-column>
             </el-table>
 
-            <p style="margin-top:20px" v-if="tableData.length>0">共有{{total}}条结果</p>
+            <p style="margin-top:20px"  v-if="tableData !==[]">共有{{total}}条结果</p>
             <!-- 分页 -->
             <el-pagination
             background
@@ -170,15 +168,16 @@ export default {
       selectDate: "",
       timeList: [],
       showDelIcon: false,
-      delTabs: [],
-      page: 1,
+      addStatus:1,  //初始化新增按钮的样式 0:不可用 1：可用
+      delStatus:0,  //初始化删除按钮的样式 0:不可用 (没有数据或初始化) 1：可用
+      recoveryStatus: 0,// 通过状态码来控制撤销状态
       page:null,
       total:null,
       totalPage:null,
       pageSize:6,
-      currStatus: 0,// 通过状态码来控制撤销状态
       dialogVisible:false,
-      errorList:[]
+      errorList:[],
+      timeOff:5
     };
   },
    computed:{
@@ -191,17 +190,23 @@ export default {
     changeTimes(val){
       console.log(val)
     },
-    getData(url,params){
-        this.$http.get(url,params).then(res =>{
-          console.log(res)
+    getData(params){
+        this.$http.get("/api/plan/room_plan",params).then(res =>{
+          // console.log(res)
           if(res){
-            this.total = res.data.data.total;
+            this.tableData=[];
             this.totalPage = res.data.data.totalPage;
+            this.total = res.data.data.total;
             this.pageSize = res.data.data.pageSize;
             this.page = res.data.data.page;
-            let rst = res.data.data.rows
-            // console.log(rst)
-            this.tableData = rst;
+            this.tableData=res.data.data.rows;
+            if(this.tableData.length>0){
+              this.delStatus =1; // 有数据才可以删除
+              this.addStatus =1;
+            }else{
+              this.delStatus =0;
+              this.addStatus =0;    // 没有数据禁用
+            }
             this.tableData.forEach((item, index) => {
                 item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
             })
@@ -210,48 +215,77 @@ export default {
     },
     showDelIconEvent() {
       this.showDelIcon = !this.showDelIcon;
-      if (this.showDelIcon && this.delTabs.length > 0) {
-        this.currStatus = 1;
+      if(this.showDelIcon === false){
+        this.$store.dispatch('resetDeledeleCurrentRowId',null)
+      }
+      if (this.showDelIcon && this.$store.state.deleCurrentRowId !==null){
+        this.recoveryStatus = 1;
       } else {
-        this.currStatus = 0;
-        this.delTabs.length = 0;
+        this.recoveryStatus = 0;
       }
     },
     handleCurrentChange(val) {
       let params = new URLSearchParams();
-      params.append("userId", 1);
+      // params.append("userId", 1);
       params.append("page", val);
       params.append("roomId", this.roomId)
-      params.append("provinceCode",110000) //后期更改 目前传值1
-      this.getData("/api/plan/room_plan", { params })
+      // params.append("provinceCode",110000) //后期更改 目前传值1
+      this.getData({ params })
     },
     //删除当前行
-    delCurRow(index) {
-      this.delTabs.push(this.tableData[index]);
-      this.delTabs.splice(0, this.delTabs.length - 1);
-      // this.tableData.splice(index, 1);
+     delCurRow(row) {
+      this.recoveryStatus =1; //删除后撤销功能启用;
       let params = new URLSearchParams()
-      params.append('id',index)
-      this.$http.post("/api/plan/del_plan",params).then( res =>{
-          console.log(res)
+      params.append('id',row.id)
+      params.append('activeStatus',1)
+      this.$http.post("/api/plan/edit_plan",params).then( res =>{
+          // console.log(res)
+          if(res.data.code === 0 && res.data.msg ==='操作成功'){
+            this.$message({
+              type:'success',
+              showClose: true,
+              message:'删除成功'
+            })
+           this.$store.dispatch('deleCurrentRow',row.id)
+           //删除后刷新页面
+           let params = new URLSearchParams();
+            params.append("roomId", this.roomId);
+            params.append('activeStatus',0)
+            params.append("provinceCode",110000) //后期更改
+            this.getData({ params })
+          //  console.log(row.id,this.$store.state.deleCurrentRowId,"22222")
+          }else{
+             this.$message({
+              type:'error',
+              showClose: true,
+              message:'删除不成功'
+            })
+          }
       })
-      console.log(this.tableData);
      
     },
-    //撤销 删除的数据重新存入一个新数组delTabs，当点击时拿到数组中最后一个回填至tableData中。
-    UNDO() {
-      if (this.delTabs.length <= 0) {
-        this.$message({
-          showClose: true,
-          type: "warning",
-          message: "抱歉,只能撤销一步"
-        });
-      } else {
-        this.tableData.push(this.delTabs.pop());
-        // console.log(this.tableData, this.delTabs);
-      }
-      // this.tableData.push(this.delTabs[this.delTabs.length-1])
-      // this.delTabs.pop()
+     UNDO() {
+      var index = this.$store.state.deleCurrentRowId;
+      // console.log(index,"111")
+      let params = new URLSearchParams()
+      params.append('id',index)
+      params.append('activeStatus',0)
+      this.$http.post("/api/plan/edit_plan",params).then( res =>{
+          // console.log(res)
+          if(res.data.code === 0 && res.data.msg ==='操作成功'){
+            this.recoveryStatus =0; //撤销成功后禁用撤销
+            let params = new URLSearchParams();
+            params.append("roomId", this.roomId);
+            params.append('activeStatus',0)
+            params.append("provinceCode",110000) //后期更改
+            this.getData({ params })
+            this.$message({
+              type:'success',
+              showClose: true,
+              message:'恢复成功'
+            })
+          }
+      })
     },
     addTimeEvent() {
       //  this.timeList.push({'stTime':this.startExamTime,'endTime':this.endExamTime});
@@ -270,7 +304,7 @@ export default {
     },
     addData(val) {
       this.timeList[this.timeList.length - 1] = val;
-      console.log(this.timeList, "aaaaa");
+      // console.log(this.timeList, "aaaaa");
     },
     submitBtn() {
       let params = new URLSearchParams();
@@ -279,10 +313,30 @@ export default {
       params.append("beginDate", this.selectDate[0]);
       params.append("endDate", this.selectDate[1]);
       params.append("timeStrs", JSON.stringify(this.timeList));
-      console.log(params)
       this.$http.post("/api/plan/add_plan", params).then(res => {
         console.log(res);
-        this.dialogVisible = true;
+        if(res.data.code===0){
+            this.$message({
+              type:'success',
+              message:'添加成功'
+            })
+            var p1 = new Promise( (resolve, reject)=> {
+              setTimeout(()=>{
+                  this.dialogFormVisible = false;
+              }, 2000, 'P1');
+            });
+            var p2 = new Promise( (resolve, reject) => {
+                setTimeout(()=>{
+                    this.dialogVisible =true;
+                    this.setIntervalFn()
+                }, 3500, 'P2');
+            });
+            // 同时执行p1和p2，并在它们都完成后执行then:
+            Promise.all([p1, p2]).then(function (results) {
+                
+            });
+        }
+        
       });
     },
     tableRowClassName({row, rowIndex}) {
@@ -292,17 +346,7 @@ export default {
         return '';
     }
   },
-  watch: {
-    delTabs() {
-      if (this.delTabs.length <= 0) {
-        this.currStatus = 0;
-      } else {
-        this.currStatus = 1;
-      }
-    },
-   
-  },
-  mounted() {
+  mounted(){
     let params = new URLSearchParams();
     params.append("userId", 1);
     params.append("provinceCode",110000) //后期更改 目前传值1
@@ -315,18 +359,7 @@ export default {
         }
     })
     params.append("roomId", this.roomId)
-    this.$http.get("/api/plan/room_plan", { params }).then( res =>{
-        console.log(res,111)
-        this.total = res.data.data.total;
-        this.totalPage = res.data.data.totalPage;
-        this.pageSize = res.data.data.pageSize;
-        this.page = res.data.data.page;
-        let rst = res.data.data.rows
-        this.tableData = rst;
-        this.tableData.forEach((item, index) => {
-            item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
-        })
-    })
+    this.getData({params})
   }
 };
 </script>

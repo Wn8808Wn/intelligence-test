@@ -101,7 +101,7 @@ export default {
           this.tableData.forEach( (item,index) =>{
               item.buildDate = this.getTimeStyle(item.buildDate)
               item.addressabbr = item.province+item.city+item.distric
-              item.manageUnit = this.unitsList.filter((value,index) => value.id = item.manageUnit)[0].unitName;
+              item.manageUnit = this.unitsList.filter((value,index) => value.id === item.manageUnit)[0].unitName;
           })
     })
       .catch(err => {
