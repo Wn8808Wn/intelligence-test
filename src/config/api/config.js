@@ -7,15 +7,16 @@ export default {
     // `transformRequest` 允许在向服务器发送前，修改请求数据
     // 只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法
     // 后面数组中的函数必须返回一个字符串，或 ArrayBuffer，或 Stream
-    // transformRequest: [
-    //   data => data
-    // ],
+    transformRequest: [
+      data => data
+    ],
     transformResponse: [],
     // 请求头在这里配置
-    headers: { 'Content-Type': 'application/json' },
+    // headers: { 'Content-Type': 'application/json' },
+    headers: {'X-Requested-With': 'XMLHttpRequest'},
     params:{},
     data: {},
-    timeout: 20000,   // 指定请求超时的毫秒数(0 表示无超时时间)  如果请求话费了超过 `timeout` 的时间，请求将被中断
+    timeout: 2000,   // 指定请求超时的毫秒数(0 表示无超时时间)  如果请求话费了超过 `timeout` 的时间，请求将被中断
     withCredentials: false, // default 表示跨域请求时是否需要使用凭证
     responseType: 'json', // default
     maxContentLength: 2000,   //定义允许的响应内容的最大尺寸

@@ -8,10 +8,13 @@ const state = {
     examPlanEditId:null,
     roomId:null,
     deleCurrentRowId:null,
+    //登录页面设置token
 }
 
 const getters = {
-
+    // userInfo:{
+    //     token:''
+    // }
 
 }
 
