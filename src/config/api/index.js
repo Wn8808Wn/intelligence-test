@@ -87,7 +87,7 @@ axios.interceptors.response.use(
     if (res.data && res.status !== 200 && res.statusText !== 'ok') {
       Message({ //  饿了么的消息弹窗组件,类似toast
         showClose: true,
-        // message: res.data.message,(未定义？？？)
+        message: res.data.msg,
         type: "error"
       });
       return Promise.reject(res.message);

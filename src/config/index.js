@@ -4,7 +4,7 @@ import { Message } from "element-ui";
 import router from "../router";
 
 const Axios = axios.create({
-  baseURL: "/api", // 因为我本地做了反向代理
+  baseURL: "", // 因为我本地做了反向代理
   timeout: 10000,
   responseType: "json",
   withCredentials: true, // 是否允许带cookie这些
@@ -17,9 +17,7 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
   config => {
     // 在发送请求之前做某件事
-    if (
-      config.method === "post"
-    ) {
+    if (config.method === "post") {
       // 序列化
       config.data = qs.stringify(config.data);
       // 温馨提示,若是贵公司的提交能直接接受json 格式,可以不用 qs 来序列化的
@@ -89,21 +87,21 @@ Axios.interceptors.response.use(
         });
       } else {
         // 下面是接口回调的satus ,因为我做了一些错误页面,所以都会指向对应的报错页面
-        if (error.response.status === 403) {
-          router.push({
-            path: "/error/403"
-          });
-        }
-        if (error.response.status === 500) {
-          router.push({
-            path: "/error/500"
-          });
-        }
-        if (error.response.status === 502) {
-          router.push({
-            path: "/error/502"
-          });
-        }
+        // if (error.response.status === 403) {
+        //   router.push({
+        //     path: "/error/403"
+        //   });
+        // }
+        // if (error.response.status === 500) {
+        //   router.push({
+        //     path: "/error/500"
+        //   });
+        // }
+        // if (error.response.status === 502) {
+        //   router.push({
+        //     path: "/error/502"
+        //   });
+        // }
         if (error.response.status === 404) {
           router.push({
             path: "/error/404"
@@ -112,7 +110,8 @@ Axios.interceptors.response.use(
       }
     }
     // 返回 response 里的错误信息
-    let errorInfo =  error.data.error ? error.data.error.message : error.data;
+    // let errorInfo =  error.data.error ? error.data.error.message : error.data;
+    let errorInfo =  error.data ? error.data.msg : error.data;
     return Promise.reject(errorInfo);
   }
 );

@@ -175,7 +175,7 @@ export default {
         getData( url, params){
             this.$http.get(url, params).then(res => {
             this.tableData = [];
-            console.log(res,1111)
+            // console.log(res,1111)
             if(res.status === 200 && res.data.code ===0){
                 this.total = res.data.data.planPage.total;
                 this.totalPage = res.data.data.planPage.totalPage;

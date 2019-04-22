@@ -3,28 +3,18 @@
         <el-tabs type="border-card"  v-model="activeName2"   @tab-click="handleClick">
             <el-tab-pane name="first">
             <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhun" ></i>考场标准</span>
-                <!-- 显示子页面 -->
-                    <router-view></router-view>
-                    <!-- <standardPage></standardPage> -->
             </el-tab-pane> 
             <el-tab-pane name="second">
             <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhunmoban" ></i>考场标准模板</span>
-                <!-- 显示子页面 -->
-                    <router-view></router-view>
-                    <!-- <standardTemplatePage></standardTemplatePage> -->
             </el-tab-pane> 
         </el-tabs>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-// import standardPage from './standard/standard'
-// import standardTemplatePage from './standardTemplate/standardTemplate' 
+
 export default {
-  components:{
-    // standardPage,
-    // standardTemplatePage
-  },
   data() {
     return {
       activeName2:"first",
