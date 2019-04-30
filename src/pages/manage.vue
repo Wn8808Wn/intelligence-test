@@ -71,7 +71,7 @@
             <div class="user-info">
                 <img src="../assets/userimg.png" alt="">
                 <span>超级管理员</span>
-                <i class="el-icon-menu"></i>
+                <i class="iconfont icon-tuichu-" style="margin-left:13px;vertical-align:middle;color:#4d655e; cursor:pointer"></i>
 
             </div>
 
