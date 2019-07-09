@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <div class="login-left">
-              <h3 id="firstH3">中国围棋协会</h3>
+              <h3>中国围棋协会</h3>
               <h3>智能管理平台</h3>
         </div>
         <div class="login-right">
@@ -34,7 +34,8 @@
                 </div>
 
               <el-button class="submit"
-                @click="submit('form')"></el-button>
+                @click="submit('form')">
+              </el-button>
             </el-form>
         </div>
     </div>
@@ -64,7 +65,7 @@ export default {
     return {
       remember: false,
       showtips: false,
-      tipsTitle:0,
+      tipsTitle: 0,
       forget: 1,
       form: {
         username: "",
@@ -96,49 +97,37 @@ export default {
           dataStr.append("loginName", username);
           dataStr.append("passWord", password);
 
-          this.$http.post("/api/login", dataStr).then(res => {
-              console.log(res,321)
+          this.$http
+            .post("/api/login", dataStr)
+            .then(res => {
               if (res.status === 200 && res.data.code === 0) {
-                // console.log(111)
                 res = res.data.data;
                 let token = res.token;
                 console.log(token);
                 let expiration = res.expiration;
                 sessionStorage.setItem("dsToken", token); // 存token
                 sessionStorage.setItem("lifeTime", expiration); // 存过期时间
-                this.showtips =false;
-                this.tipsTitle=0;
+                this.showtips = false;
+                this.tipsTitle = 0;
                 this.$message({
+                  customClass:'message',
                   showClose: true,
                   type: "success",
                   message: "登录成功",
                   duration: 800
                 });
-                
+
                 setTimeout(() => {
                   this.$router.push({ path: "/exammanage" });
                 }, 1000);
               }
               if (res.status === 200 && res.data.code === 10002) {
-                 this.showtips = true;
+                this.showtips = true;
                 this.tipsTitle = 1;
-                // this.$message({
-                //   showClose: true,
-                //   type: "error",
-                //   message: "账号不存在",
-                //   duration: 1000
-                // });
               }
               if (res.status === 200 && res.data.code === 10003) {
-                //
                 this.showtips = true;
                 this.tipsTitle = 2;
-                // this.$message({
-                //   showClose: true,
-                //   type: "error",
-                //   message: "密码错误",
-                //   duration: 1000
-                // });
               }
             })
             .catch(res => {
@@ -159,6 +148,12 @@ export default {
     }
   },
   created() {
+    var whdef = 100 / 1920; // 表示1920的设计图,使用100PX的默认值
+    var wH = window.innerHeight; // 当前窗口的高度
+    var wW = window.innerWidth; // 当前窗口的宽度
+    var rem = wW * whdef; // 以默认比例值乘以当前窗口宽度,得到该宽度下的相应FONT-SIZE值
+    $("html").css("font-size", rem + "px");
+    console.log(rem);
     if (Cookies.get("dsName") != null) {
       this.form.username = Cookies.get("dsName") || "";
       this.form.password = Cookies.get("dsWord") || "";
@@ -179,48 +174,51 @@ export default {
   height: 100%;
   position: relative;
   overflow: hidden;
-  .login-left{
-    width: 28.85%;
-    height: 26.76%;
+  .login-left {
+    width: 5.54rem;
+    height: 2.38rem;
     position: absolute;
-    left: 9.48%;
-    top: 37.63%;
-      &>h3{
-          width: 100%;
-          height: 90px;
-          font-size: 90px;
-          line-height: 90px;
-          font-weight: 900;
-          background: linear-gradient(to bottom, #22effe, #008ae1);
-          -webkit-background-clip: text;
-          color: transparent;
-          &:nth-child(1){
-            margin-bottom: 30px;
-          }
+    left: 1.82rem;
+    top: 3.34rem;
+    & > h3 {
+      width: 100%;
+      height: 0.9rem;
+      font-size: 0.9rem;
+      line-height: 1;
+      font-weight: 900;
+      background: linear-gradient(to bottom, #22effe, #008ae1);
+      -webkit-background-clip: text;
+      color: transparent;
+      &:nth-child(1) {
+        margin-bottom: 0.3rem;
+        // margin-bottom: 11.95%;
       }
+    }
   }
 
   .login-right {
-    width: 50.31%;
-    height: 50.32%;
+    width: 9.66rem;
+    height: 4.72rem;
+    left: 8.78rem;
+    top: 2.23rem;
     position: absolute;
-    left: 45.74%;
-    top: 23.77%;
     background: url(../../assets/login_bg.png) no-repeat;
+    background-size: cover;
     .remember {
       float: left;
+      font-size: 0.14rem;
     }
-
     .forget {
       float: right;
+      font-size: 0.14rem;
     }
-
     .submit {
-      width: 188px;
-      height: 138px;
+      width: 1.88rem;
+      height: 1.38rem;
+      margin-top: 0.48rem;
+      margin-left: 0.84rem;
       background: url(../../assets/button.png) no-repeat;
-      margin-top: 48px;
-      margin-left: 84px;
+      background-size: cover;
       border: none;
     }
   }
@@ -229,64 +227,75 @@ export default {
 
 
 <style rel='stylesheet/scss' lang="scss">
-.login-right .login-input {
-  width: 346px;
-  height: 447px;
-  margin-left: 300px;
-  margin-top: 74px;
+.message{
+  width:.5rem;
+  font-size:.14rem;
+}
+.login-input {
+  width: 3.46rem;
+  height: 4.47rem;
+  margin-left: 3rem;
+  margin-top: 0.74rem;
+  // width: 35.82%;
+  // height: 94.7%;
+  // margin-left: 31.05%;
+  // margin-top: 7.66%;
   & > .input-bg {
     width: 100%;
-    height: 75px;
+    height: 0.75rem;
+    font-size: 0.18rem;
+    margin-bottom: 0.17rem;
     text-align: center;
-    line-height: 75px;
+    line-height: 1;
     color: #ff0000;
-    font-size: 18px;
-    margin-bottom: 17px;
   }
-  .el-form-item__content {
-    height: 33px;
-    width: 100%;
-  }
-
-  $error: #000000;
-  .el-form-item {
+  & /deep/ .el-form-item {
     margin-bottom: 0;
-    height: 33px;
     width: 100%;
     position: relative;
-    margin-bottom: 66px;
-    border-bottom: 2px solid $error;
+    height: 0.33rem;
+    margin-bottom: 0.66rem;
+    border-bottom: 0.02rem solid #000000;
     & > label {
-      height: 33px;
-      line-height: 33px;
-      font-size: 18px;
-      color: $error;
+      line-height: 0.33rem;
+      height: 0.33rem;
+      font-size: 0.18rem;
+      color: #000000;
       position: absolute;
       top: 0;
       left: 0;
       z-index: 10;
     }
 
-    .el-input__inner {
-      height: 33px;
-      padding: 0;
-      border: none;
-      border-radius: 0%;
-      position: absolute;
-      top: -25px;
-      left: 0;
-      padding-left: 68px;
-      font-size: 18px;
-      color: #000;
+    & /deep/ .el-form-item__content {
+      width: 100%;
+      height: 0.33rem;
+      & /deep/ .el-input {
+        width: 100%;
+        height: 0.36rem;
+        & /deep/ .el-input__inner {
+          height: 0.33rem;
+          padding: 0;
+          border: none;
+          border-radius: 0%;
+          position: absolute;
+          // top: -0.25rem;
+          left: 0;
+          padding-left: 0.68rem;
+          font-size: 0.18rem;
+          color: #000;
+          line-height: 0.33rem;
+        }
+      }
     }
   }
   & > div:nth-of-type(3) {
-    margin-bottom: 18px;
+    margin-bottom: 0.18rem;
   }
-  .redBorder{
-    border-color:red;
-    &>label{
-      color:red;
+  .redBorder {
+    border-color: red;
+    & > label {
+      color: red;
     }
   }
 }

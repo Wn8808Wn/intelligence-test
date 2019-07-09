@@ -255,7 +255,7 @@ export default {
             this.getData("/api/plan/plan_list", { params });
         },
         changeManageUnit(val){
-            alert(val)
+            // alert(val)
             let params = new URLSearchParams();
             params.append("provinceId",110000);
             if(this.inputVal){

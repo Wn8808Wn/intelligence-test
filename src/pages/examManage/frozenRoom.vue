@@ -118,7 +118,6 @@ export default {
     },200),
     unFreezeData(id){
        //恢复考场操作
-      alert(id);
       this.$confirm(
          "考场恢复使用后，可在考场列表中查看。确定恢复？",
         "考场恢复",

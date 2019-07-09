@@ -256,7 +256,7 @@ export default {
             this.getData("/api/ticket/manage_list", { params });
         },
         searchData(){
-            alert(this.nameNum)
+            // alert(this.nameNum)
             let params = new URLSearchParams();
             params.append("userId", 1);
             params.append("id", 1);

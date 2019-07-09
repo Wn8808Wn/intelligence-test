@@ -39,9 +39,8 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang="scss" >
+<style rel='stylesheet/scss' lang="scss" scoped>
 .exammanage {
-  // width: 100%;
   overflow: hidden;
   max-height: 926px;
   margin-right: 319px;

@@ -18,10 +18,10 @@ export default {
     },
     methods:{
         updataPages(){
-            alert(111)
+            this.$router.g0(0);
         },
         toHome(){
-            this.$router.push('/')
+            this.$router.push('/');
         }
 
     }

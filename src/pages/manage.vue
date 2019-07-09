@@ -27,7 +27,7 @@
                 </el-menu-item>
                 <el-menu-item  index="/planManage">
                      <i class="iconfont icon-kaoshijihuaguanli-"></i>
-                    <span slot="title">考题计划管理</span>
+                    <span slot="title">考试计划管理</span>
                 </el-menu-item>
                 <el-menu-item  index="/orderManage">
                      <i class="iconfont icon-dingdanguanli-"></i>
@@ -143,8 +143,8 @@ export default {
       padding-right: 0 !important;
       border-left: 3px solid #07281f;
       & > i {
-        margin-right: 19px;
-        margin-left: 18px;
+        margin-right: 12px;
+        margin-left: 16px;
       }
       & > span {
         font-size: 16px;

@@ -106,7 +106,7 @@ export default {
           this.tableData = rst;
           this.unitsList = res.data.data.unitsList;
           this.tableData.forEach( (item,index) => {
-            item.buildDate = this.getTimeStyle(item.buildDate)
+            item.buildDate = this.getDateStyle(item.buildDate)
             item.addressabbr = item.province + item.city + item.distric;
             //管理单位code码转换为名字
             item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
@@ -135,7 +135,6 @@ export default {
     },
     freezeData(id) {
       //冻结考场操作
-      alert(id);
       this.$confirm(
         "考场冻结后，将不能对该考场新增考试计划，但不影响已编排计划。",
         "考场冻结",
@@ -164,7 +163,6 @@ export default {
     },
     searchData() {
       //输入考场编号搜索相对应的考场   //考场编号加 考场状态
-      alert(this.RoomCode);
       let params = new URLSearchParams();
       params.append("examRoomCode", this.RoomCode);
       params.append("dataStatus", 0);

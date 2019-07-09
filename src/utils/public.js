@@ -38,7 +38,7 @@ export function _throttle(fn, interval) {
 }
 
 
-export default function  getTimeStyle(time){
+ function  getTimeStyle(time){
     let d = new Date(time);
     let times =
     d.getFullYear() +"-" +(d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1): d.getMonth() + 1) +
@@ -46,3 +46,12 @@ export default function  getTimeStyle(time){
      +":"+(d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes())
      return times;
 }
+
+function  getDateStyle(time){
+    let d = new Date(time);
+    let times =
+    d.getFullYear() +"-" +(d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1): d.getMonth() + 1) +
+     "-" +(d.getDate() < 10 ? "0" + d.getDate() : d.getDate());
+     return times;
+}
+export  {getTimeStyle,getDateStyle}

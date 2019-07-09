@@ -11,10 +11,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-          // target: 'http://192.168.1.122:8080',//辉哥后端接口地址  
-          target: 'http://192.168.1.88:8090',//服务器接口地址
-          // target: 'http://192.168.1.142:8080',//钟宇宏后端接口地址  
-          // target: 'http://192.168.1.182:8080',//肖翔服务器接口地址
+          // target: 'http://192.168.1.125:8080',//辉哥后端接口地址  
+          // target: 'http://192.168.1.88:8090',//服务器接口地址
+          target: 'http://192.168.1.145:8080',//钟宇宏后端接口地址  
           changeOrigin: true,//是否允许跨越
           pathRewrite: {
               '^/api': '/',//重写,

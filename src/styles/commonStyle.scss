@@ -1,4 +1,5 @@
 
+
  .clearfix:after{
     /*添加一个内容*/
     content: "";
@@ -7,12 +8,12 @@
     /*清除两侧的浮动*/
     clear: both;
 }
-
+img { max-width: 100%;}
 .commonRight{
   overflow: hidden;
   max-height: 926px;
   margin-right: 319px;
-  padding-top: 12px;
+  padding-top: 13px;
   .el-tabs--border-card{
     background: #f0f0f0;
   }

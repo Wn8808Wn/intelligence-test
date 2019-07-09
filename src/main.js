@@ -7,16 +7,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-
+//引入jq
+import $ from 'jquery'
 //引入css
 import './styles/reset.css'
-
 
 //引入 elementUI库
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import  "./styles/commonStyle.scss"
-
 
 // ajax
 // import http from './config/api'
@@ -27,9 +26,10 @@ import axios from 'axios'
 Vue.prototype.$http = axios
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 
-import getTimeStyle from './utils/public'
+import {getTimeStyle,getDateStyle} from './utils/public'
 
 Vue.prototype.getTimeStyle = getTimeStyle
+Vue.prototype.getDateStyle = getDateStyle
 
 Vue.use(ElementUI);
 
