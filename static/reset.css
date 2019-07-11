@@ -1,0 +1,58 @@
+@charset "utf-8";
+/* CSS Document */
+html, body, ul, li, ol, dl, dd, dt, p, span,h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0;font-family:"PingFang-SC-Medium";font-weight: 500; }
+
+fieldset, c{ border:none; }
+
+img{display: block;}
+
+ul, ol ,li{ list-style:none; }
+
+body { font:12px "PingFang-SC-Medium","SimSun","宋体","Arial Narrow",HELVETICA; background:#fff;}
+
+a { color:#666; text-decoration:none; }
+/*清除浮动*/
+.clear{clear:both}
+button{
+    outline: none;
+}
+*{
+    touch-action: none;
+}
+
+::-webkit-scrollbar  
+{  
+	display: none!important;
+    width: 0px;  
+    height: 0px;  
+}
+/*移动端默认样式*/
+/*清除掉按下时会有一个灰色阴影*/
+a,input,button{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+/*清除掉ios自带圆角*/
+input,button{
+    -webkit-appearance: none;
+    /* //消除输入框核按钮的默认外观 */
+    border-radius: 0;
+}
+/* // 禁止用户选中文本 */
+*{
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-khtml-user-select:none;
+    user-select:none;
+     /* iPhone 和 Android 的浏览器纵向 (Portrate mode) 和橫向 (Landscape mode) 模式皆有自动调整字体大小的功能。控制它的就是 CSS 中的 -webkit-text-size-adjust。关闭字体大小自动调整功能*/
+     -webkit-text-size-adjust: 100%;
+}
+a{
+    text-decoration: none;
+}
+input{
+    outline: none;
+    vertical-align: middle;
+}
+img{
+    vertical-align: middle;
+}

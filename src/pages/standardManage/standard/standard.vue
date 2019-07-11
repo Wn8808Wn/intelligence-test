@@ -2,7 +2,7 @@
     <div class="standard">
         <div class="top">
             <el-button type="primary" icon="el-icon-plus"  round @click="handleAddStandard">新增标准</el-button>
-            <el-select  v-model="currManageUnit" placeholder="全部管理单位" @change="changeSearch">
+            <el-select  v-model="currManageUnit" placeholder="全部管理单位" @change="changeManageUnit">
                 <el-option
                 v-for="item in unitsList"
                 :key="item.id"
@@ -93,8 +93,6 @@
     </div>
 
 </template>
-
-
 <script>
 export default {
   data() {
@@ -103,7 +101,7 @@ export default {
       unitsList:[],
       levelList:[],
       total: null,
-      currManageUnit: "",
+      currManageUnit:'',
       dataType:1,
       currentPage: 1,
       pageSize: 10,
@@ -115,18 +113,17 @@ export default {
     indexMethod(index){
             return index+1+this.pageSize*(this.currentPage-1);
     },
-    getData(url,params){
-        this.$http.get(url,params).then(res => {
+    getData(params){
+        this.$http.get("/api/standard/standard_list", { params }).then(res => {
             this.tableData=[];
-            // console.log(res,222)
             this.total = res.data.data.standPage.total;
-            this.currentPage = res.data.data.standPage.page;
             this.pageSize = res.data.data.standPage.pageSize;
+            this.currentPage = res.data.data.standPage.page;
             this.totalPage = res.data.data.standPage.totalPage;
             this.tableData = res.data.data.standPage.rows;
             this.unitsList  = res.data.data.unitsList;
+            this.unitsList.unshift({unitName:'全部',id:0})
             this.levelList = res.data.data.levelList;
-            // console.log(this.unitsList,this.levelList)
             this.tableData.forEach( (item,index) =>{
                 item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
                 item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
@@ -140,36 +137,40 @@ export default {
     },
     handleCurrentChange(val) {
       let params = new URLSearchParams();
+      params.append("page", val);
       params.append("dataType", this.dataType);
       params.append("userId", 1);
-      params.append("page", val);
-      this.getData("/api/standard/standard_list", { params });
+      if(this.manageUnit !== ''){
+        params.append("manageUnit", this.currManageUnit);  
+      }else{
+        params.append("manageUnit",0); 
+      }
+      this.getData(params);
     },
-    changeSearch(val){
+    changeManageUnit(val){
       let params = new URLSearchParams();
-       params.append("userId", 1);
-       params.append("dataType", this.dataType);
-       params.append("manageUnit", val);    // 管理单位对应的数字编码
-       this.getData("/api/standard/standard_list", { params });
+      this.manageUnit =val;
+      params.append("manageUnit", val);   
+      params.append("userId", 1);
+      params.append("dataType", this.dataType);
+      this.getData(params);
     },
     // 修改对应的数据
     modifyData(id){
       this.$router.push({name:'updateStandard',query: { id: id }})
-      // console.log(id)
     },
     //查看详情页
     handldetails(id){
       this.$router.push({name:'standardDetail',query: { id: id }})
-      // console.log(id)
     }
   },
   created(){
     //进入页面显示考题标准信息
     let params = new URLSearchParams();
+    params.append("manageUnit", 0);
     params.append("userId", 1);
-    params.append("dataType", this.dataType);
-    this.getData("/api/standard/standard_list", { params });
-    
+    params.append("dataType", 1);
+    this.getData(params);
   }
 };
 </script>

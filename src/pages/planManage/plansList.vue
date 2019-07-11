@@ -6,14 +6,14 @@
                 <input type="text" placeholder="请输入考场编号或级别"  v-model.trim ="inputVal">
                 <el-button circle @click="searchData">搜索</el-button>
             </div>
-            <el-button  type="primary"  icon="el-icon-time" round @click="handleHistory" >历史考试计划</el-button>
-           
+            <el-button class="historyBtn"  type="primary"  icon="el-icon-time" round @click="handleHistory" >历史考试计划</el-button>
         </div>
         <div class="top" id="searchPart">
             <el-date-picker
             v-model="pickerTime"
             type="daterange"
             @change="changePickerTime"
+            format="yyyy - MM - dd "
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
@@ -64,9 +64,11 @@
                         </el-table-column>
 
                         <el-table-column
-                        prop="examDate"
-                        label="考试日期"
-                        width="105">
+                          label="考试日期"
+                          width="105">
+                          <template slot-scope="scope">
+                            <span>{{scope.row.examDate.split(' ')[0]}}</span>
+                          </template>
                         </el-table-column>
 
                         <el-table-column
@@ -136,7 +138,7 @@ export default {
     data(){
         return{
             inputVal:'',
-            pickerTime:"",
+            pickerTime:[],
             manageUnitId:'',
             examRoomId:'',
             unitsList:[],
@@ -154,84 +156,66 @@ export default {
         indexMethod(index){
             return index+1+this.pageSize*(this.currentPage-1);
         },
-        // getDataList(){
-        //     setInterval(()=>{
-        //         this.intervalFunc();
-        //     },1000)
-        //     // this.tableData.push({openTime:'2019-4-10 22:22'},{openTime:'2019-4-10 22:09'});
-        //     this.tableData.forEach((item,index)=>{
-        //         this.$set(item,'status',false);
-        //     })
-        // },
-        // intervalFunc(){
-        //     console.log(this.nowTimetamp);
-        //     this.nowTimetamp = Number(new Date());
-        //     this.tableData.forEach((item,index)=>{
-        //         if(this.nowTimetamp - Number(Date.parse(item.openTime.replace(/-/g,'/'))) > 0){
-        //             item.status = true;
-        //         }
-        //     })
-        // },
-        getData( url, params){
-            this.$http.get(url, params).then(res => {
-            this.tableData = [];
-            // console.log(res,1111)
-            if(res.status === 200 && res.data.code ===0){
-                this.total = res.data.data.planPage.total;
-                this.totalPage = res.data.data.planPage.totalPage;
-                this.pageSize = res.data.data.planPage.pageSize;
-                this.currentPage = res.data.data.planPage.page;
-                // console.log(res.data.data)
-                let rst = res.data.data;
-                this.unitsList = rst.unitsList
-                this.roomList = rst.roomList
-                this.tableData = rst.planPage.rows
-                this.tableData.forEach((item, index) => {
-                    item.createdTime = this.getTimeStyle(item.createdTime);
-                    item.manageUnit = this.unitsList.filter(itemVal => itemVal.id === item.manageUnit)[0].unitName
-                    item.roomIdName = this.roomList.filter(itemVal => itemVal.id === item.roomId)[0].examRoomName
-                    // // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime)  //转换时间样式 由两部分组成
-                    item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
-                    //判断修改的状态
-                    let openTimeStamp = Number(Date.parse(item.openTime.replace(/-/g,'/')))
-                    let nowTImeStamp = Number(new Date())
-                    // console.log(openTimeStamp-nowTImeStamp)
-                    if(openTimeStamp-nowTImeStamp >= 0){
-                        //开放报名时间比现在晚
-                        item.status = false
-                    }else{
-                        item.status = true
-                    }
-                });
-               
-            }else{
-                console.log(res.data.msg)
-            }
+        getData(params){
+            this.$http.get('/api/plan/plan_list', {params}).then(res => {
+                this.tableData = [];
+                if(res.status === 200 && res.data.code ===0){
+                    this.total = res.data.data.planPage.total;
+                    this.totalPage = res.data.data.planPage.totalPage;
+                    this.pageSize = res.data.data.planPage.pageSize;
+                    this.currentPage = res.data.data.planPage.page;
+                    // console.log(res.data.data,'999')
+                    let rst = res.data.data;
+                    this.unitsList = rst.unitsList
+                    this.unitsList.unshift({unitName:'全部',id:0})
+                    this.roomList = rst.roomList
+                    this.roomList.unshift({examRoomName:'全部',id:0})
+                    this.tableData = rst.planPage.rows
+                    this.tableData.forEach((item, index) => {
+                        item.createdTime = this.getTimeStyle(item.createdTime).split(' ')[0]
+                        item.manageUnit = this.unitsList.filter(itemVal => itemVal.id === item.manageUnit)[0].unitName
+                        item.roomIdName = this.roomList.filter(itemVal => itemVal.id === item.roomId)[0].examRoomName
+                        // // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime)  //转换时间样式 由两部分组成
+                        item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
+                        //判断修改的状态
+                        let openTimeStamp = Number(Date.parse(item.openTime.replace(/-/g,'/')))
+                        let nowTImeStamp = Number(new Date())
+                        if(openTimeStamp-nowTImeStamp >= 0){
+                            //开放报名时间比现在晚
+                            item.status = false
+                        }else{
+                            item.status = true
+                        }
+                    });
+                }else{
+                    console.log(res.data.msg)
+                }
             }).catch((err)=>{
-                console.log()
+                console.log('数据异常')
             });
         },
         handleAddPlan(){
             this.$emit('showPage',this.CurrentPages.ADD_PLAN)
         },
         searchData(){
-            // alert(this.inputVal)
             let params = new URLSearchParams();
             params.append("provinceId",110000);
-            if(this.inputVal){
-                params.append("paramStr",this.inputVal); 
+            params.append("paramStr",this.inputVal)
+            if(this.manageUnitId !== ''){
+                params.append("manageUnit",this.manageUnitId)
+            }else{
+                params.append("manageUnit",0)
             }
-            if(this.manageUnitId){
-                params.append("manageUnit",this.manageUnit); 
+            if(this.examRoomId !== ''){
+                params.append("roomId",this.examRoomId)
+            }else{
+                params.append("roomId",0)
             }
-            if(this.pickerTime !== ""){
+            if(this.pickerTime !== '' && this.pickerTime !== null){
                 params.append("begin",this.pickerTime[0])
                 params.append("end",this.pickerTime[1])
             }
-            if(this.examRoomId){
-                params.append("roomId",this.examRoomId); 
-            }
-            this.getData("/api/plan/plan_list",{ params }); 
+            this.getData(params); 
         },
         handleHistory(){
             alert("后期增加历史考试计划")
@@ -239,57 +223,68 @@ export default {
         changePickerTime(val){
             let params = new URLSearchParams();
             params.append("provinceId",110000);
-            if(this.inputVal){
-                params.append("paramStr",this.inputVal); 
+            if(this.pickerTime !== '' && this.pickerTime !== null){
+                params.append("begin",this.pickerTime[0])
+                params.append("end",this.pickerTime[1])
             }
-            if(this.manageUnitId){
-                params.append("manageUnit",this.manageUnit); 
+            if(this.inputVal !== ''){
+                params.append("paramStr",this.inputVal)
+            }else{
+                params.append("paramStr",'')
             }
-            if(this.pickerTime !== ""){
-                params.append("begin",val[0])
-                params.append("end",val[1])
+            if(this.manageUnitId !== ''){
+                params.append("manageUnit",this.manageUnitId)
+            }else{
+                params.append("manageUnit",0)
             }
-            if(this.examRoomId){
-                params.append("roomId",this.examRoomId); 
+            if(this.examRoomId !== ''){
+                params.append("roomId",this.examRoomId)
+            }else{
+                params.append("roomId",0)
             }
-            this.getData("/api/plan/plan_list", { params });
+            this.getData(params); 
         },
         changeManageUnit(val){
-            // alert(val)
+            this.manageUnitId = val;
             let params = new URLSearchParams();
             params.append("provinceId",110000);
-            if(this.inputVal){
-                params.append("paramStr",this.inputVal); 
+            params.append("manageUnit",val)
+            if(this.inputVal !== ''){
+                params.append("paramStr",this.inputVal)          
+            }else{
+                params.append("paramStr",'');
             }
-            if(this.manageUnitId){
-                params.append("manageUnit",val); 
+            if(this.examRoomId !== ''){
+                params.append("roomId",this.examRoomId)          
+            }else{
+                params.append("roomId",0);
             }
-            if(this.pickerTime !== ""){
+            if(this.pickerTime !== '' && this.pickerTime !== null){
                 params.append("begin",this.pickerTime[0])
-                params.append("end",this.pickerTime[1])
+               params.append("end",this.pickerTime[1])
             }
-            if(this.examRoomId){
-                params.append("roomId",this.examRoomId); 
-            }
-            this.getData("/api/plan/plan_list", { params });
+            this.getData(params); 
         },  
         changeExamRoom(val){
+            this.examRoomId =val;
             let params = new URLSearchParams();
+            params.append("roomId",val)
             params.append("provinceId",110000);
-            if(this.inputVal){
-                params.append("paramStr",this.inputVal); 
+            if(this.inputVal !== ''){
+                params.append("paramStr",this.inputVal)        
+            }else{
+                params.append("paramStr",'')
             }
-            if(this.manageUnitId){
-                params.append("manageUnit",this.manageUnit); 
+            if(this.manageUnitId !== ''){
+                params.append("manageUnit",this.manageUnitId)        
+            }else{
+                params.append("manageUnit",0)
             }
-            if(this.pickerTime !== ""){
+            if(this.pickerTime !== '' && this.pickerTime !== null){
                 params.append("begin",this.pickerTime[0])
-                params.append("end",this.pickerTime[1])
+               params.append("end",this.pickerTime[1])
             }
-            if(this.examRoomId){
-                params.append("roomId",this.examRoomId); 
-            }
-            this.getData("/api/plan/plan_list", { params });
+            this.getData(params); 
         },
         modifyData(val){
             console.log(val)
@@ -310,36 +305,40 @@ export default {
         },
         handleCurrentChange(val){
             let params = new URLSearchParams();
-            params.append("userId",1);
             params.append("provinceId",110000);
-            if(this.inputVal){
-                params.append("paramStr",this.inputVal); 
+            params.append("page", val);
+            if(this.inputVal !== ''){
+                params.append("paramStr",this.inputVal)        
+            }else{
+                params.append("paramStr",'')
             }
-            if(this.manageUnitId){
-                params.append("manageUnit",this.manageUnitId); 
+            if(this.manageUnitId !== ''){
+                params.append("manageUnit",this.manageUnitId)        
+            }else{
+                params.append("manageUnit",0)
             }
-            if(this.pickerTime !== ""){
+            if(this.examRoomId !== ''){
+                params.append("roomId",this.examRoomId)        
+            }else{
+                params.append("roomId",0)
+            }
+            if(this.pickerTime !== '' && this.pickerTime !== null){
                 params.append("begin",this.pickerTime[0])
                 params.append("end",this.pickerTime[1])
             }
-            if(this.examRoomId){
-                params.append("roomId",this.examRoomId); 
-            }
-            params.append("page", val);
-            this.getData("/api/plan/plan_list", { params });
+            this.getData(params); 
         },
     },
     mounted(){
-        // this.intervalFunc();
-        // this.getDataList();
-        // let params = {
-        //     userId:1,
-        //     provinceId:110000
-        // }
-        let params = new URLSearchParams();
-        params.append("userId",1);
-        params.append("provinceId",110000);
-        this.getData( "/api/plan/plan_list",{params})
+        let  params={
+            provinceId:110000,
+            manageUnit:0,
+            roomId:0,
+            // begin:this.pickerTime[0],
+            // end:this.pickerTime[1],
+            paramStr:''
+        }
+        this.getData(params); 
     }
 }
 </script>
@@ -379,7 +378,5 @@ export default {
             bottom: 224px;
         }
     }
-   
-    
 }
 </style>

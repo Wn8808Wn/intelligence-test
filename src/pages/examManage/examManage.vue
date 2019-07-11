@@ -47,10 +47,11 @@ export default {
   padding-top: 12px;
   .el-tabs--border-card{
     background: #f0f0f0;
+   & /deep/ .el-tabs__content{
+      padding: 0;
+    }
   }
-  .el-tabs--border-card>.el-tabs__content{
-    padding: 0;
-  }
+  
 }
 </style>
 

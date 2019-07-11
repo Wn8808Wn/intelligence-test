@@ -79,7 +79,6 @@
         <div id="right-box">
             <router-view></router-view> 
         </div>
-
     </div>
 </template>
 
@@ -99,7 +98,7 @@ export default {
       this.keyPath = keyPath[0];
       console.log(this.keyPath);
     }
-  }
+  },
 };
 </script>
 

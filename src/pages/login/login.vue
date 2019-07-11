@@ -5,43 +5,27 @@
               <h3>智能管理平台</h3>
         </div>
         <div class="login-right">
-            <el-form class="lr login-input"
-            :model="form"
-            :rules="rules"
-            ref="form">
-
+            <el-form class="lr login-input" :model="form"  :rules="rules" ref="form">
                 <div class="input-bg"><span v-show="showtips">{{tipsTitle===1?'账号不存在,请重新输入':'密码错误,请重新输入'}}</span></div>
                 <el-form-item prop="username" label="用户名:" :class="{'redBorder':tipsTitle===1}">
-                    <el-input type="username"
-                    v-model="form.username">
-                    </el-input>
+                    <el-input type="username" v-model="form.username"> </el-input>
                 </el-form-item>
 
                 <el-form-item prop="password" label="密　码:" :class="{'redBorder':tipsTitle===2}">
-                    <el-input type="password"
-                    v-model="form.password">
-                    </el-input>
+                    <el-input type="password" v-model="form.password"></el-input>
                 </el-form-item>
-
                 <div class="remember">
                     <label class="check-box">
-                    <input type="checkbox"
-                    v-model="remember" />&nbsp;&nbsp;记住密码</label>
+                    <input type="checkbox"  v-model="remember" />&nbsp;&nbsp;记住密码</label>
                 </div>
                 <div class="forget">
-                    <label class="check-box"
-                    v-model="forget" />&nbsp;&nbsp;忘记密码？</label>
+                    <label class="check-box"   v-model="forget" />&nbsp;&nbsp;忘记密码？</label>
                 </div>
-
-              <el-button class="submit"
-                @click="submit('form')">
-              </el-button>
+                <el-button class="submit"  @click="submit('form')"></el-button>
             </el-form>
         </div>
     </div>
-
 </template>
-
 <script>
 import md5 from "md5";
 import Cookies from "js-cookie";
@@ -49,18 +33,18 @@ export default {
   name: "login",
   data() {
     let validateUserName = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("账号不能为空"));
-      } else {
-        callback();
-      }
+        if (!value) {
+            callback(new Error("账号不能为空"));
+        } else {
+            callback();
+        }
     };
     let validatePassWord = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("密码不能为空"));
-      } else {
-        callback();
-      }
+        if (!value) {
+            callback(new Error("密码不能为空"));
+        } else {
+            callback();
+        }
     };
     return {
       remember: false,
@@ -68,12 +52,12 @@ export default {
       tipsTitle: 0,
       forget: 1,
       form: {
-        username: "",
-        password: ""
+          username: "",
+          password: ""
       },
       rules: {
-        username: [{ validator: validateUserName, trigger: "blur" }],
-        password: [{ validator: validatePassWord, trigger: "blur" }]
+          username: [{ validator: validateUserName, trigger: "blur" }],
+          password: [{ validator: validatePassWord, trigger: "blur" }]
       }
     };
   },
@@ -82,43 +66,40 @@ export default {
       let username = this.form.username;
       let password = this.form.password;
       this.$refs[form].validate(valid => {
-        if (valid) {
+          if (valid) {
           // 如果验证通过 存用户的id provent
-          if (this.remember === true) {
-            // 记住密码按钮勾选
-            Cookies.set("dsName", username, { expires: 7 });
-            Cookies.set("dsWord", password, { expires: 7 });
-          } else {
-            this.region = false;
-            Cookies.remove("dsName");
-            Cookies.remove("dsWord");
-          }
-          let dataStr = new URLSearchParams();
-          dataStr.append("loginName", username);
-          dataStr.append("passWord", password);
+              if (this.remember === true) {
+                // 记住密码按钮勾选
+                  Cookies.set("dsName", username, { expires: 7 });
+                  Cookies.set("dsWord", password, { expires: 7 });
+              } else {
+                  this.region = false;
+                  Cookies.remove("dsName");
+                  Cookies.remove("dsWord");
+              }
+              let dataStr = new URLSearchParams();
+              dataStr.append("loginName", username);
+              dataStr.append("passWord", password);
 
-          this.$http
-            .post("/api/login", dataStr)
-            .then(res => {
+          this.$http.post("/api/login", dataStr).then(res => {
               if (res.status === 200 && res.data.code === 0) {
-                res = res.data.data;
-                let token = res.token;
-                console.log(token);
-                let expiration = res.expiration;
-                sessionStorage.setItem("dsToken", token); // 存token
-                sessionStorage.setItem("lifeTime", expiration); // 存过期时间
-                this.showtips = false;
-                this.tipsTitle = 0;
-                this.$message({
-                  customClass:'message',
-                  showClose: true,
-                  type: "success",
-                  message: "登录成功",
-                  duration: 800
-                });
-
+                  res = res.data.data;
+                  let token = res.token;
+                  console.log(token);
+                  let expiration = res.expiration;
+                  sessionStorage.setItem("dsToken", token); // 存token
+                  sessionStorage.setItem("lifeTime", expiration); // 存过期时间
+                  this.showtips = false;
+                  this.tipsTitle = 0;
+                  this.$message({
+                      customClass:'message',
+                      showClose: true,
+                      type: "success",
+                      message: "登录成功",
+                      duration: 800
+                  });
                 setTimeout(() => {
-                  this.$router.push({ path: "/exammanage" });
+                    this.$router.push({ path: "/exammanage" });
                 }, 1000);
               }
               if (res.status === 200 && res.data.code === 10002) {
@@ -148,12 +129,12 @@ export default {
     }
   },
   created() {
-    var whdef = 100 / 1920; // 表示1920的设计图,使用100PX的默认值
-    var wH = window.innerHeight; // 当前窗口的高度
-    var wW = window.innerWidth; // 当前窗口的宽度
-    var rem = wW * whdef; // 以默认比例值乘以当前窗口宽度,得到该宽度下的相应FONT-SIZE值
-    $("html").css("font-size", rem + "px");
-    console.log(rem);
+    // var whdef = 100 / 1920; // 表示1920的设计图,使用100PX的默认值
+    // var wH = window.innerHeight; // 当前窗口的高度
+    // var wW = window.innerWidth; // 当前窗口的宽度
+    // var rem = wW * whdef; // 以默认比例值乘以当前窗口宽度,得到该宽度下的相应FONT-SIZE值
+    // $("html").css("font-size", rem + "px");
+    // console.log(rem);
     if (Cookies.get("dsName") != null) {
       this.form.username = Cookies.get("dsName") || "";
       this.form.password = Cookies.get("dsWord") || "";
@@ -166,7 +147,6 @@ export default {
   }
 };
 </script>
-
 
 <style rel='stylesheet/scss' lang="scss" scoped>
 .login {

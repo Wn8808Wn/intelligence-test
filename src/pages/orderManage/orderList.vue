@@ -6,7 +6,7 @@
                 <input type="text" placeholder="请输入订单编号/用户名"  v-model.trim="orderNumber">
                 <el-button circle @click="searchData">搜索</el-button>
             </div>
-            <el-select  v-model="payStatus" placeholder="全部订单" @change="changeSearch">
+            <el-select  v-model="payStatus" placeholder="全部订单" @change="changePayStatus">
                 <el-option
                 v-for="item in payStatuses"
                 :key="item.value"
@@ -65,10 +65,10 @@
                   label="订单状态"
                   width="120">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.payStatus== 0" style="color: #ff0000">已支付</span>
-                    <span v-else-if="scope.row.payStatus== 1" style="color: #000000">待支付</span>
-                    <span v-else-if="scope.row.payStatus== 2" style="color: #000000">已关闭</span>
-                    <span v-else style="color: #1AE642">有退款</span>
+                    <span v-if="scope.row.payStatus== 0" style="color:#00D067">已支付</span>
+                    <span v-else-if="scope.row.payStatus== 1" style="color:#0067F1">待支付</span>
+                    <span v-else-if="scope.row.payStatus== 2" style="color:#6F6F6F">已关闭</span>
+                    <span v-else style="color:#F91111">有退款</span>
                   </template>
                 </el-table-column>
 
@@ -97,7 +97,7 @@ import {mapState,mapActions,mapMutations}  from 'vuex'
 export default {
   data() {
     return {
-      orderNumber: "",
+      orderNumber:'',
       currentPage: 1,
       pageSize: 10,
       totalPage: null,
@@ -115,6 +115,10 @@ export default {
       ],
       payStatus: "",
       payStatuses: [
+        {
+          value: -1,
+          label: "全部"
+        },
         {
           value: 0,
           label: "已支付"
@@ -135,6 +139,10 @@ export default {
       orderType: "",
       orderTypes: [
         {
+          value: -1,
+          label: "全部"
+        },
+        {
           value: 0,
           label: "考试服务"
         },
@@ -152,20 +160,22 @@ export default {
     ...mapActions({
       sendID : "modify"
     }),
-    getData(url, params) {
-      this.$http.get(url, params).then(res => {
+    getData(params) {
+      this.$http.get('/api/order/order_list', {params}).then(res => {
         this.tableData = [];
         this.total = res.data.data.total;
         this.totalPage = res.data.data.totalPage;
         this.pageSize = res.data.data.pageSize;
         this.currentPage = res.data.data.page;
-        // console.log(res.data.data.rows)
+        // console.log(res.data.data.rows,'888')
         var rst = res.data.data.rows;
         if (rst) {
           this.tableData = rst;
           this.tableData.forEach((item, index) => {
             item.createdTime = this.getTimeStyle(item.createdTime);
-            item.payTime = this.getTimeStyle(item.payTime);
+            if(item.payTime){
+                item.payTime = this.getTimeStyle(item.payTime);
+            }
           });
         } else {
           console.log("err");
@@ -175,35 +185,72 @@ export default {
     handleCurrentChange(val) {
       let params = new URLSearchParams();
       params.append("page", val);
-      params.append("userId", 1);
-      this.getData("/api/order/order_list", { params });
+      if(this.orderNumber !== ''){
+        params.append('str',this.orderNumber);
+      }else{
+        params.append('str','');
+      }
+      if(this.payStatus !== ''){
+        params.append('payStatus',this.payStatus);
+      }else{
+        params.append('payStatus',-1);
+      }
+      if(this.orderType !== ''){
+        params.append('orderType',this.orderType);
+      }else{
+        params.append('orderType',-1);
+      }
+      this.getData(params);
     },
     searchData() {
       //输入订单编号或用户名搜索相对应的考场
       let params = new URLSearchParams();
       params.append("str", this.orderNumber) 
-      params.append("userId", 1);
-      this.getData("/api/order/order_list", { params });
-    },
-    changeSearch(val) {
-      // 输入订单状态搜索相对应的考场
-      let params = new URLSearchParams();
-      if (this.orderType !== "") {
-        params.append("orderType", this.orderType);
+      if(this.payStatus !== ''){
+        params.append('payStatus',this.payStatus);
+      }else{
+        params.append('payStatus',-1);
       }
+      if(this.orderType !== ''){
+        params.append('orderType',this.orderType);
+      }else{
+        params.append('orderType',-1);
+      }
+      this.getData(params);
+    },
+    changePayStatus(val) {
+      // 输入订单状态搜索相对应的考场
+      this.payStatus = val;
+      let params = new URLSearchParams();
       params.append("payStatus", val);
-      params.append("userId", 1);
-      this.getData("/api/order/order_list", { params });
+      if(this.orderNumber !== ''){
+        params.append('str',this.orderNumber);
+      }else{
+        params.append('str','');
+      }
+      if(this.orderType !== ''){
+        params.append('orderType',this.orderType);
+      }else{
+        params.append('orderType',-1);
+      }
+      this.getData(params);
     },
     changeServerType(val) {
       //输入服务类型搜索相对应的考场
+      this.orderType = val;
       let params = new URLSearchParams();
-      if (this.payStatus !== "") {
-        params.append("payStatus", this.payStatus);
-      }
       params.append("orderType", val);
-      params.append("userId", 1);
-      this.getData("/api/order/order_list", { params });
+      if(this.orderNumber !== ''){
+        params.append('str',this.orderNumber);
+      }else{
+        params.append('str','');
+      }
+      if(this.payStatus !== ''){
+        params.append('payStatus',this.payStatus);
+      }else{
+        params.append('payStatus',-1);
+      }
+      this.getData(params);
     },
     handldetails(val) {
       //查看详细页
@@ -213,8 +260,10 @@ export default {
   mounted() {
     //页面进入请求数据
     let params = new URLSearchParams();
-    params.append("userId", 1);
-    this.getData("/api/order/order_list", { params });
+    params.append("payStatus",-1);
+    params.append("orderType", -1);
+    params.append("str", '');
+    this.getData(params)
   }
 };
 </script>

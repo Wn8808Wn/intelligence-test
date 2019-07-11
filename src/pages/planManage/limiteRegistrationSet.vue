@@ -82,6 +82,7 @@ export default {
                     let rst = res.data.data.list;
                     this.tableData = rst;
                     this.unitsList = res.data.data.unitsList;
+                    this.unitsList.unshift({unitName:'全部',id:0})
                     this.levelList = res.data.data.levelList;
                     this.tableData.forEach( (item,index) =>{
                         item.examTime = this.getTimeStyle(item.examTime)
