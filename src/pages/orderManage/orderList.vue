@@ -254,6 +254,7 @@ export default {
     },
     handldetails(val) {
       //查看详细页
+      console.log(val,'00')
       this.$emit("hanleShow", {boolean:true,index:val});
     }
   },

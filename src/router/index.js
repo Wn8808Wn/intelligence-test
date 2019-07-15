@@ -13,6 +13,7 @@ export default new Router({
       path: '/manage',
       name: 'manage',
       component: () => import('@/pages/manage'),
+      redirect:'/examManage',
       children: [
         {
           path: '/examManage',

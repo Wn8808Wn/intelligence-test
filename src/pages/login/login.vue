@@ -99,7 +99,7 @@ export default {
                       duration: 800
                   });
                 setTimeout(() => {
-                    this.$router.push({ path: "/exammanage" });
+                    this.$router.push({name: 'manage'});
                 }, 1000);
               }
               if (res.status === 200 && res.data.code === 10002) {

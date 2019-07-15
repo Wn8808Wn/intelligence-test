@@ -77,7 +77,7 @@
 
         </div>
         <div id="right-box">
-            <router-view></router-view> 
+            <router-view v-if="isRouterAlive"></router-view> 
         </div>
     </div>
 </template>
@@ -87,16 +87,35 @@
 
 import "../assets/iconfont/iconfont.css"
 export default {
+  name:'manage',
+  // 向后代注入这个provide中的所有内容
+  provide() {
+    return {
+      reload: this.reload  // 调用的是menthods中的方法
+    };
+  },
   data() {
     return {
-      activeIndex: "/exammanage",
+      isRouterAlive: true,
+      activeIndex: '/examManage',
       keyPath: ""
     };
   },
+  watch:{
+      
+  },
   methods: {
+    reload() {
+      // 调用这个reload()函数时，v-if=false,页面会将router-view中的DOM元素全部删除，当页面更新完毕时，
+      //再重新创建一个router-view出口。这时里面的页面内容会重新加载。
+      this.isRouterAlive = false;
+      this.$nextTick(function() {
+        this.isRouterAlive = true;
+      });
+    },
     handleSelect(key, keyPath) {
       this.keyPath = keyPath[0];
-      console.log(this.keyPath);
+      this.reload();
     }
   },
 };

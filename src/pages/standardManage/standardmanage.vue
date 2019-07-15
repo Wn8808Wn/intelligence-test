@@ -2,10 +2,10 @@
     <div class="standardmanage">
         <el-tabs type="border-card"  v-model="activeName2"   @tab-click="handleClick">
             <el-tab-pane name="first">
-            <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhun" ></i>考场标准</span>
+            <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhun" ></i>考题标准</span>
             </el-tab-pane> 
             <el-tab-pane name="second">
-            <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhunmoban" ></i>考场标准模板</span>
+            <span  slot="label"><i class="el-icon-date iconfont icon-kaotibiaozhunmoban" ></i>考题标准模板</span>
             </el-tab-pane> 
         </el-tabs>
         <router-view></router-view>

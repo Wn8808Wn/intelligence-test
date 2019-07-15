@@ -78,7 +78,7 @@ export default {
         getData( url, params){
             this.$http.get(url, params).then(res => {
             // console.log(res)
-                if(res){
+                if(res.data.code === 0){
                     let rst = res.data.data.list;
                     this.tableData = rst;
                     this.unitsList = res.data.data.unitsList;
@@ -96,7 +96,11 @@ export default {
         },
         changeSearch(val){
             let params = new URLSearchParams();
-            params.append('manageUnit',val)
+            if(this.manageUnit !== ''){
+                params.append('manageUnit',val)
+            }else{
+                params.append('manageUnit',0)
+            }
             this.getData('/api/sign_limit/list', { params })
         },
         changeNolimitLevEvent(val){
@@ -119,9 +123,9 @@ export default {
         }
     },
     mounted(){
-        // let params = new URLSearchParams();
-        // params.append('userId',1)
-        // this.getData('/api/sign_limit/list', { params })
+        let params = new URLSearchParams();
+        params.append('manageUnit',0)
+        this.getData('/api/sign_limit/list', { params })
     }
     
 }

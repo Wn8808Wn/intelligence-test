@@ -10,10 +10,11 @@
                 <div class="examerInfo">
                     <div class="lf">
                         <p>姓　　名:<span>{{name}}</span></p>
-                        <p>性　　别:<span>女</span> 证件类型:<span>身份证</span></p>
-                        <p>报考等级:<span>XX级</span></p>
+                        <p>性　　别:<span>X</span> 证件类型:<span style="color:#000;margin-left:20px;">XXXX</span></p>
                         <p><i class="threeLetter">证件号</i>:<span>XXXXXXXXXXXXXXXXXX</span></p>
-                        <p>考试时间:<span>XXXX-XX-XX  X:XX - XX:XX</span></p>
+                        <p>报考等级:<span>XX级</span></p>
+                        <p>准考证号:<span>XXXXXXXXXXXXXXXXXXXX</span></p>
+                        <p>考试时间:<span>XXXX-XX-XX  XX:XX</span></p>
                         <p>考试地点:<span>XXX省XXX市围棋协会</span></p>
                     </div>
                     <div class="QRCode">
@@ -107,11 +108,11 @@ export default {
                 color: #ffffff;
                 text-align: center;
                 float: left;
-                margin-left: 15%;
+                margin-left: 4.5%;
             }
             &>p{
                 font-size: 29px;
-                width: 42.6%;
+                width: 34%;
                 float: left;
                 margin-left: 2%;
                 line-height: 41px;
@@ -119,24 +120,26 @@ export default {
         }
         .examerInfo{
             width: 100%;
-            height: 40%;
+            height: 38.5%;
             background: #e5e5e5;
             &>.lf{
                 width: 55.3%;
-                height: 81.5%;
-                margin-left: 6%;
-                padding: 27px 0 30px 0px;
+                height: calc(100% -40px);
+                margin-left: 5.15%;
+                padding: 20px 0;
                 float: left;
-                // background: sandybrown;
                 &>p{
                     width: 100%;
                     font-size: 20px;
                     height: 48px;
+                    color: #666;
                     line-height: 48px;
                     &>span:nth-of-type(1){
+                        color:#000000;
                         margin-left: 26px
                     }
                     .threeLetter{
+                        font-style: normal;
                         letter-spacing:9px;
                         margin-right:-9px;
                     }
@@ -149,12 +152,10 @@ export default {
                 }
             }
             &>.QRCode{
-                // width: 29.3%;
-                // height: 52.6%;
                 width: 200px;
                 height: 200px;
                 float: left;
-                margin-top: 8%;
+                margin-top: 12%;
                 margin-left: 2%;
                 background: #000;
                 &>img{

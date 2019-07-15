@@ -8,7 +8,8 @@
             </div>
             <el-button class="historyBtn"  type="primary"  icon="el-icon-time" round @click="handleHistory" >历史考试计划</el-button>
         </div>
-        <div class="top" id="searchPart">
+        <div class="top" id="searchPart"> 
+            <div class="lfPart">
             <el-date-picker
             v-model="pickerTime"
             type="daterange"
@@ -36,6 +37,7 @@
                     :value="item.id">
                 </el-option>
             </el-select>
+            </div>
             <p>共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
         </div>
 
@@ -138,7 +140,7 @@ export default {
     data(){
         return{
             inputVal:'',
-            pickerTime:[],
+            pickerTime:'',
             manageUnitId:'',
             examRoomId:'',
             unitsList:[],
@@ -175,7 +177,6 @@ export default {
                         item.createdTime = this.getTimeStyle(item.createdTime).split(' ')[0]
                         item.manageUnit = this.unitsList.filter(itemVal => itemVal.id === item.manageUnit)[0].unitName
                         item.roomIdName = this.roomList.filter(itemVal => itemVal.id === item.roomId)[0].examRoomName
-                        // // console.log(item.signOpenDate.split(' ')[0]+' '+item.signOpenTime)  //转换时间样式 由两部分组成
                         item.openTime = item.signOpenDate.split(' ')[0]+' '+item.signOpenTime;
                         //判断修改的状态
                         let openTimeStamp = Number(Date.parse(item.openTime.replace(/-/g,'/')))
@@ -330,14 +331,19 @@ export default {
         },
     },
     mounted(){
-        let  params={
-            provinceId:110000,
-            manageUnit:0,
-            roomId:0,
-            // begin:this.pickerTime[0],
-            // end:this.pickerTime[1],
-            paramStr:''
-        }
+        // let  params={
+        //     "provinceId":110000,
+        //     "manageUnit":0,
+        //     "roomId":0,
+        //     // begin:this.pickerTime[0],
+        //     // end:this.pickerTime[1],
+        //     "paramStr":''
+        // }
+        let params = new URLSearchParams();
+        params.append("provinceId", 110000);
+        params.append("manageUnit", 0);
+        params.append("roomId", 0);
+        params.append("paramStr", '');
         this.getData(params); 
     }
 }
@@ -348,26 +354,34 @@ export default {
     width: 100%;
     height: 926px;
     #searchPart{   
-        height: 66px;
-        width: 100%;
-        &>.el-select{
-            margin:0 13px;
-        }
-        &>.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-             margin-left: -760px;
-        }
-        //修改时间划过样式border变蓝色
-        .el-input__inner{
-            vertical-align: middle;
-            border-radius: 32px;
-            border-color:#8b8b8b;
-        }
-        .el-range-editor.is-active, .el-range-editor.is-active:hover{
-            border-color: #409EFF;
+        height: 50px;
+        padding-left:20px;
+        width: calc(100% - 20px);
+        &>.lfPart{
+            float: left;
+            &>.el-select{
+                width: 180px;
+                height: 40px;
+                margin:0 13px;
+            }
+            &>.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+                width: 350px;
+                height: 40px;
+            }
+            //修改时间划过样式border变蓝色
+            .el-input__inner{
+                vertical-align: middle;
+                border-radius: 32px;
+                border-color:#8b8b8b;
+            }
+            .el-range-editor.is-active, .el-range-editor.is-active:hover{
+                border-color: #409EFF;
+            }
         }
         &>p{
+            float: right;
+            height: 20px;
             padding-top: 20px;
-            margin-right: 20px;
         }
     }
     & > .tabs-data{
@@ -376,6 +390,12 @@ export default {
         }
         & /deep/ .el-pagination{
             bottom: 224px;
+        }
+    }
+    .historyBtn{
+        width: 167px;
+        & /deep/ .el-icon-time:before {
+            margin-right: 8px;
         }
     }
 }

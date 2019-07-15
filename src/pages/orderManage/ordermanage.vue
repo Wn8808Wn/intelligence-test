@@ -30,7 +30,7 @@ export default {
     handleShow(val){
       this.showContent =val.boolean;
       this.index = val.index;
-      console.log(val.index)
+      // console.log(val.index)
     }
   },
   computed:{

@@ -91,6 +91,8 @@
         </div>
 
         <el-dialog  id="detailPageDialog"
+        modal
+        :close-on-click-modal = "false"
         :visible.sync="showDetailPage"
         top="0"
         width="690px"
@@ -104,9 +106,10 @@
             <div class="examerInfo">
                 <div class="lf">
                     <p>姓　　名:<span>{{this.examerInfo.playerName}}</span></p>
-                    <p>性　　别:<span>{{this.examerInfo.gender == 0? '女' : '男'}}</span> 证件类型:<span>{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
-                    <p>报考等级:<span>{{this.examerInfo.examLevel}}</span></p>
+                    <p>性　　别:<span>{{this.examerInfo.gender == 0? '女' : '男'}}</span> 证件类型:<span style="color:#000;margin-left:20px;">{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
                     <p><i class="threeLetter">证件号</i>:<span>{{this.examerInfo.certificateNo}}</span></p>
+                    <p>报考等级:<span>{{this.examerInfo.examLevel}}</span></p>
+                    <p>准考证号:<span>{{this.examerInfo.examPermitNo}}</span></p>
                     <p>考试时间:<span>{{this.examerInfo.examTime}}</span></p>
                     <p>考试地点:<span>{{this.examerInfo.address}}</span></p>
                 </div>
@@ -206,7 +209,7 @@ export default {
             params.append("id",id);
             params.append("userId", 1);
             this.$http.get("/api/ticket/details_list", { params }).then( res => {
-                console.log(res.data.data,111112)
+                // console.log(res.data.data,111112)
                 let rst = res.data.data
                 this.examerInfo = rst;
                 this.examerInfo.examLevel = this.levelList.filter( (value) => value.id === this.examerInfo.examLevel)[0].levelName
@@ -351,7 +354,7 @@ export default {
                     }
                     &>p{
                         font-size: 29px;
-                        width: 42.6%;
+                        width: 42.4%;
                         float: left;
                         margin-left: 2%;
                         line-height: 41px;
@@ -369,28 +372,30 @@ export default {
                     background: #e5e5e5;
                     &>.lf{
                         width: 55.3%;
-                        height: 81.5%;
+                        height: calc(100% - 40px);
                         margin-left: 6%;
-                        padding: 27px 0 30px 0px;
+                        padding: 20px 0;
                         float: left;
-                        // background: sandybrown;
                         &>p{
                             width: 100%;
                             font-size: 20px;
                             height: 48px;
+                            color:#666;
                             line-height: 48px;
                             &>span:nth-of-type(1){
-                                margin-left: 26px
+                                margin-left: 26px;
+                                color:#000000;
+                                font-weight: 500;
                             }
                             .threeLetter{
+                                font-style: normal;
                                 letter-spacing:9px;
                                 margin-right:-9px;
                             }
-                            
                             &:nth-of-type(2){
-                            &>span:nth-of-type(1){
-                                margin-right: 20px
-                            }
+                                &>span:nth-of-type(1){
+                                    margin-right: 20px
+                                }
                             }
                         }
                     }
@@ -398,7 +403,7 @@ export default {
                         width: 180px;
                         height: 180px;
                         float: left;
-                        margin-top: 5%;
+                        margin-top: 14%;
                         &>img{
                             width: 100%;
                             height: 100%;
@@ -451,10 +456,8 @@ export default {
                             color:#838383;
                         }    
                     }
-
                 }
             }
-
         }
     }
     

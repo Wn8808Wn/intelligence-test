@@ -18,6 +18,7 @@
             <el-table
             :data="tableData"
             stripe
+            @sort-change="sortChange"
             style="width: 100%">
                 <el-table-column
                 type="index"
@@ -33,7 +34,7 @@
                 <el-table-column
                 prop="examLevel"
                 label="级别"
-                sortable  
+                sortable='custom'  
                 width="78">
                 </el-table-column>
                 <el-table-column
@@ -136,12 +137,15 @@ export default {
             } )
         })
     },
+    sortChange(){
+      alert('sort');
+    },
     handleCurrentChange(val) {
       let params = new URLSearchParams();
       params.append("page", val);
       params.append("dataType", this.dataType);
       params.append("userId", 1);
-      if(this.manageUnit !== ''){
+      if(this.currManageUnit !== ''){
         params.append("manageUnit", this.currManageUnit);  
       }else{
         params.append("manageUnit",0); 

@@ -27,7 +27,7 @@ export default {
            }else if(this.$route.path == "/orderManage"){
                 this.$router.go(0)
            }else if(this.$route.path == "/ticketManage"){
-                this.$router.go(0)
+                this.$router.go(-1)
            }
            else{
                this.$router.go(-1)

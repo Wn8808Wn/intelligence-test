@@ -12,15 +12,14 @@ module.exports = {
     proxyTable: {
       '/api': {
           // target: 'http://192.168.1.124:8080',//辉哥后端接口地址  
-          target:'http://39.98.82.63:8080',
-          // target: 'http://192.168.1.145:8080',//钟宇宏后端接口地址  
+          // target:'http://39.98.82.63:8080',
+          target: 'http://192.168.1.145:8080',//钟宇宏后端接口地址  
           changeOrigin: true,//是否允许跨越
           pathRewrite: {
               '^/api': '/',//重写,
           }
       }
   },
-
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
@@ -28,12 +27,9 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
-
     /**
      * Source Maps
      */
-
     // https://webpack.js.org/configuration/devtool/#development
     devtool: 'cheap-module-eval-source-map',
 
@@ -57,7 +53,6 @@ module.exports = {
     /**
      * Source Maps
      */
-
     productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',

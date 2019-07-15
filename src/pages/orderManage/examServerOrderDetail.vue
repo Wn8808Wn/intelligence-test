@@ -47,9 +47,9 @@
 
     <div class="examInfoBox"  v-if="orderType == 1">
         <p>认证级别：<span>{{examLevel}}</span></p>
-        <p>邮寄地址：<span>后期微信公众号添加</span>
-        <p>收件人：<span>刘强</span></p>
-        <p>联系方式：<span>18777777778</span></p>
+        <p>邮寄地址：<span>{{address}}</span>
+        <p><b style="font-weight:normal;letter-spacing:0.5em; margin-right:-0.5em;">收件人</b>：<span>{{linkman}}</span></p>
+        <p>联系方式：<span>{{phone}}</span></p>
     </div>
 
     <div class="examerInfo" v-if="orderType == 0">
@@ -69,24 +69,24 @@
                 label="证件类型"
                 width="111">
                  <template slot-scope="scope">
-                     <span v-if="scope.row.certificateType === 0">身份证</span>
-                     <span v-if="scope.row.certificateType === 1">港澳台身份证身份证</span>
+                     <span v-if="scope.row.certificateType === 0">港澳台身份证</span>
+                     <span v-if="scope.row.certificateType === 1">身份证</span>
                  </template>
                 </el-table-column>
-
 
                 <el-table-column
                 prop="certificateNo"
                 label="证件号"
                 width="185">
                 </el-table-column>
+
                 <el-table-column
-                prop="chessLevel"
+                prop="chessLevels"
                 label="当前段位"
                 width="82">
                 </el-table-column>
+
                 <el-table-column
-                prop="payoffStatus"
                 label="退款处理"
                 width="99">
                 <template slot-scope="scope">
@@ -104,11 +104,14 @@
                             <p><span>退款金额:</span>         <span>{{item.refundFee}}</span>元</p>
                         </div>
                     </div>
-                    <el-button type="text" slot="reference" icon="el-icon-error iconfont icon-yituikuan"  @click.prevent="handldetails(scope.row.id)">{{payoffStatus}}</el-button>
+                    <el-button v-if="scope.row.payoffStatus === 1"  type="text" slot="reference" icon="el-icon-error iconfont icon-yituikuan"  @click.prevent="handldetails(scope.row.id)">已退款</el-button>
+                    <el-button v-if="scope.row.payoffStatus === 0"  type="text" slot="reference"></el-button>
                     </el-popover>
                 </template>
                 </el-table-column>
-            </el-table>    
+                </el-table>    
+              
+            
     </div>
     </div>
 
@@ -125,18 +128,22 @@
                 width="106">
                 </el-table-column>
                 <el-table-column
-                prop="certificateType"
                 label="证件类型"
                 width="111">
+                <template slot-scope="scope">
+                     <span v-if="scope.row.certificateType === 0">港澳台身份证</span>
+                     <span v-if="scope.row.certificateType === 1">身份证</span>
+                </template>
                 </el-table-column>
+
                 <el-table-column
                 prop="certificateNo"
                 label="证件号"
                 width="185">
                 </el-table-column>
                 <el-table-column
-                prop="chessLevel"
                 label="当前段位"
+                prop="chessLevels"
                 width="82">
                 </el-table-column>
                 <el-table-column
@@ -160,61 +167,71 @@ export default {
   data(){
       return{
           titleTop:'订单详情',
-          payoffStatus:'已退款',
-          examLevel:null,
-          address:null,
-          examTime:null,
-          orderInfo:null,
-          detailList:null,
-          refundList:null,
-          orderType:''
+          examLevel:'',
+          address:'',
+          examTime:'',
+          orderInfo:[],
+          levelList:[],
+          detailList:[],
+          refundList:[],
+          orderType:'',
+          linkman:'',
+          phone:'',
       }
   },
   methods:{
     getData(url,params){
-      this.orderInfo = [];
-      this.detailList = [];
-      this.refundList = [];
-      this.$http.get(url,params).then(res => {
-        //   console.log(res)
-          console.log(res.data.data.orderInfo)
-          console.log(res.data.data.detailList)
-        //   console.log(res.data.data.refundList)
+        this.orderInfo = [];
+        this.detailList = [];
+        this.refundList = [];
+        this.$http.get(url,params).then(res => {
+            console.log(res,'000')
+            if( res.data.code === 0){
+                this.levelList = res.data.data.levelList;
+                let orderInfo = res.data.data.orderInfo
+                this.orderInfo.push(orderInfo)
+                this.orderType = this.orderInfo[0].orderType
+                //创建时间
+                this.orderInfo[0].createdTime = this.getTimeStyle(orderInfo.createdTime); 
+                //付款时间
+                if(orderInfo.payTime){
+                    this.orderInfo[0].payTime =this.getTimeStyle(orderInfo.payTime);
+                }
+                //考试时间
+                this.examTime = this.getTimeStyle(orderInfo.examTime);
+                this.examLevel = this.levelList.filter( (item,index) => item.id === orderInfo.examLevel)[0].levelName;
+                this.address =orderInfo.address;
+                this.linkman =orderInfo.linkman;
+                this.phone = orderInfo.phone;
+                this.detailList = res.data.data.detailList;
 
-        let orderInfo = res.data.data.orderInfo
-        this.orderInfo.push(orderInfo)
-
-        this.orderType = this.orderInfo[0].orderType
-          //创建时间
-        this.orderInfo[0].createdTime = this.getTimeStyle(orderInfo.createdTime); 
-          //付款时间
-        this.orderInfo[0].payTime =this.getTimeStyle(orderInfo.payTime);
-        //考试时间
-        this.examTime = this.getTimeStyle(orderInfo.examTime);
-        this.examLevel = orderInfo.examLevel;
-        this.address =orderInfo.address;
-        this.detailList = res.data.data.detailList;
-
-
-        //考生信息表  //判断有无退款？？？？？？？？？？？？
-        let refundList = res.data.data.refundList;
-        this.refundList = refundList;
-        for(let i = 0; i<this.refundList.length; i++){
-
-        let refundTime = this.getTimeStyle(refundList[i].refundTime);
-        this.refundList[i].refundTime = refundTime 
-        }
+                 //考生信息表   判断有无退款
+                let refundList = res.data.data.refundList;
+                this.refundList = refundList;
+                this.detailList.forEach( (item) => {
+                    var existArr = this.refundList.filter( item1 => item1.certificateNo === item.certificateNo)
+                    console.log(existArr,'existArr')
+                    if(existArr.length>0){
+                        this.$set(item,'payoffStatus',1)
+                    }else{
+                         this.$set(item,'payoffStatus',0)
+                    }
+                })
+                console.log( this.detailList,'sss')
+                for(let i = 0; i<this.refundList.length; i++){
+                    let refundTime = this.getTimeStyle(refundList[i].refundTime);
+                    this.refundList[i].refundTime = refundTime 
+                }
+            }
       })
     },
     handldetails(val){
-         console.log(val) 
     }
   },
   mounted(){
-          let params = new URLSearchParams();
-          params.append("userId", 1);
-          params.append("id", this.index);
-          this.getData("/api/order/order_detail", { params });
+    let params = new URLSearchParams();
+    params.append("id", this.index);
+    this.getData("/api/order/order_detail", { params });
   }
 }  
 </script>

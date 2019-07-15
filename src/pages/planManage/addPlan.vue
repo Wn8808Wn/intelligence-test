@@ -72,7 +72,7 @@
         :visible.sync="dialogVisible"
         width="30%"
         >
-            <p><span>本次新增2条</span>  <span>成功2条</span>  <span>失败2条</span></p>
+            <p><span>本次新增{{this.timeList.length}}条</span>  <span>成功{{this.timeList.length}}条</span>  <span>失败{{0}}条</span></p>
             <p>失败如下:</p>
             <p v-for="(item,index) in errorList" :key="index">
                 <span>日期</span> <span>时间</span>

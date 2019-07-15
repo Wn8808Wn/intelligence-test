@@ -100,7 +100,6 @@ export default {
       tableData: [],
       unitsList:[],
       levelList:[],
-      total: null,
       currManageUnit:'',
       dataType:1,
       currentPage: 1,
@@ -116,6 +115,7 @@ export default {
     getData(params){
         this.$http.get("/api/standard/standard_list", { params }).then(res => {
             this.tableData=[];
+            console.log(res,'88');
             this.total = res.data.data.standPage.total;
             this.pageSize = res.data.data.standPage.pageSize;
             this.currentPage = res.data.data.standPage.page;
@@ -140,7 +140,7 @@ export default {
       params.append("page", val);
       params.append("dataType", this.dataType);
       params.append("userId", 1);
-      if(this.manageUnit !== ''){
+      if(this.currManageUnit !== ''){
         params.append("manageUnit", this.currManageUnit);  
       }else{
         params.append("manageUnit",0); 
