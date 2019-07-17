@@ -82,13 +82,11 @@ export default {
               dataStr.append("passWord", password);
 
           this.$http.post("/api/login", dataStr).then(res => {
-              if (res.status === 200 && res.data.code === 0) {
-                  res = res.data.data;
-                  let token = res.token;
+              console.log(res,'988')
+              if (res.data.code === 0) {
+                  let token = res.data.data.token;
                   console.log(token);
-                  let expiration = res.expiration;
                   sessionStorage.setItem("dsToken", token); // 存token
-                  sessionStorage.setItem("lifeTime", expiration); // 存过期时间
                   this.showtips = false;
                   this.tipsTitle = 0;
                   this.$message({

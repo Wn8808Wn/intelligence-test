@@ -69,7 +69,7 @@ export default {
             manageUnit:'',
             unitsList:[],
             levelList:[],
-            total:5,
+            total:0,
             limitLevel:'',
             tableData:[]
         }

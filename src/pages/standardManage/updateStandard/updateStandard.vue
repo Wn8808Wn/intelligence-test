@@ -7,12 +7,12 @@
             <div class="standardBody">
                 <div class="testLevel">
                     <span class="commontips">考试级别:</span>
-                    <el-select v-model="examLevel" placeholder="请选择" :disabled="disabled">
+                    <el-select v-model="examLevel" placeholder="请选择" :disabled="disabled" @change="changeExamLevel">
                         <el-option
-                        v-for="item in options1"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        v-for="item in examLevelList"
+                        :key="item.id"
+                        :label="item.levelName"
+                        :value="item.id">
                         </el-option>
                     </el-select>
                 </div>
@@ -21,63 +21,59 @@
                     <span class="commontips">报考条件:</span>
                     <el-select v-model="signRequirement" placeholder="请选择"  :disabled="disabled">
                         <el-option
-                        v-for="item in options2"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        v-for="item in examLevelList"
+                        :key="item.id"
+                        :label="item.levelName"
+                        :value="item.id">
                         </el-option>
                     </el-select>
                 </div>
 
-                <!-- <div class="testLevel">
-                    <span class="commontips">题库难度:</span>
-                      <el-input v-model="itemDifficulty"></el-input>
-                    <div class="addLevel">+</div>
-                    <div class="reduceLevel">_</div>
-                </div> -->
                 <div class="testLevel">
                     <span class="commontips">题库难度:</span>
-                    <el-input-number v-model="itemDifficulty" controls-position="right" @change="handleChange" 
-                    :min="5" :max="25"  :step="5"
-                    >
-                    </el-input-number>
+                    <div class="ajustBtn">
+                        <el-input v-model="examLevelName"></el-input>
+                        <button class="addLevel" @click="addLevel" :disabled='addDisabled'>+</button>
+                        <button class="reduceLevel"  @click="reduceLevel" :disabled='reduceDisabled'>—</button>
+                    </div>
                 </div>
 
                 <div class="knowledgeHierarchy">
                   <span>知识体系:</span> 
                   <p>
-                    <span v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item}}道</span>
+                    <span v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
                   </p>
                 </div>
 
                  <div class="testTime">
                   <span>考试时长:</span> 
-                  <p v-html="examLength"></p>
+                  <p>{{examLength}}分钟</p>
                 </div>
 
             </div>
 
                 <div class="examFee">
                     <span>考试服务费:（元）</span>
-                    <el-input v-model="examServiceFee"></el-input>
+                    <el-input v-model.number="examServiceFee"></el-input>
                 </div>
 
                 <div class="examFee">
                     <span>认证服务费:（元）</span>
-                    <el-input v-model="certificationServiceFee"></el-input>
+                    <el-input v-model.number="certificationServiceFee"></el-input>
                 </div>
 
-                <div class="examFee detailInfo">
-                    <span>详情介绍:</span>
+                <div class="examFee detailInfo" >
+                    <span v-if="false">详情介绍:</span>
                     <el-input
                       type="textarea"
+                      v-if="false"
                       :autosize="{ minRows: 4, maxRows: 4}"
                       maxlength="200"
                       @input = "descInput"
                       v-model="details"
                       >
                     </el-input>
-                    <p>已输入<span v-html="number"></span>个字,不得超过200字</p>
+                    <p v-if="false">已输入<span v-html="number"></span>个字,不得超过200字</p>
                     <div style="text-align:center;width:100%;">
                       <el-button type="primary" round 
                         style="background:#1f91b5;
@@ -86,7 +82,7 @@
                         font-size:16px;
                         margin-top:38px;"
                         @click="handleput"  
-                      >修改</el-button>
+                      >提交</el-button>
                     </div>
                 </div>
 
@@ -108,87 +104,94 @@ export default {
     return {
       titleTop: "修改标准",
       dataType:1,
-      id:null,
+      id:'',
       examLevel: null,
+      examLevelName:'',
+      addDisabled:false,
+      reduceDisabled:false,
       signRequirement: null,
-      itemDifficulty: null,
       examServiceFee: null,
       certificationServiceFee:null,
-      knowledgeHierarchy:null,
-      examLength:null,
-      updatedUser:1,
+      knowledgeHierarchy:[],
+      examLength:"0",
+      itemDifficulty:'',
       disabled: false,
       details:null,
       number:0,
-      options1: [
-        {
-          value: "20级",
-          label: "20级"
-        },
-        {
-          value: "10级",
-          label: "10级"
-        },
-        {
-          value: "9级",
-          label: "9级"
-        },
-        {
-          value: "8级",
-          label: "8级"
-        },
-        {
-          value: "5级",
-          label: "5级"
-        }
-      ],
-      options2: [
-        {
-          value: "25级",
-          label: "25级"
-        },
-        {
-          value: "20级",
-          label: "20级"
-        },
-        {
-          value: "15级",
-          label: "15级"
-        },
-        {
-          value: "10级",
-          label: "10级"
-        },
-        {
-          value: "5级",
-          label: "5级"
-        }
-      ],
-      options3: [
-        {
-          value: "25级",
-          label: "25级"
-        },
-        {
-          value: "20级",
-          label: "20级"
-        },
-        {
-          value: "15级",
-          label: "15级"
-        },
-        {
-          value: "10级",
-          label: "10级"
-        },
-        {
-          value: "5级",
-          label: "5级"
-        }
-      ]
+      examLevelList: [],
+      knowledStr:'',
+      ai:'',
+      evaluateDanId:'',
+      passScore:'',
+      totalScore:'',
+      aiTime:'',
+      a:'',
+      b:'',
+      c:'',
+      d:''
     };
   },
   methods: {
+    changeExamLevel(val){
+      this.itemDifficulty = val;
+      this.examLevelName = this.examLevelList.filter( item => item.id === this.examLevel)[0].levelName;
+    },
+    getKnowledgeSystem(num){
+          let params ={
+              "levelId":num
+          }
+          this.$http.get('/api/standard/get_knowledge',{params}).then( res =>{
+              this.knowledgeHierarchy =[];
+              if( res.data.code === 0){
+                  console.log(res,'pppp')
+                  //保存后台需要的数据
+                  if(res.data.data !== {}){
+                      let rst = res.data.data;
+                      this.evaluateDanId = rst.evaluateDanId;
+                      this.passScore = rst.passScore;
+                      this.totalScore = rst.totalScore;
+                      this.aiTime = rst.aiTime;
+                      this.ai = rst.ai;
+                  }
+                  //处理不存在的情况
+                  if(res.data.data.totalTime){
+                    this.examLength = res.data.data.totalTime;
+                  }else{
+                    this.examLength = 0;
+                  }
+                  if(res.data.data.knowledgeSystem){
+                      this.knowledStr = res.data.data.knowledgeSystem;
+                      this.knowledgeHierarchy = res.data.data.knowledgeSystem.split(',');
+                  }
+              }
+          })
+    },
+    addLevel(){
+        if(this.examLevel<18){
+            let addLev = this.examLevel+1;
+            this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
+            this.itemDifficulty = addLev;
+            this.getKnowledgeSystem(addLev);
+        }else{
+            let addLev = 18;
+            this.itemDifficulty = addLev;
+            this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
+            this.getKnowledgeSystem(addLev);
+        }
+    },
+    reduceLevel(){
+        if(this.examLevel>1){
+            let reduceLev = this.examLevel - 1;
+            this.itemDifficulty = reduceLev;
+            this.examLevelName = this.examLevelList.filter( item => item.id === reduceLev)[0].levelName;
+            this.getKnowledgeSystem(reduceLev);
+        }else{
+            let reduceLev = 1;
+            this.itemDifficulty = reduceLev;
+            this.examLevelName = this.examLevelList.filter( item => item.id === reduceLev)[0].levelName;
+            this.getKnowledgeSystem(reduceLev);
+        }
+    },
     handleChange(value) {
       console.log(value);
     },
@@ -198,46 +201,111 @@ export default {
     },
     handleput(){
         let params = new URLSearchParams();
-        // params.append("manageUnit", parseInt(this.manageUnit));  机构代码
-        params.append("id", this.id); 
-        params.append("examLevel", parseInt(this.examLevel));  // int 
-        params.append("signRequirement", parseInt(this.signRequirement));  //int
-        params.append("itemDifficulty",  this.itemDifficulty);  //varchar
-        params.append("knowledgeHierarchy", this.knowledgeHierarchy); //varchar     //??????????????????????处理数据
-        params.append("examLength", this.examLength);  //varchar
-        params.append("examServiceFee", parseInt(this.examServiceFee));  //int 
-        params.append("certificationServiceFee", parseInt(this.certificationServiceFee));  //int 
-        params.append("details", this.details);
-        params.append("updatedUser", this.updatedUser);   //????????????修改人
-        params.append("dataType", this.dataType);  //int 
-        this.$http.post("/api/standard/edit_standard", params).then(res => {
-          console.log(res);
-        });
-        this.$router.push({name: "standard"})
+        params.append('id',this.id)
+        if(this.evaluateDanId){
+            params.append('evaluateDanId',this.evaluateDanId)
+        }
+        if(this.totalScore){
+            params.append('totalScore',this.totalScore)
+        }
+        if(this.passScore){
+            params.append('passScore',this.passScore)
+        }
+        if(this.aiTime){
+            params.append('aiTime',this.aiTime)
+        }
+        if(this.ai){
+            params.append('isAI',this.ai)
+        }
+        if(this.examLevel === ''){
+            this.a = false;
+        }else{
+            this.a = true;
+            params.append("examLevel", this.examLevel);
+        }
+        if(this.signRequirement === ''){
+            this.b = false;
+        }else{
+            this.b = true;
+            params.append("signRequirement", this.signRequirement);
+        }
+        if(this.examServiceFee === ''){
+            this.c = false;
+        }else{
+            this.c = true;
+            params.append("examServiceFee", this.examServiceFee);
+        }
+        if(this.certificationServiceFee === ''){
+            this.d = false;
+        }else{
+            this.d = true;
+            params.append("certificationServiceFee", this.certificationServiceFee);
+        }
+        params.append("itemDifficulty",  this.itemDifficulty);
+        params.append("knowledgeHierarchy", this.knowledStr); 
+        params.append("examLength", this.examLength); 
+        // params.append("details", this.details);  //产品取消描述需求
+        params.append("dataType", this.dataType); 
+        if(this.a && this.b && this.c && this.d){
+            this.$http.post("/api/standard/edit_standard", params).then(res => {
+                console.log(res);
+                if(res.data.code === 0){
+                    this.$message({
+                        message: '恭喜你，修改成功',
+                        type: 'success'
+                    });
+                    this.$router.push({name: "standard"})
+                }else{
+                    this.$message.error('修改失败');
+                }
+          });
+
+        }else{
+            this.$message.error('输入考试服务费、认证服务费后才能进行提交');
+        }
     }
   },
   created(){
-      let id = this.$route.query.id;
-      this.id = id;
-      let url = '/api/standard/standard_detail?id='+id
-      this.$http.get(url).then(res => {
-        console.log(res.data.data);
-        let rst = res.data.data;
-        //处理数据
-        this.examLevel = rst.examLevel +'级'
-        this.signRequirement = rst.signRequirement+'级'
-        this.itemDifficulty = rst.itemDifficulty
-        this.certificationServiceFee = rst.certificationServiceFee
-        this.examServiceFee = rst.examServiceFee
-        this.examLength = rst.examLength
-        this.details = rst.details
-        this.knowledgeHierarchy = rst.knowledgeHierarchy.split(',').splice(0,5)
-        this.number = rst.details.length
-        })
+      //获取考试级别
+      let params1 ={
+        // "levelId":1
+      }
+      this.$http.get('/api/standard/standard_level_list',{params1}).then( res =>{
+        if(res.data.code === 0){
+          console.log(res.data.data.levelList)
+          this.examLevelList = res.data.data.levelList;
+        }
+      }).then( ()=>{
+          let id = this.$route.query.id;
+          this.id = id;
+          let url = '/api/standard/standard_detail?id='+id
+          this.$http.get(url).then(res => {
+            console.log(res.data.data,'8888888');
+            let rst = res.data.data;
+            //处理数据
+            this.examLevel = rst.examLevel
+            this.signRequirement = rst.signRequirement
+            this.itemDifficulty = rst.itemDifficulty
+            this.certificationServiceFee = rst.certificationServiceFee
+            this.examServiceFee = rst.examServiceFee
+            this.examLength = rst.examLength
+            this.knowledStr = rst.knowledgeHierarchy
+            this.knowledgeHierarchy = rst.knowledgeHierarchy.split(',')
+            this.itemDifficulty = rst.itemDifficulty;
+            this.examLevelName = this.examLevelList.filter( item => item.id === Number(rst.itemDifficulty))[0].levelName;
+            // //保存AI数据
+            this.evaluateDanId = rst.evaluateDanId;
+            this.passScore = rst.passScore;
+            this.totalScore = rst.totalScore;
+            this.aiTime = rst.aiLength;
+            this.ai = rst.isAI;
+            // this.details = rst.details
+            // this.number = rst.details.length    
+          })
+      })
   }
-}
+};
 </script>
-
 <style rel='stylesheet/scss' lang="scss">
 .el-tabs--border-card>.el-tabs__content{
   padding: 0;
@@ -279,6 +347,49 @@ export default {
         padding-bottom: 18px;
         padding-left: 7px;
       }
+      &>.ajustBtn{
+          width: 160px;
+          height: 40px;
+          position: relative;
+          & /deep/ .el-input__inner{
+            width: 134px;
+            border-radius: 4px 0 0 4px;
+          }
+          &>.addLevel{
+            width: 26px;
+            height: 20px;
+            border: none;
+            outline: none;
+            position: absolute;
+            right:0px;
+            top: 0px;
+            background: #ffffff;
+            border: 1px solid #DCDFE6;
+            border-radius:0 4px 0  0;
+            text-align: center;
+            font-size: 16px;
+            border-left:none;
+            line-height: 18px;
+          } 
+          &>.reduceLevel{
+            width: 26px;
+            height: 20px;
+            border: none;
+            outline: none;
+            position: absolute;
+            right: 0px;
+            top: 20px;
+            border-radius:0 0 4px  0;
+            text-align: center;
+            font-size: 12px;
+            background: #ffffff;
+            border: 1px solid #DCDFE6;
+            border-top:none;
+            border-left:none;
+            line-height: 15px;
+          }
+      }
+     
     }
    
     .knowledgeHierarchy {
@@ -298,15 +409,17 @@ export default {
         padding-left: 7px;
       }
       & > p {
+        width: calc( 100% - 7px);
         padding-left: 7px;
         height: 70px;
         & > span {
           display: block;
           float: left;
-          width: 112px;
+          width: 140px;
           font-size: 16px;
           height: 70px;
           line-height: 70px;
+          margin-right: 10px;
         }
       }
     }
@@ -326,6 +439,7 @@ export default {
       & > p {
         padding-left: 7px;
         width: 112px;
+        
         font-size: 16px;
       }
     }
@@ -356,6 +470,7 @@ export default {
       color:#1f91b5;
     }
   }
+
   .el-select {
     width: 100%;
     background: #f8f8f8;
@@ -364,6 +479,8 @@ export default {
     color: #000;
   }
 }
+
+
 </style>
 
 

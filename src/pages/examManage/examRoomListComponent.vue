@@ -89,7 +89,6 @@ export default {
       unitsList:[]
     };
   },
-  props: ["SHOWTYPE"],
   methods: {
     getData(url, params) {
       this.tableData = [];
@@ -119,19 +118,24 @@ export default {
     },
     freezedRoom() {
       //查看已冻结考场信息  1：冻结  0 ：正常
-      this.$emit("showDiffPage",this.SHOWTYPE.FROZEN);
+      this.$router.push({name:'frozenRoom'})
     },
     handleCurrentChange:_debounce(function(val) {
       //分页切换当前页
       let params = new URLSearchParams();
+      if(this.RoomCode){
+       params.append("examRoomCode", this.RoomCode);
+      }else{
+        params.append("examRoomCode",'');
+      }
       params.append("dataStatus", 0);
       params.append("userId", 1);
       params.append("page", val);
       this.getData("/api/room/room_list", { params });
     },300),
     handleAddRoom() {
-      //跳转新增考场页面
-      this.$emit("showDiffPage",this.SHOWTYPE.ADD);
+        //跳转新增考场页面
+        this.$router.push({name:'addRoom'})
     },
     freezeData(id) {
       //冻结考场操作

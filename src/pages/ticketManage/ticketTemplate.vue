@@ -1,6 +1,8 @@
 <template>
     <div class="ticketTemplate">
-        <commonTop :titleTop="title"></commonTop>
+        <div class="common">
+            <p>{{title}}</p>
+        </div>    
         <!-- <el-button @click="editButton" v-if="showButton">修改</el-button> -->
             <div  class="ticketDetails">
                 <div class="titleTop">
@@ -46,14 +48,10 @@
 </template>
 
 <script>
-import commonTop from '../../pages/common/commonTop'
 export default {
-    components:{
-        commonTop
-    },
     data(){
         return{
-            title:'模板修改',
+            title:'模板样式',
             name: 'XX',
             showButton:false
         }
@@ -76,6 +74,19 @@ export default {
     position: relative;
     height: 100%;
     background: #ffffff;
+    .common{
+        width: 100%;
+        height: 69px;
+        border-bottom: 1px solid #acacac;
+    }
+    .common>p{
+        font-size: 16px;
+        padding-top: 42px;
+        padding-bottom: 11px;
+        color: #000;
+        float: left;
+        margin-left: 4px;
+    }
     & /deep/ .el-button{
         width: 80px;
         height: 40px;

@@ -22,8 +22,9 @@ import  "./styles/commonStyle.scss"
 
 import store from './store/index'
 
-import axios from 'axios'
+import axios from './config/axios'
 Vue.prototype.$http = axios
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 
 import {getTimeStyle,getDateStyle} from './utils/public'

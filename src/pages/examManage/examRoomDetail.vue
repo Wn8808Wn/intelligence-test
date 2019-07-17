@@ -1,7 +1,6 @@
 <template>
     <div class="addroom">
         <div class="examRoomInfo">
-          
              <div class="prov unit">
                 <span class="commontips">管理单位:</span>
                 <el-select v-model="manageUnit"  :disabled="disabled">
@@ -105,14 +104,25 @@ export default {
             disabled: true,
             examRoomCode: "",
             examRoomName: "",
+            comeName:''
         }
     },
     methods:{
         handleBack(){
-           this.$router.push({path:'/examManage'})
+            if(this.comeName === 'frozenRoom'){
+                    this.$router.push({name:'frozenRoom'})
+            }else{
+                this.$router.push({name:'examManage'})
+            }
         }
     },
-    mounted(){
+    //记录路由决定返回那个页面
+    beforeRouteEnter(to,from,next){
+        next( (vm) =>{
+            vm.comeName = from.name;
+        });
+    },
+    created(){
         let  currentId = this.$route.query.id
         console.log(currentId)
         let params = new URLSearchParams();

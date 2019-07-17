@@ -196,7 +196,7 @@ export default {
             });
         },
         handleAddPlan(){
-            this.$emit('showPage',this.CurrentPages.ADD_PLAN)
+            this.$router.push({name:'addPlan'})
         },
         searchData(){
             let params = new URLSearchParams();
@@ -300,7 +300,7 @@ export default {
                 this.$router.go(0)
                 //刷新页面更改状态
             }else{
-                this.$emit("showPage",this.CurrentPages.EDIT_PLAN)
+                 this.$router.push({name:'editPlan'})
                 this.$store.dispatch('modifyDate',{'currentId':val.id,'storeRoomId':val.roomId})
             }
         },

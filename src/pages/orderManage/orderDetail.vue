@@ -3,8 +3,8 @@
          <div class="orderManage commonRight">
             <el-tabs type="border-card">
                 <el-tab-pane>
-                    <span slot="label"><i class="el-icon-date iconfont icon-dingdanguanli-"></i>订单管理</span>
-                    <orderListCom></orderListCom>
+                <span slot="label"><i class="el-icon-date iconfont icon-dingdanguanli-"></i>订单管理</span>
+                    <orderDetailCom ></orderDetailCom>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -12,17 +12,19 @@
 </template>
 
 <script>
-import orderListCom from "./orderListComponent"
+
+import orderDetailCom from "./orderDetailComponent"
 export default {
   components:{
-    orderListCom,
+    orderDetailCom
   },
   data() {
     return {
-    }
+    };
   },
 };
 </script>
+
 <style rel='stylesheet/scss' lang="scss" scoped>
 .orderManage {
     width: 1196px;
@@ -31,6 +33,3 @@ export default {
     }
 }
 </style>
-
-
-

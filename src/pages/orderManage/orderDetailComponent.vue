@@ -163,7 +163,6 @@ export default {
   components: {
     commonTop,
   },
-  props:["index"],
   data(){
       return{
           titleTop:'订单详情',
@@ -188,6 +187,7 @@ export default {
             console.log(res,'000')
             if( res.data.code === 0){
                 this.levelList = res.data.data.levelList;
+                console.log(this.levelList,'lev')
                 let orderInfo = res.data.data.orderInfo
                 this.orderInfo.push(orderInfo)
                 this.orderType = this.orderInfo[0].orderType
@@ -226,11 +226,13 @@ export default {
       })
     },
     handldetails(val){
+        
     }
   },
   mounted(){
+    let id = this.$route.query.id
     let params = new URLSearchParams();
-    params.append("id", this.index);
+    params.append("id", id);
     this.getData("/api/order/order_detail", { params });
   }
 }  

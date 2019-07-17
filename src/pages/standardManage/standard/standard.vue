@@ -37,14 +37,18 @@
                 width="78">
                 </el-table-column>
                 <el-table-column
-                prop="itemDifficulty"
                 label="题库难度"
                 width="104">
+                <template slot-scope="scope">
+                    <span>{{scope.row.itemDifficulty}}</span>
+                </template>
                 </el-table-column>
                 <el-table-column
-                prop="knowledgeHierarchy"
                 label="知识体系"
                 width="245">
+                <template slot-scope="scope">
+                    <span>{{scope.row.knowledgeHierarchy.replace(/@/g,'')}}</span>
+                </template>
                 </el-table-column>
                 <el-table-column
                 prop="examLength"
@@ -100,6 +104,7 @@ export default {
       tableData: [],
       unitsList:[],
       levelList:[],
+      itemDifficulty:'',
       currManageUnit:'',
       dataType:1,
       currentPage: 1,

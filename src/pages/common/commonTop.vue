@@ -1,7 +1,6 @@
 <template>
     <div class="common">
         <p>{{titleTop}}</p>
-
         <div class="right">
             <i class="iconfont icon-fanhui"></i> 
             <span @click="handleBack" style="cursor:pointer">返回</span>   
@@ -18,20 +17,30 @@ export default {
     },
     methods:{
         handleBack(){
-           if(this.$route.path == "/orderManage"){
-                this.$router.go(0)
-           }else if(this.$route.path == "/examManage"){
-                this.$router.go(0)
-           }else if(this.$route.path == "/planManage"){
-                this.$router.go(0)
-           }else if(this.$route.path == "/orderManage"){
-                this.$router.go(0)
-           }else if(this.$route.path == "/ticketManage"){
-                this.$router.go(-1)
-           }
-           else{
-               this.$router.go(-1)
-           }
+            console.log(this.$route.path,'111')
+            if(this.$route.path === "/examManage/addRoom"){
+                this.$router.push({name:'examManage'})
+            }else if(this.$route.path === "/examManage/frozenRoom"){
+                this.$router.push({name:'examManage'})
+            }
+            else{
+                 this.$router.go(-1)
+            }
+            
+            //    if(this.$route.path === "/examManage/addRoom"){
+            //     this.$Router.push({name:'examManage'});
+            //    }else if(this.$route.path == "/orderManage"){
+            //         this.$router.go(0)
+            //    }else if(this.$route.path == "/planManage"){
+            //         this.$router.go(0)
+            //    }else if(this.$route.path == "/orderManage"){
+            //         this.$router.go(0)
+            //    }else if(this.$route.path == "/ticketManage"){
+            //         this.$router.go(-1)
+            //    }
+            //    else{
+            //       
+            //    }
         }
     }
    
