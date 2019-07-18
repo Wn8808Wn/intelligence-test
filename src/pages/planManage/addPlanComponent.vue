@@ -92,7 +92,7 @@
             label="日期"
             width="153">
             <template slot-scope="scope">
-              <span style="margin-right:10px">{{scope.row.examDate}}</span>  <span>周{{"日一二三四五六".charAt(new Date(scope.row.examDate).getDay())}}</span>
+              <span style="margin-right:10px">{{scope.row.examDate.split(' ')[0]}}</span>  <span>周{{"日一二三四五六".charAt(new Date(scope.row.examDate).getDay())}}</span>
             </template> 
             </el-table-column>
 
@@ -320,6 +320,11 @@ export default {
           this.timeOff--;
           if(this.timeOff<=0){
            this.dialogVisible =false;
+           let params = new URLSearchParams()
+           params.append("roomId", this.examRoomId);
+           params.append('activeStatus',0)
+           params.append("provinceCode",110000) //后期更改
+           this.getData({ params })
            clearInterval(timer);
           }
       }, 1000);
@@ -333,12 +338,7 @@ export default {
       params.append("timeStrs", JSON.stringify(this.timeList));
       this.muchDate = (this.selectDate[1].getTime()-this.selectDate[0].getTime())/(1000*60*60*24)+1
       this.$http.post("/api/plan/add_plan", params).then(res => {
-        console.log(res);
           if(res.data.code===0){
-              this.$message({
-                type:'success',
-                message:'添加成功'
-              })
               var p1 = new Promise( (resolve, reject)=> {
                 setTimeout(()=>{
                     this.dialogFormVisible = false;
@@ -350,12 +350,7 @@ export default {
                       this.setIntervalFn()
                   }, 3500, 'P2');
               });
-              // 同时执行p1和p2，并在它们都完成后执行then:
-              Promise.all([p1, p2]).then(function (results) {
-                  
-              });
           }
-        
       });
     }
   },

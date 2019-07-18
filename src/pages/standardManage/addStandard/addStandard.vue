@@ -117,6 +117,8 @@ export default {
       disabled: false,
       details:'',
       number:0,
+      ranglist:[],
+      betweenIndex:1,
       examLevelList: [],
       knowledStr:'',
       ai:'',
@@ -133,7 +135,16 @@ export default {
   methods: {
     changeExamLevel(val){
       this.itemDifficulty = val;
+      if(val === 18){
+          this.ranglist = [17,18];
+      }else if(val === 1){
+          this.ranglist=[1,2];
+      }else{
+          this.ranglist=[val-1,val,val+1];
+      } 
+    //   console.log(this.ranglist,'ranglist')
       this.examLevelName = this.examLevelList.filter( item => item.id === this.examLevel)[0].levelName;
+      this.getKnowledgeSystem(val);
     },
     getKnowledgeSystem(num){
           let params ={
@@ -142,7 +153,7 @@ export default {
           this.$http.get('/api/standard/get_knowledge',{params}).then( res =>{
               this.knowledgeHierarchy =[];
               if( res.data.code === 0){
-                  console.log(res,'pppp')
+                //   console.log(res,'pppp')
                   //保存后台需要的数据
                   if(res.data.data !== {}){
                       let rst = res.data.data;
@@ -166,29 +177,41 @@ export default {
           })
     },
     addLevel(){
-        if(this.examLevel<18){
-            let addLev = this.examLevel+1;
-            this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
-            this.itemDifficulty = addLev;
-            this.getKnowledgeSystem(addLev);
+        if(this.ranglist.length === 2){
+            this.betweenIndex++;
+            if(this.betweenIndex >= 2){
+                this.betweenIndex = 1;
+            }
         }else{
-            let addLev = 18;
-            this.itemDifficulty = addLev;
+            this.betweenIndex++;
+            if(this.betweenIndex > 2){
+                this.betweenIndex = 2;
+            }
+        }
+        if(0<=this.betweenIndex&&this.betweenIndex<=2){
+            let addLev = this.ranglist[this.betweenIndex];
             this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
+            this.itemDifficulty = addLev;
             this.getKnowledgeSystem(addLev);
         }
     },
     reduceLevel(){
-        if(this.examLevel>1){
-            let reduceLev = this.examLevel - 1;
-            this.itemDifficulty = reduceLev;
-            this.examLevelName = this.examLevelList.filter( item => item.id === reduceLev)[0].levelName;
-            this.getKnowledgeSystem(reduceLev);
+        if(this.ranglist.length === 2){
+            this.betweenIndex--;
+            if(this.betweenIndex <=0){
+                this.betweenIndex = 0;
+            }
         }else{
-            let reduceLev = 1;
-            this.itemDifficulty = reduceLev;
-            this.examLevelName = this.examLevelList.filter( item => item.id === reduceLev)[0].levelName;
-            this.getKnowledgeSystem(reduceLev);
+            this.betweenIndex--;
+            if(this.betweenIndex < 0){
+                this.betweenIndex = 0;
+            }
+        }
+        if(0<=this.betweenIndex&&this.betweenIndex<=2){
+            let addLev = this.ranglist[this.betweenIndex];
+            this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
+            this.itemDifficulty = addLev;
+            this.getKnowledgeSystem(addLev);
         }
     },
     handleChange(value) {
@@ -270,7 +293,7 @@ export default {
       }
       this.$http.get('/api/standard/standard_level_list',{params1}).then( res =>{
         if(res.data.code === 0){
-          console.log(res.data.data.levelList)
+        //   console.log(res.data.data.levelList)
           this.examLevelList = res.data.data.levelList;
         }
       })
@@ -386,6 +409,7 @@ export default {
         & > span {
           display: block;
           float: left;
+          background: #1f91b5;
           width: 140px;
           font-size: 16px;
           height: 70px;
