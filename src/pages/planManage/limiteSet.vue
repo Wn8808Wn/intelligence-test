@@ -1,35 +1,44 @@
 <template>
     <div class="planmanage commonRight">
-        <el-tabs type="border-card" v-model="activeName">
-            <el-tab-pane name="1">
+        <el-tabs type="border-card"  @tab-click="handelGo">
+            <el-tab-pane>
             <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi"></i>限报设置</span>
                 <!-- 显示子页面 -->
                 <limiteRegistrationSet></limiteRegistrationSet>
             </el-tab-pane> 
-            <el-tab-pane name="2">
+            <el-tab-pane>
             <span slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli"></i>考试计划</span>
                 <!-- 显示子页面 -->
-                <addPlanComponent></addPlanComponent>
+                <plansListComponent></plansListComponent>
             </el-tab-pane> 
         </el-tabs>
     </div>
 </template>
 
 <script>
-import addPlanComponent from "./addPlanComponent"
+import plansListComponent from "./plansListComponent"
 import limiteRegistrationSet from "./limiteRegistrationSet"
+
 export default {
   data() {
     return {
-        activeName:'2'
-    }
+     
+    };
   },
   components: {
+    plansListComponent,
     limiteRegistrationSet,
-    addPlanComponent,
   },
   methods:{
-    
+    handelGo(val){
+      console.log(val.index)
+      if(val.index == 0){
+        this.$router.push({name:'limiteSet'})
+      }
+      if(val.index == 1){
+        this.$router.push({name:'planList'})
+      }
+    }
   }
 };
 </script>

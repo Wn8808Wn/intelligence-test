@@ -5,7 +5,7 @@ import axios from 'axios'
 import router from '../router/index.js';
 import { Message } from 'element-ui'
 //超时时间
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 30000;
 //跨域请求，允许保存cookie
 axios.defaults.withCredentials = true;
 let msg;

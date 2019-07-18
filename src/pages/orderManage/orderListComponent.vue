@@ -65,8 +65,8 @@
                   label="订单状态"
                   width="120">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.payStatus== 0" style="color:#00D067">已支付</span>
-                    <span v-else-if="scope.row.payStatus== 1" style="color:#0067F1">待支付</span>
+                    <span v-if="scope.row.payStatus== 0" style="color:#00D067">待支付</span>
+                    <span v-else-if="scope.row.payStatus== 1" style="color:#0067F1">已支付</span>
                     <span v-else-if="scope.row.payStatus== 2" style="color:#6F6F6F">已关闭</span>
                     <span v-else style="color:#F91111">有退款</span>
                   </template>
@@ -121,11 +121,11 @@ export default {
         },
         {
           value: 0,
-          label: "已支付"
+          label: "待支付"
         },
         {
           value: 1,
-          label: "待支付"
+          label: "已支付"
         },
         {
           value: 2,
@@ -163,6 +163,7 @@ export default {
     getData(params) {
       this.$http.get('/api/order/order_list', {params}).then(res => {
         this.tableData = [];
+        console.log(res,'orderList')
         this.total = res.data.data.total;
         this.totalPage = res.data.data.totalPage;
         this.pageSize = res.data.data.pageSize;

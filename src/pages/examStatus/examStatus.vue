@@ -500,6 +500,7 @@ export default {
     //页面进入请求数据
     let params = new URLSearchParams();
     params.append("provinceCode", 0);
+    params.append("areaLevel", 1);
     params.append("manageUnit", 0);
     params.append("examLevel", 0);
     params.append("examResult", -1);

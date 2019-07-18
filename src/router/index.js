@@ -79,8 +79,13 @@ export default new Router({
           ]
         },
         {
-          path: '/planManage', //考试计划
-          name: 'planManage',
+          path: '/planManage/limiteSet', //考试计划
+          name: 'limiteSet',
+          component: () => import('@/pages/planManage/limiteSet'),
+        },
+        {
+          path: '/planManage/planList', //限报设置
+          name: 'planList',
           component: () => import('@/pages/planManage/planManage'),
         },
         {

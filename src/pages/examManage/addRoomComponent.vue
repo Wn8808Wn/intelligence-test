@@ -136,37 +136,97 @@ export default {
       showNum: false,
       disabled: false,
       number: "",
-      examRoomName: ""
+      examRoomName: "",
+      a:'',
+      b:'',
+      c:'',
+      d:'',
+      e:'',
+      f:'',
+      g:'',
+      h:'',
+      j:''
     };
   },
   methods: {
-    changeDistric(value) {
-      this.examRoomName = value + "考场";
-    },
     handleput() {
-      //所有内容填写完成时，点击【提交】（1）内容不可再编辑，（2）生成考场编号，（3）出现【完成】按钮，（4）同时隐藏【提交】按钮；
-      this.showNum = true;
-      this.disabled = true;
-      if (this.showNum) {
         let params = new URLSearchParams();
-        params.append("province", this.province);
-        params.append("manageUnit", 2); //管理单位 int类型
-        params.append("investUnit", this.investUnit.join(","));
-        params.append("city", this.city);
-        params.append("distric", this.distric);
-        params.append("address", this.address);
-        params.append("seatSize", this.seatSize);
-        params.append("spareSeatSize", this.spareSeatSize);
-        params.append("examRoomName", this.examRoomName);
-        this.$http.post("/api/room/add_room", params).then(res => {
-          if(res){
-            this.number = res.data.data;
-          }
-        });
+        if(this.manageUnit){
+            this.a = true;
+            params.append("manageUnit",this.manageUnit); 
+        }else{
+            this.a =false;
+        }
+        if(this.investUnit){
+            this.b = true;
+            params.append("investUnit", this.investUnit.join(","));
+        }else{
+            this.b = false;
+        }
+        if(this.province){
+            this.c = true;
+            let provinceName = this.provinceList.filter( e => e.id === this.province)[0].areaName
+            params.append("province", provinceName);
+            params.append("provinceCode", this.province);
+        }else{
+            this.c = false;
+        }
+        if(this.city){
+            this.d = true;
+            let cityName = this.cityList.filter( e => e.id === this.city)[0].areaName
+            params.append("city", cityName);
+            params.append("cityCode", this.city);
+        }else{
+            this.d = false;
+        }
+        if(this.distric){
+            this.e = true;
+            let districName = this.districList.filter( e => e.id === this.distric)[0].areaName
+            params.append("distric", districName);
+            params.append("districCode", this.distric);
+        }else{
+            this.e = false;
+        }
+        if(this.address){
+            this.f = true;
+            params.append("address", this.address);
+        }else{
+            this.f = false;
+        }
+        if(this.seatSize){
+            this.g = true;
+            params.append("seatSize", this.seatSize);
+        }else{
+            this.g = false;
+        }
+        if(this.spareSeatSize){
+            this.h = true;
+            params.append("spareSeatSize", this.spareSeatSize);
+        }else{
+            this.h = false;
+        }
+        if(this.examRoomName){
+            this.j = true;
+            params.append("examRoomName", this.examRoomName);
+        }else{
+            this.j = false;
+        }
+      //所有内容填写完成时，点击【提交】（1）内容不可再编辑，（2）生成考场编号，（3）出现【完成】按钮，（4）同时隐藏【提交】按钮；
+      if( this.a && this.b && this.c && this.d  && this.e && this.f && this.g && this.h&&this.j){
+          this.showNum = true;
+          this.disabled = true;
+          this.$http.post("/api/room/add_room", params).then(res => {
+              if(res.data.code === 0){
+                console.log(res.data.data)
+                this.number = res.data.data;
+              }
+          });
+      }else{
+          this.$message.error('需要完善全部数据后才可以点击提交')
       }
     },
     handlesent() {
-
+        this.$router.push({name:'examManage'})
     },
     selectProvince(val){
         this.city = '';
@@ -190,11 +250,8 @@ export default {
         })
     },
     selectDistric(val){
-        console.log(val)
+        this.examRoomName = this.districList.filter( item => item.id === val)[0].areaName+'考场';
     }
-
-   
-    
   },
   created(){
         let params = new URLSearchParams();

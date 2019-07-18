@@ -129,13 +129,16 @@ export default {
         params.append('userId',1)
         params.append('id',currentId);
         this.$http.get('/api/room/room_detail',{params}).then( res => {
-            // console.log(res)
             // console.log(res.data.data.unitsList)
             this.unitsList = res.data.data.unitsList;
             let rst = res.data.data.list[0]
             this.province = rst.province
             this.manageUnit = this.unitsList.filter(item => item.id === rst.manageUnit)[0].unitName;
-            this.investUnit = rst.investUnit
+            let investUnitArr = rst.investUnit.split(',');
+            investUnitArr.map( (e,index) =>{
+                investUnitArr.splice(index,1,this.unitsList.filter(item => item.id == e)[0].unitName)
+            })
+            this.investUnit = investUnitArr.join(',')
             this.city=rst.city
             this.distric=rst.distric
             this.address=rst.address
@@ -144,7 +147,6 @@ export default {
             this.examRoomCode= rst.examRoomCode
             this.examRoomName=rst.examRoomName
             })
-            
     }
 }
 </script>

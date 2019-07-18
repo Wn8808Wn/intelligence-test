@@ -95,13 +95,24 @@ export default {
           this.pageSize = res.data.data.roomPage.pageSize;
           this.currentPage = res.data.data.roomPage.page;
           //列表数据
-          this.unitsList = res.data.data.unitsList;
           let rst = res.data.data.roomPage.rows;
+          this.unitsList = res.data.data.unitsList;
           this.tableData = rst 
           this.tableData.forEach( (item,index) =>{
-              item.buildDate = this.getTimeStyle(item.buildDate)
-              item.addressabbr = item.province+item.city+item.distric
-              item.manageUnit = this.unitsList.filter((value,index) => value.id === item.manageUnit)[0].unitName;
+              item.buildDate = this.getDateStyle(item.buildDate)
+              if(item.province === '北京市'){
+                  item.addressabbr = item.province + item.distric;
+              }else if(item.province === '天津市'){
+                  item.addressabbr = item.province + item.distric;
+              }else if(item.province === '上海市'){
+                  item.addressabbr = item.province + item.distric;
+              }else if(item.province === '重庆市'){
+                  item.addressabbr = item.province + item.distric;
+              }else{
+                  item.addressabbr = item.province + item.city + item.distric;
+              }
+              //管理单位code码转换为名字
+              item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
           })
     })
       .catch(err => {
@@ -140,9 +151,8 @@ export default {
               type: "success",
               message: "恢复成功!"
             });
-                    
+            this.reload();
           })
-          // this.reload();
         })
         .catch(() => {
           this.$message({

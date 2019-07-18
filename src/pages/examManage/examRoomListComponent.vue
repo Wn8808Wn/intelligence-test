@@ -94,7 +94,7 @@ export default {
       this.tableData = [];
       this.$http.get(url, params).then(res => {
           // 分页
-          // console.log(res,'212313');
+          console.log(res,'212313');
           this.total = res.data.data.roomPage.total;
           this.totalPage = res.data.data.roomPage.totalPage;
           this.pageSize = res.data.data.roomPage.pageSize;
@@ -106,7 +106,17 @@ export default {
           this.unitsList = res.data.data.unitsList;
           this.tableData.forEach( (item,index) => {
             item.buildDate = this.getDateStyle(item.buildDate)
-            item.addressabbr = item.province + item.city + item.distric;
+            if(item.province === '北京市'){
+                item.addressabbr = item.province + item.distric;
+            }else if(item.province === '天津市'){
+                item.addressabbr = item.province + item.distric;
+            }else if(item.province === '上海市'){
+                item.addressabbr = item.province + item.distric;
+            }else if(item.province === '重庆市'){
+                item.addressabbr = item.province + item.distric;
+            }else{
+                item.addressabbr = item.province + item.city + item.distric;
+            }
             //管理单位code码转换为名字
             item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
           })

@@ -1,12 +1,12 @@
 <template>
     <div class="planmanage commonRight" >
         <el-tabs type="border-card" v-model="activeName">
-            <el-tab-pane   name="first">
+            <el-tab-pane name="1">
             <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi"></i>限报设置</span>
                 <!-- 显示子页面 -->
                 <limiteRegistrationSet></limiteRegistrationSet>
             </el-tab-pane> 
-            <el-tab-pane name="second">
+            <el-tab-pane name="2">
             <span slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli"></i>考试计划</span>
                 <!-- 显示子页面 -->
                 <editPlanComponent></editPlanComponent>
@@ -22,13 +22,15 @@ import limiteRegistrationSet from "./limiteRegistrationSet"
 export default {
   data() {
     return {
-         activeName:'second'
+        activeName:'2'
     };
   },
   components: {
     limiteRegistrationSet,
     editPlanComponent
   },
+  methods:{
+  }
 };
 </script>
 

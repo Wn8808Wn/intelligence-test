@@ -72,11 +72,11 @@
         :visible.sync="dialogVisible"
         width="30%"
         >
-            <p><span>本次新增{{this.timeList.length}}条</span>  <span>成功{{this.timeList.length}}条</span>  <span>失败{{0}}条</span></p>
-            <p>失败如下:</p>
+            <p><span>本次新增{{this.timeList.length*this.muchDate}}条</span>  <span>成功{{this.timeList.length*this.muchDate}}条</span>  <span>失败{{0}}条</span></p>
+            <!-- <p>失败如下:</p>
             <p v-for="(item,index) in errorList" :key="index">
                 <span>日期</span> <span>时间</span>
-            </p>
+            </p> -->
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="dialogVisible = false">完 成({{timeOff}})</el-button>
             </span>
@@ -181,7 +181,8 @@ export default {
       pageSize:6,
       dialogVisible:false,
       errorList:[],
-      timeOff:5
+      timeOff:5,
+      muchDate:'',
     };
   },
  
@@ -330,29 +331,30 @@ export default {
       params.append("beginDate", this.selectDate[0]);
       params.append("endDate", this.selectDate[1]);
       params.append("timeStrs", JSON.stringify(this.timeList));
+      this.muchDate = (this.selectDate[1].getTime()-this.selectDate[0].getTime())/(1000*60*60*24)+1
       this.$http.post("/api/plan/add_plan", params).then(res => {
         console.log(res);
-        if(res.data.code===0){
-            this.$message({
-              type:'success',
-              message:'添加成功'
-            })
-            var p1 = new Promise( (resolve, reject)=> {
-              setTimeout(()=>{
-                  this.dialogFormVisible = false;
-              }, 2000, 'P1');
-            });
-            var p2 = new Promise( (resolve, reject) => {
+          if(res.data.code===0){
+              this.$message({
+                type:'success',
+                message:'添加成功'
+              })
+              var p1 = new Promise( (resolve, reject)=> {
                 setTimeout(()=>{
-                    this.dialogVisible =true;
-                    this.setIntervalFn()
-                }, 3500, 'P2');
-            });
-            // 同时执行p1和p2，并在它们都完成后执行then:
-            Promise.all([p1, p2]).then(function (results) {
-                
-            });
-        }
+                    this.dialogFormVisible = false;
+                }, 2000, 'P1');
+              });
+              var p2 = new Promise( (resolve, reject) => {
+                  setTimeout(()=>{
+                      this.dialogVisible =true;
+                      this.setIntervalFn()
+                  }, 3500, 'P2');
+              });
+              // 同时执行p1和p2，并在它们都完成后执行then:
+              Promise.all([p1, p2]).then(function (results) {
+                  
+              });
+          }
         
       });
     }

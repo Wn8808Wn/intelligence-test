@@ -25,7 +25,7 @@
                      <i class="iconfont icon-kaotibiaozhunguanli-"></i>
                     <span slot="title">考题标准管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/planManage">
+                <el-menu-item  index="/planManage/limiteSet">
                      <i class="iconfont icon-kaoshijihuaguanli-"></i>
                     <span slot="title">考试计划管理</span>
                 </el-menu-item>
