@@ -2,12 +2,12 @@
     <div class="ticketmanage">
         <el-tabs type="border-card">
             <el-tab-pane >
-            <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi" ></i>准考证管理</span>
+            <span  slot="label"><i class="iconfont icon-duanxintongzhi" ></i>准考证管理</span>
                 <!-- 显示子页面 -->
                 <ticketListCom></ticketListCom>
             </el-tab-pane> 
             <el-tab-pane >
-            <span  slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli" ></i>准考证模板管理</span>
+            <span  slot="label"><i class="iconfont icon-duanxinmobanguanli" ></i>准考证模板管理</span>
                 <!-- 显示子页面 -->
                 <ticketTemplateCom></ticketTemplateCom>
             </el-tab-pane> 

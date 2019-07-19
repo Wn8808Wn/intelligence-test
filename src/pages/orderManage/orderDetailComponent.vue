@@ -104,7 +104,7 @@
                             <p><span>退款金额:</span>         <span>{{item.refundFee}}</span>元</p>
                         </div>
                     </div>
-                    <el-button v-if="scope.row.payoffStatus === 1"  type="text" slot="reference" icon="el-icon-error iconfont icon-yituikuan"  @click.prevent="handldetails(scope.row.id)">已退款</el-button>
+                    <el-button v-if="scope.row.payoffStatus === 1"  type="text" slot="reference" icon="iconfont icon-yituikuan"  @click.prevent="handldetails(scope.row.id)">已退款</el-button>
                     <el-button v-if="scope.row.payoffStatus === 0"  type="text" slot="reference"></el-button>
                     </el-popover>
                 </template>

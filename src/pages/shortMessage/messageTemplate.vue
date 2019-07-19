@@ -39,8 +39,8 @@
                 <el-table-column
                     label="管理操作">
                     <template slot-scope="scope">
-                        <el-button v-if="messageTemplateList[scope.$index].editable"  type="text" icon="el-icon-error iconfont icon-xiugai-"  @click.native="editCurrentDate(scope.$index, scope.row)">修改</el-button>
-                        <el-button  v-if="!messageTemplateList[scope.$index].editable" type="text" icon="el-icon-error iconfont icon-wancheng"  @click.native="completeEdit(scope.$index, scope.row)">完成</el-button>
+                        <el-button v-if="messageTemplateList[scope.$index].editable"  type="text" icon="iconfont icon-xiugai-"  @click.native="editCurrentDate(scope.$index, scope.row)">修改</el-button>
+                        <el-button  v-if="!messageTemplateList[scope.$index].editable" type="text" icon="iconfont icon-wancheng"  @click.native="completeEdit(scope.$index, scope.row)">完成</el-button>
                     </template>
                 </el-table-column>
             </el-table>

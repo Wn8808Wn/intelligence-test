@@ -47,8 +47,8 @@
                 <el-table-column
                 label="管理操作">
                 <template slot-scope="scope">
-                    <el-button class="recoverBtn" type="text" icon="el-icon-error iconfont icon-huifu" @click.prevent="unFreezeData(scope.row.id)" :disabled="isDisable">恢复</el-button>
-                    <el-button type="text" icon="el-icon-error iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                    <el-button class="recoverBtn" type="text" icon="iconfont icon-huifu" @click.prevent="unFreezeData(scope.row.id)" :disabled="isDisable">恢复</el-button>
+                    <el-button type="text" icon="iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
                 </template>
                 </el-table-column >
             </el-table>

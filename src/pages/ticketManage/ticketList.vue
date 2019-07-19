@@ -68,8 +68,8 @@
                 label="操作"
                >
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error iconfont icon-fasong"  @click.prevent="dialogFormVisible = true">发送</el-button>
-                    <el-button type="text" icon="el-icon-error iconfont icon-xiangqing"  @click.prevent="handlDetails(scope.row.id)">详情</el-button>
+                    <el-button type="text" icon="iconfont icon-fasong"  @click.prevent="dialogFormVisible = true">发送</el-button>
+                    <el-button type="text" icon="iconfont icon-xiangqing"  @click.prevent="handlDetails(scope.row.id)">详情</el-button>
                     
                     <el-dialog :title="title" :visible.sync="dialogFormVisible" width='30%' >
                         <el-radio  v-model="radio" @click.native="checkedButton"><el-input  v-model="email" placeholder="同时发送至用户邮箱:"></el-input></el-radio>

@@ -3,13 +3,13 @@
          <div class="examStatus commonRight">
             <el-tabs type="border-card">
                 <el-tab-pane>
-                <span slot="label"><i class="el-icon-date iconfont icon-kaoshizhuangtaichaxun-"></i>考试状态查询</span>
+                <span slot="label"><i class="iconfont icon-kaoshizhuangtaichaxun-"></i>考试状态查询</span>
                 <div class="top">
                     <div class="search">
                         <input type="text" placeholder="请输入考生姓名/证件号"  v-model.trim ="inputVal">
                         <el-button circle @click="searchData">搜索</el-button>
                     </div>
-                    <el-button  type="primary" round icon="el-icon-more iconfont icon-yijiandaochu" @click="handleDownload">一键导出</el-button>
+                    <el-button  type="primary" round icon="iconfont icon-yijiandaochu" @click="handleDownload">一键导出</el-button>
                     <p class="NoFloat">共有<span>{{total}}</span>/<span>{{total}}</span>条结果</p>
                 </div>
                 <div class="top" id="topSearch">

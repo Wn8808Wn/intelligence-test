@@ -34,9 +34,9 @@
                     <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeTimes">
                         <el-option
                             v-for="item in examLevClassify"
-                            :key="item.value"
+                            :key="item.id"
                             :label="item.label"
-                            :value="item.value">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </div>
@@ -153,16 +153,20 @@ export default {
       tableData: [],
       examLevClassify: [
         {
-          label: "25级 — 10级  45分钟",
-          value: 1
+          label: "25级 — 10级 30分钟",
+          id: 1
         },
         {
-          label: "5级 — 2段  60分钟",
-          value: 2
+          label: "9 级 — 1 级  45分钟",
+          id: 2
         },
         {
-          label: "3段 —7段  90分钟",
-          value: 3
+          label: "1 段 — 4 段  60分钟",
+          id: 3
+        },
+        {
+          label: "5 段   90分钟",
+          id: 4
         }
       ],
       dialogFormVisible: false,

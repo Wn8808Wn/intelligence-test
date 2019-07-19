@@ -3,7 +3,7 @@
          <div class="orderManage commonRight">
             <el-tabs type="border-card">
                 <el-tab-pane>
-                    <span slot="label"><i class="el-icon-date iconfont icon-dingdanguanli-"></i>订单管理</span>
+                    <span slot="label"><i class="iconfont icon-dingdanguanli-"></i>订单管理</span>
                     <orderListCom></orderListCom>
                 </el-tab-pane>
             </el-tabs>

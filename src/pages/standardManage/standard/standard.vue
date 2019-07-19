@@ -78,8 +78,8 @@
                 <el-table-column
                 label="管理操作">
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" >修改</el-button>
-                    <el-button type="text" icon="el-icon-error iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                    <el-button type="text" icon="iconfont icon-xiugai-" @click.prevent="modifyData(scope.row.id)" >修改</el-button>
+                    <el-button type="text" icon="iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
                 </template>
                 </el-table-column >
             </el-table>

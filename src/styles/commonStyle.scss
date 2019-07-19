@@ -278,6 +278,18 @@ img { max-width: 100%;}
 
 }
 
+//头部标题icon 间距控制
+.el-tabs .el-tabs__item.is-top, .el-tabs .el-tabs__item.is-top.is-active{
+    & /deep/ span{
+      &>i{
+        padding-right: 12px;
+      }
+    }
+}
+
+
+
+
 .el-icon-edit-outline:before{
   font-size: 18px;
   margin-right: 2px;
@@ -289,4 +301,11 @@ img { max-width: 100%;}
 //一键导出按钮样式重置
 .icon-yijiandaochu{
   margin-right: 12px;
+}
+//冻结详情恢复
+.icon-dongjie,.icon-huifu,.icon-xiangqing,.icon-xiugai-,.icon-wancheng,.icon-fasong{
+  margin-right: 5px;
+}
+.icon-yituikuan{
+  margin-right: 5px;
 }

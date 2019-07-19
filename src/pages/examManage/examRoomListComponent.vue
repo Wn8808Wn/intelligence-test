@@ -56,8 +56,8 @@
                 <el-table-column
                 label="管理操作">
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-error iconfont icon-dongjie" @click.prevent="freezeData(scope.row.id)"  :disabled="isDisable">冻结</el-button>
-                    <el-button type="text" icon="el-icon-error iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
+                    <el-button type="text" icon="iconfont icon-dongjie" @click.prevent="freezeData(scope.row.id)"  :disabled="isDisable">冻结</el-button>
+                    <el-button type="text" icon="iconfont icon-xiangqing" @click.prevent="handldetails(scope.row.id)">详情</el-button>
                 </template>
                 </el-table-column >
             </el-table>

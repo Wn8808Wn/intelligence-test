@@ -2,12 +2,12 @@
     <div class="shortMessage commonRight">
         <el-tabs type="border-card">
             <el-tab-pane >
-            <span  slot="label"><i class="el-icon-date iconfont icon-duanxintongzhi" ></i>短信通知</span>
+            <span  slot="label"><i class="iconfont icon-duanxintongzhi" ></i>短信通知</span>
                 <!-- 显示子页面 -->
                 <messageCom></messageCom>
             </el-tab-pane> 
             <el-tab-pane >
-            <span  slot="label"><i class="el-icon-date iconfont icon-duanxinmobanguanli" ></i>短信模板管理</span>
+            <span  slot="label"><i class="iconfont icon-duanxinmobanguanli" ></i>短信模板管理</span>
                 <!-- 显示子页面 -->
                   <messageTemplateCom></messageTemplateCom>
             </el-tab-pane> 

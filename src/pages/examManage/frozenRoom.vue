@@ -2,7 +2,7 @@
     <div class="exammanage">
         <el-tabs type="border-card">
             <el-tab-pane>
-                <span slot="label"><i class="el-icon-date iconfont icon-kaochangguanli-"></i>考场管理</span>
+                <span slot="label"><i class="iconfont icon-kaochangguanli-"></i>考场管理</span>
                 <frozenRoomComponent></frozenRoomComponent>
             </el-tab-pane> 
         </el-tabs>

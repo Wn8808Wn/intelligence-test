@@ -407,9 +407,7 @@ export default {
         padding-left: 7px;
         height: 70px;
         & > span {
-          display: block;
           float: left;
-          width:100%;
         //   background: #1f91b5;
           width: 140px;
           font-size: 16px;

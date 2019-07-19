@@ -12,7 +12,7 @@
             mode="vertical" 
             @select="handleSelect"
             class="el-menu-vertical-demo"
-            background-color="#07281f"
+            background-color="#222f3c"
             text-color="#fff"
             active-text-color="#fff"
             router
@@ -136,18 +136,21 @@ export default {
     // min-height: 938px;
     float: left;
     margin-right: 13px;
-    background: #07281f;
+    background: #222f3c;
     .log-top {
       width: 176px;
       height: 71px;
-      background: #021b14;
+      background: #222f3c;
       & > img {
-        margin: 20px 15px 18px 11px;
+        margin: 18px 12px 18px 12px;
         border: none;
+        width: 33px;
+        height: 33px;
       }
       & > span {
         font-size: 16px;
-        color: #1f91b5;
+        color:#52b1cf;
+        font-weight:700;
         float: right;
         margin-top: 26px;
         margin-bottom: 25px;
