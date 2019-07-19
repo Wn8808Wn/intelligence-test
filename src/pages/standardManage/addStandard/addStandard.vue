@@ -409,7 +409,8 @@ export default {
         & > span {
           display: block;
           float: left;
-          background: #1f91b5;
+          width:100%;
+        //   background: #1f91b5;
           width: 140px;
           font-size: 16px;
           height: 70px;
