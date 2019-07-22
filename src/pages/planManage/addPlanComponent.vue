@@ -31,7 +31,7 @@
             <div class="setTop clearfix">
                 <div class="setLev">
                     <p>设置报考级别:</p>
-                    <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeTimes">
+                    <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeLevel">
                         <el-option
                             v-for="item in examLevClassify"
                             :key="item.id"
@@ -189,11 +189,7 @@ export default {
       muchDate:'',
     };
   },
- 
   methods: {
-    changeTimes(val){
-      // console.log(val)
-    },
     getData(params){
         this.$http.get("/api/plan/room_plan",params).then(res =>{
           // console.log(res)
@@ -314,6 +310,9 @@ export default {
     },
     delCurTimeEmitter(index) {
       this.timeList.splice(index, 1);
+    },
+    changeLevel(val){
+      this.form.examLev=val;
     },
     addData(val) {
       this.timeList[this.timeList.length - 1] = val;

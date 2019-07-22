@@ -40,8 +40,8 @@
 
                 <div class="knowledgeHierarchy">
                   <span>知识体系:</span> 
-                  <p>
-                    <span v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
+                  <p class="knowP">
+                    <span class="KnowPspan" v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
                   </p>
                 </div>
 
@@ -402,18 +402,16 @@ export default {
         padding-bottom: 27px;
         padding-left: 7px;
       }
-      & > p {
+      & > .knowP {
         width: calc( 100% - 7px);
         padding-left: 7px;
         height: 70px;
-        & > span {
+        & >.KnowPspan {
           float: left;
-        //   background: #1f91b5;
-          width: 140px;
           font-size: 16px;
           height: 70px;
           line-height: 70px;
-          margin-right: 10px;
+          margin-right: 20px;
         }
       }
     }

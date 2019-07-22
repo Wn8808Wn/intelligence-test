@@ -35,12 +35,15 @@ export default {
         var date = new Date(this.startExamTime);
         switch(this.examLev){
           case 1:{
-            return date.setMinutes(date.getMinutes() + 45);
+            return date.setMinutes(date.getMinutes() + 30);
           }
           case 2:{
-            return date.setMinutes(date.getMinutes() + 60);
+            return date.setMinutes(date.getMinutes() + 45);
           }
           case 3:{
+            return date.setMinutes(date.getMinutes() + 60);
+          }
+          case 4:{
             return date.setMinutes(date.getMinutes() + 90);
           }
         }
