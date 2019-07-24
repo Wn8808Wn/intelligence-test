@@ -407,11 +407,12 @@ export default {
         padding-left: 7px;
         height: 70px;
         & >.KnowPspan {
-          float: left;
-          font-size: 16px;
-          height: 70px;
-          line-height: 70px;
-          margin-right: 20px;
+           float: left;
+           width: auto;
+           font-size: 16px;
+           height: 70px;
+           line-height: 70px;
+           margin-right: 20px;
         }
       }
     }

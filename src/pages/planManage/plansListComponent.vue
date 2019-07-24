@@ -288,7 +288,7 @@ export default {
             this.getData(params); 
         },
         modifyData(val){
-            console.log(val)
+            console.log(val,'val')
             let timetamp4 = Number(Date.parse(val.openTime.replace(/-/g,'/')))
             let timetamp3 = Number(new Date())
                     console.log(timetamp4-timetamp3,111111)
@@ -300,8 +300,8 @@ export default {
                 this.$router.go(0)
                 //刷新页面更改状态
             }else{
-                 this.$router.push({name:'editPlan'})
-                this.$store.dispatch('modifyDate',{'currentId':val.id,'storeRoomId':val.roomId})
+                this.$router.push({name:'editPlan', query:{id:val.id,roomId:val.roomId}})
+                // this.$store.dispatch('modifyDate',{'currentId':val.id,'storeRoomId':val.roomId})
             }
         },
         handleCurrentChange(val){

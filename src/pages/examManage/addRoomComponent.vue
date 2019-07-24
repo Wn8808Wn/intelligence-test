@@ -315,6 +315,9 @@ export default {
     }
     .invenunit {
       width: 100%;
+      & /deep/ .el-tag.el-tag--info .el-tag__close{
+          color: #ffffff;
+      }
     }
     .address {
       width: 360px;

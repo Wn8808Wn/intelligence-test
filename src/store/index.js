@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import persistedState from 'vuex-persistedstate' //首先引入
 import orderManageData from './mudoles/orderManageDate'
 
 Vue.use(Vuex)
@@ -44,11 +45,12 @@ const actions = {
     }
 }
 
-export default new  Vuex.Store({
+export default new Vuex.Store({
     state,
     mutations,
     getters,
     actions,
+    plugins: [persistedState ()] //加上这个就可以了 
     // modules:{
     //     orderManageData,
     // }

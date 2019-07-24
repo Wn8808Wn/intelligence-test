@@ -4,8 +4,8 @@
         <div class="examSelect">
             <div class="prov">
                 <span class="commontips">考场:</span>
-                <el-select v-model="examRoomId" disabled>
-                </el-select>
+                <el-input v-model="examRoomName" disabled>
+                </el-input>
             </div>
             <p>座位数:<span>{{realSeatings}}个</span></p>  
         </div>
@@ -25,12 +25,12 @@
             <div class="setTop clearfix">
                 <div class="setLev">
                     <p>设置报考级别:</p>
-                    <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeTimes">
+                    <el-select v-model="form.examLev" placeholder="请选择报考级别" @change="changeLevel">
                         <el-option
-                            v-for="item in examLevClassify"
-                            :key="item.value"
+                             v-for="item in examLevClassify"
+                            :key="item.id"
                             :label="item.label"
-                            :value="item.value">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </div>
@@ -67,15 +67,15 @@
         :visible.sync="dialogVisible"
         width="30%"
         >
-          <p><span>本次新增2条</span>  <span>成功2条</span>  <span>失败2条</span></p>
-          <p>失败如下:</p>
-          <p v-for="(item,index) in errorList" :key="index">
-              <span>日期</span> <span>时间</span>
-          </p>
-          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="dialogVisible = false">完 成({{timeOff}})</el-button>
-          </span>
-        </el-dialog>
+            <p><span>本次新增{{this.timeList.length*this.muchDate}}条</span>  <span>成功{{this.timeList.length*this.muchDate}}条</span>  <span>失败{{0}}条</span></p>
+            <!-- <p>失败如下:</p>
+            <p v-for="(item,index) in errorList" :key="index">
+                <span>日期</span> <span>时间</span>
+            </p> -->
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="dialogVisible = false">完 成({{timeOff}})</el-button>
+            </span>
+       </el-dialog>
 
         <div class="tabs-data" id="addPlanTabs">     
             <el-table 
@@ -88,7 +88,7 @@
             label="日期"
             width="153">
             <template slot-scope="scope">
-              <span style="margin-right:10px">{{scope.row.examDate}}</span>  <span>周{{"日一二三四五六".charAt(new Date(scope.row.examDate).getDay())}}</span>
+              <span style="margin-right:10px">{{scope.row.examDate.split(' ')[0]}}</span>  <span>周{{"日一二三四五六".charAt(new Date(scope.row.examDate).getDay())}}</span>
             </template> 
             </el-table-column>
 
@@ -142,23 +142,28 @@ export default {
   data() {
     return {
       title: "修改计划",
-      examRoomId: "",
+      examRoomName:'',
+      roomId:'',
       roomList: [],
       realSeatings:'', //真实座位数 
       provinceCode:"",  // 根据考场列表获取当前的考场省份Code
       tableData: [],
       examLevClassify: [
         {
-          label: "25级 — 10级  45分钟",
-          value: 1
+          label: "25级 — 10级 30分钟",
+          id: 1
         },
         {
-          label: "5级 — 2段  60分钟",
-          value: 2
+          label: "9 级 — 1 级  45分钟",
+          id: 2
         },
         {
-          label: "3段 —7段  90分钟",
-          value: 3
+          label: "1 段 — 4 段  60分钟",
+          id: 3
+        },
+        {
+          label: "5 段   90分钟",
+          id: 4
         }
       ],
       dialogFormVisible: false,
@@ -177,23 +182,18 @@ export default {
       pageSize:6,
       dialogVisible:false,
       errorList:[],
-      timeOff:5
+      timeOff:5,
+      muchDate:'',
     };
   },
-   computed:{
-    ...mapState({
-      examPlanEditId: state => state.examPlanEditId,
-      roomId: state => state.roomId
-    })
-  },
   methods: {
-    changeTimes(val){
-      console.log(val)
+    changeLevel(val){
+        this.form.examLev=val;
     },
     getData(params){
         this.$http.get("/api/plan/room_plan",params).then(res =>{
           // console.log(res)
-          if(res){
+        if(res.data.code === 0){
             this.tableData=[];
             this.totalPage = res.data.data.totalPage;
             this.total = res.data.data.total;
@@ -226,7 +226,6 @@ export default {
     },
     handleCurrentChange(val) {
       let params = new URLSearchParams();
-      // params.append("userId", 1);
       params.append("page", val);
       params.append("roomId", this.roomId)
       // params.append("provinceCode",110000) //后期更改 目前传值1
@@ -253,7 +252,6 @@ export default {
             params.append('activeStatus',0)
             params.append("provinceCode",110000) //后期更改
             this.getData({ params })
-          //  console.log(row.id,this.$store.state.deleCurrentRowId,"22222")
           }else{
              this.$message({
               type:'error',
@@ -306,6 +304,20 @@ export default {
       this.timeList[this.timeList.length - 1] = val;
       // console.log(this.timeList, "aaaaa");
     },
+    setIntervalFn(){
+      var timer = setInterval(()=>{
+          this.timeOff--;
+          if(this.timeOff<=0){
+           this.dialogVisible =false;
+           let params = new URLSearchParams()
+           params.append("roomId", this.roomId);
+           params.append('activeStatus',0)
+           params.append("provinceCode",110000) //后期更改
+           this.getData({ params })
+           clearInterval(timer);
+          }
+      }, 1000);
+    },
     submitBtn() {
       let params = new URLSearchParams();
       params.append("roomId", this.roomId);
@@ -313,13 +325,10 @@ export default {
       params.append("beginDate", this.selectDate[0]);
       params.append("endDate", this.selectDate[1]);
       params.append("timeStrs", JSON.stringify(this.timeList));
+      this.muchDate = (this.selectDate[1].getTime()-this.selectDate[0].getTime())/(1000*60*60*24)+1
       this.$http.post("/api/plan/add_plan", params).then(res => {
         console.log(res);
         if(res.data.code===0){
-            this.$message({
-              type:'success',
-              message:'添加成功'
-            })
             var p1 = new Promise( (resolve, reject)=> {
               setTimeout(()=>{
                   this.dialogFormVisible = false;
@@ -330,10 +339,6 @@ export default {
                     this.dialogVisible =true;
                     this.setIntervalFn()
                 }, 3500, 'P2');
-            });
-            // 同时执行p1和p2，并在它们都完成后执行then:
-            Promise.all([p1, p2]).then(function (results) {
-                
             });
         }
         
@@ -346,20 +351,28 @@ export default {
         return '';
     }
   },
-  mounted(){
+  created(){
+    this.examPlanEditId = this.$route.query.id;
+    this.roomId = this.$route.query.roomId
     let params = new URLSearchParams();
-    params.append("userId", 1);
-    params.append("provinceCode",110000) //后期更改 目前传值1
+    params.append("provinceCode",110000) //后期更改
     this.$http.get("/api/room/get_room_by_province", { params }).then( res =>{
-       if (res.status === 200 && res.data.code === 0) {
+       if (res.data.code === 0) {
+            console.log(res,'res')
             this.roomList = res.data.data;
-            var obj = this.roomList.filter(item => item.id === this.roomId);
-            this.realSeatings =obj[0].seatSize-obj[0].spareSeatSize
-            this.examRoomId = obj[0].examRoomName
+            let  obj = this.roomList.filter(item => item.id == this.roomId);
+            console.log(obj)
+            if(obj){
+              this.realSeatings =obj[0].seatSize-obj[0].spareSeatSize
+              this.examRoomName = obj[0].examRoomName
+              let params = new URLSearchParams();
+              params.append("provinceCode",110000) //后期更改
+              params.append("roomId", this.roomId)
+              this.getData({params})
+            }
         }
     })
-    params.append("roomId", this.roomId)
-    this.getData({params})
+  
   }
 };
 </script>

@@ -192,8 +192,8 @@ export default {
   methods: {
     getData(params){
         this.$http.get("/api/plan/room_plan",params).then(res =>{
-          // console.log(res)
-          if(res){
+          // console.log(res,'000')
+          if(res.data.code === 0){
             this.tableData=[];
             this.totalPage = res.data.data.totalPage;
             this.total = res.data.data.total;

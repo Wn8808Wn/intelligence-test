@@ -40,8 +40,8 @@
 
                 <div class="knowledgeHierarchy">
                   <span>知识体系:</span> 
-                  <p>
-                    <span v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
+                  <p class="knowP">
+                    <span class="KnowPspan" v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
                   </p>
                 </div>
 
@@ -97,213 +97,234 @@
 <script>
 import commonTop from "../../common/commonTop";
 export default {
-  components: {
-    commonTop
-  },
-  data() {
-    return {
-      titleTop: "修改标准",
-      dataType:1,
-      id:'',
-      examLevel: null,
-      examLevelName:'',
-      addDisabled:false,
-      reduceDisabled:false,
-      signRequirement: null,
-      examServiceFee: null,
-      certificationServiceFee:null,
-      knowledgeHierarchy:[],
-      examLength:"0",
-      itemDifficulty:'',
-      disabled: false,
-      details:null,
-      number:0,
-      examLevelList: [],
-      knowledStr:'',
-      ai:'',
-      evaluateDanId:'',
-      passScore:'',
-      totalScore:'',
-      aiTime:'',
-      a:'',
-      b:'',
-      c:'',
-      d:''
-    };
-  },
-  methods: {
-    changeExamLevel(val){
-      this.itemDifficulty = val;
-      this.examLevelName = this.examLevelList.filter( item => item.id === this.examLevel)[0].levelName;
+    components: {
+        commonTop
     },
-    getKnowledgeSystem(num){
-          let params ={
-              "levelId":num
-          }
-          this.$http.get('/api/standard/get_knowledge',{params}).then( res =>{
-              this.knowledgeHierarchy =[];
-              if( res.data.code === 0){
-                  console.log(res,'pppp')
-                  //保存后台需要的数据
-                  if(res.data.data !== {}){
-                      let rst = res.data.data;
-                      this.evaluateDanId = rst.evaluateDanId;
-                      this.passScore = rst.passScore;
-                      this.totalScore = rst.totalScore;
-                      this.aiTime = rst.aiTime;
-                      this.ai = rst.ai;
-                  }
-                  //处理不存在的情况
-                  if(res.data.data.totalTime){
-                    this.examLength = res.data.data.totalTime;
-                  }else{
-                    this.examLength = 0;
-                  }
-                  if(res.data.data.knowledgeSystem){
-                      this.knowledStr = res.data.data.knowledgeSystem;
-                      this.knowledgeHierarchy = res.data.data.knowledgeSystem.split(',');
-                  }
-              }
-          })
+    data() {
+        return {
+        titleTop: "修改标准",
+        dataType:1,
+        id:'',
+        examLevel: '',
+        examLevelName:'',
+        addDisabled:false,
+        reduceDisabled:false,
+        signRequirement: '',
+        examServiceFee: '',
+        certificationServiceFee:'',
+        knowledgeHierarchy:[],
+        examLength:"0",
+        itemDifficulty:'',
+        disabled: false,
+        details:'',
+        number:0,
+        ranglist:[],
+        betweenIndex:1,
+        examLevelList: [],
+        knowledStr:'',
+        ai:'',
+        evaluateDanId:'',
+        passScore:'',
+        totalScore:'',
+        aiTime:'',
+        a:'',
+        b:'',
+        c:'',
+        d:''
+        };
     },
-    addLevel(){
-        if(this.examLevel<18){
-            let addLev = this.examLevel+1;
-            this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
-            this.itemDifficulty = addLev;
-            this.getKnowledgeSystem(addLev);
-        }else{
-            let addLev = 18;
-            this.itemDifficulty = addLev;
-            this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
-            this.getKnowledgeSystem(addLev);
-        }
-    },
-    reduceLevel(){
-        if(this.examLevel>1){
-            let reduceLev = this.examLevel - 1;
-            this.itemDifficulty = reduceLev;
-            this.examLevelName = this.examLevelList.filter( item => item.id === reduceLev)[0].levelName;
-            this.getKnowledgeSystem(reduceLev);
-        }else{
-            let reduceLev = 1;
-            this.itemDifficulty = reduceLev;
-            this.examLevelName = this.examLevelList.filter( item => item.id === reduceLev)[0].levelName;
-            this.getKnowledgeSystem(reduceLev);
-        }
-    },
-    handleChange(value) {
-      console.log(value);
-    },
-    descInput(){
-      details:null,
-      this.number = this.details.length
-    },
-    handleput(){
-        let params = new URLSearchParams();
-        params.append('id',this.id)
-        if(this.evaluateDanId){
-            params.append('evaluateDanId',this.evaluateDanId)
-        }
-        if(this.totalScore){
-            params.append('totalScore',this.totalScore)
-        }
-        if(this.passScore){
-            params.append('passScore',this.passScore)
-        }
-        if(this.aiTime){
-            params.append('aiTime',this.aiTime)
-        }
-        if(this.ai){
-            params.append('isAI',this.ai)
-        }
-        if(this.examLevel === ''){
-            this.a = false;
-        }else{
-            this.a = true;
-            params.append("examLevel", this.examLevel);
-        }
-        if(this.signRequirement === ''){
-            this.b = false;
-        }else{
-            this.b = true;
-            params.append("signRequirement", this.signRequirement);
-        }
-        if(this.examServiceFee === ''){
-            this.c = false;
-        }else{
-            this.c = true;
-            params.append("examServiceFee", this.examServiceFee);
-        }
-        if(this.certificationServiceFee === ''){
-            this.d = false;
-        }else{
-            this.d = true;
-            params.append("certificationServiceFee", this.certificationServiceFee);
-        }
-        params.append("itemDifficulty",  this.itemDifficulty);
-        params.append("knowledgeHierarchy", this.knowledStr); 
-        params.append("examLength", this.examLength); 
-        // params.append("details", this.details);  //产品取消描述需求
-        params.append("dataType", this.dataType); 
-        if(this.a && this.b && this.c && this.d){
-            this.$http.post("/api/standard/edit_standard", params).then(res => {
-                console.log(res);
-                if(res.data.code === 0){
-                    this.$message({
-                        message: '恭喜你，修改成功',
-                        type: 'success'
-                    });
-                    this.$router.push({name: "standard"})
-                }else{
-                    this.$message.error('修改失败');
+    methods: {
+        changeExamLevel(val){
+            this.itemDifficulty = val;
+            if(val === 18){
+                this.ranglist = [17,18];
+            }else if(val === 1){
+                this.ranglist=[1,2];
+            }else{
+                this.ranglist=[val-1,val,val+1];
+            } 
+            this.examLevelName = this.examLevelList.filter( item => item.id === this.examLevel)[0].levelName;
+            this.getKnowledgeSystem(val);
+        },
+        getKnowledgeSystem(num){
+            let params ={
+                "levelId":num
+            }
+            this.$http.get('/api/standard/get_knowledge',{params}).then( res =>{
+                this.knowledgeHierarchy =[];
+                if( res.data.code === 0){
+                    //   console.log(res,'pppp')
+                    //保存后台需要的数据
+                    if(res.data.data !== {}){
+                        let rst = res.data.data;
+                        this.evaluateDanId = rst.evaluateDanId;
+                        this.passScore = rst.passScore;
+                        this.totalScore = rst.totalScore;
+                        this.aiTime = rst.aiTime;
+                        this.ai = rst.ai;
+                    }
+                    //处理不存在的情况
+                    if(res.data.data.totalTime){
+                        this.examLength = res.data.data.totalTime;
+                    }else{
+                        this.examLength = 0;
+                    }
+                    if(res.data.data.knowledgeSystem){
+                        this.knowledStr = res.data.data.knowledgeSystem;
+                        this.knowledgeHierarchy = res.data.data.knowledgeSystem.split(',');
+                    }
                 }
-          });
+            })
+        },
+        addLevel(){
+            if(this.ranglist.length === 2){
+                this.betweenIndex++;
+                if(this.betweenIndex >= 2){
+                    this.betweenIndex = 1;
+                }
+            }else{
+                this.betweenIndex++;
+                if(this.betweenIndex > 2){
+                    this.betweenIndex = 2;
+                }
+            }
+            if(0<=this.betweenIndex&&this.betweenIndex<=2){
+                let addLev = this.ranglist[this.betweenIndex];
+                this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
+                this.itemDifficulty = addLev;
+                this.getKnowledgeSystem(addLev);
+            }
+        },
+        reduceLevel(){
+            if(this.ranglist.length === 2){
+                this.betweenIndex--;
+                if(this.betweenIndex <=0){
+                    this.betweenIndex = 0;
+                }
+            }else{
+                this.betweenIndex--;
+                if(this.betweenIndex < 0){
+                    this.betweenIndex = 0;
+                }
+            }
+            if(0<=this.betweenIndex&&this.betweenIndex<=2){
+                let addLev = this.ranglist[this.betweenIndex];
+                this.examLevelName = this.examLevelList.filter( item => item.id === addLev)[0].levelName;
+                this.itemDifficulty = addLev;
+                this.getKnowledgeSystem(addLev);
+            }
+        },
+        handleChange(value) {
+        console.log(value);
+        },
+        descInput(){
+        details:null,
+        this.number = this.details.length
+        },
+        handleput(){
+            let params = new URLSearchParams();
+            params.append('id',this.id)
+            if(this.evaluateDanId){
+                params.append('evaluateDanId',this.evaluateDanId)
+            }
+            if(this.totalScore){
+                params.append('totalScore',this.totalScore)
+            }
+            if(this.passScore){
+                params.append('passScore',this.passScore)
+            }
+            if(this.aiTime){
+                params.append('aiTime',this.aiTime)
+            }
+            if(this.ai){
+                params.append('isAI',this.ai)
+            }
+            if(this.examLevel === ''){
+                this.a = false;
+            }else{
+                this.a = true;
+                params.append("examLevel", this.examLevel);
+            }
+            if(this.signRequirement === ''){
+                this.b = false;
+            }else{
+                this.b = true;
+                params.append("signRequirement", this.signRequirement);
+            }
+            if(this.examServiceFee === ''){
+                this.c = false;
+            }else{
+                this.c = true;
+                params.append("examServiceFee", this.examServiceFee);
+            }
+            if(this.certificationServiceFee === ''){
+                this.d = false;
+            }else{
+                this.d = true;
+                params.append("certificationServiceFee", this.certificationServiceFee);
+            }
+            params.append("itemDifficulty",  this.itemDifficulty);
+            params.append("knowledgeHierarchy", this.knowledStr); 
+            params.append("examLength", this.examLength); 
+            // params.append("details", this.details);  //产品取消描述需求
+            params.append("dataType", this.dataType); 
+            if(this.a && this.b && this.c && this.d){
+                this.$http.post("/api/standard/edit_standard", params).then(res => {
+                    console.log(res);
+                    if(res.data.code === 0){
+                        this.$message({
+                            message: '恭喜你，修改成功',
+                            type: 'success'
+                        });
+                        this.$router.push({name: "standard"})
+                    }else{
+                        this.$message.error('添加失败');
+                    }
+            });
 
-        }else{
-            this.$message.error('输入考试服务费、认证服务费后才能进行提交');
+            }else{
+                this.$message.error('输入考试服务费、认证服务费后才能进行提交');
+            }
         }
-    }
-  },
-  created(){
-      //获取考试级别
-      let params1 ={
-        // "levelId":1
-      }
-      this.$http.get('/api/standard/standard_level_list',{params1}).then( res =>{
-        if(res.data.code === 0){
-          console.log(res.data.data.levelList)
-          this.examLevelList = res.data.data.levelList;
-        }
-      }).then( ()=>{
-          let id = this.$route.query.id;
-          this.id = id;
-          let url = '/api/standard/standard_detail?id='+id
-          this.$http.get(url).then(res => {
+    },
+    created(){
+        //获取考试级别
+        this.$http.get('/api/standard/standard_level_list').then( res =>{
+            if(res.data.code === 0){
+                this.examLevelList = res.data.data.levelList;
+                console.log(this.examLevelList,'iiii')
+            }
+        }).then( ()=>{
+            let id = this.$route.query.id;
+            this.id = id;
+            let url = '/api/standard/standard_detail?id='+id
+            this.$http.get(url).then(res => {
             console.log(res.data.data,'8888888');
-            let rst = res.data.data;
-            //处理数据
-            this.examLevel = rst.examLevel
-            this.signRequirement = rst.signRequirement
-            this.itemDifficulty = rst.itemDifficulty
-            this.certificationServiceFee = rst.certificationServiceFee
-            this.examServiceFee = rst.examServiceFee
-            this.examLength = rst.examLength
-            this.knowledStr = rst.knowledgeHierarchy
-            this.knowledgeHierarchy = rst.knowledgeHierarchy.split(',')
-            this.itemDifficulty = rst.itemDifficulty;
-            this.examLevelName = this.examLevelList.filter( item => item.id === Number(rst.itemDifficulty))[0].levelName;
-            // //保存AI数据
-            this.evaluateDanId = rst.evaluateDanId;
-            this.passScore = rst.passScore;
-            this.totalScore = rst.totalScore;
-            this.aiTime = rst.aiLength;
-            this.ai = rst.isAI;
-            // this.details = rst.details
-            // this.number = rst.details.length    
-          })
-      })
-  }
+                if( res.data.code === 0){
+                    let rst = res.data.data;
+                    //处理数据
+                    this.examLevel = rst.examLevel
+                    this.signRequirement = rst.signRequirement
+                    this.certificationServiceFee = rst.certificationServiceFee
+                    this.examServiceFee = rst.examServiceFee
+                    this.examLength = rst.examLength
+                    this.knowledStr = rst.knowledgeHierarchy
+                    this.knowledgeHierarchy = rst.knowledgeHierarchy.split(',')
+                    this.itemDifficulty = rst.itemDifficulty;
+                    this.changeExamLevel(Number(rst.itemDifficulty));
+                    this.examLevelName = this.examLevelList.filter( item => item.id === Number(rst.itemDifficulty))[0].levelName;
+                    // //保存AI数据
+                    this.evaluateDanId = rst.evaluateDanId;
+                    this.passScore = rst.passScore;
+                    this.totalScore = rst.totalScore;
+                    this.aiTime = rst.aiLength;
+                    this.ai = rst.isAI;
+                    // this.details = rst.details
+                    // this.number = rst.details.length    
+                }
+            })
+        })
+    }
 };
 </script>
 <style rel='stylesheet/scss' lang="scss">
@@ -408,18 +429,17 @@ export default {
         padding-bottom: 27px;
         padding-left: 7px;
       }
-      & > p {
+      & > .knowP {
         width: calc( 100% - 7px);
         padding-left: 7px;
         height: 70px;
-        & > span {
-          display: block;
-          float: left;
-          width: 140px;
-          font-size: 16px;
-          height: 70px;
-          line-height: 70px;
-          margin-right: 10px;
+        & >.KnowPspan {
+           float: left;
+           width: auto;
+           font-size: 16px;
+           height: 70px;
+           line-height: 70px;
+           margin-right: 20px;
         }
       }
     }

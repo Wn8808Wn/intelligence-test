@@ -12,9 +12,7 @@
 
                 <div class="testLevel">
                     <span class="commontips">报考条件:</span>
-                    <el-select v-model="signRequirement" disabled>
-                      
-                    </el-select>
+                    <el-input v-model="signRequirement" disabled></el-input>
                 </div>
 
                 <div class="testLevel">
@@ -26,10 +24,10 @@
                     </div>
                 </div>
 
-                <div class="knowledgeHierarchy">
+                  <div class="knowledgeHierarchy">
                   <span>知识体系:</span> 
-                  <p>
-                    <span v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
+                  <p class="knowP">
+                    <span class="KnowPspan" v-for="(item,index) in knowledgeHierarchy" :key="index" >{{item.split('@')[0]}} {{item.split('@')[1]}}道</span>
                   </p>
                 </div>
 
@@ -37,7 +35,6 @@
                   <span>考试时长:</span> 
                   <p>{{examLength}}分钟</p>
                 </div>
-
             </div>
 
                 <div class="examFee">
@@ -238,18 +235,17 @@ export default {
         padding-bottom: 27px;
         padding-left: 7px;
       }
-      & > p {
+      & > .knowP {
         width: calc( 100% - 7px);
         padding-left: 7px;
         height: 70px;
-        & > span {
-          display: block;
-          float: left;
-          width: 140px;
-          font-size: 16px;
-          height: 70px;
-          line-height: 70px;
-          margin-right: 10px;
+        & >.KnowPspan {
+           float: left;
+           width: auto;
+           font-size: 16px;
+           height: 70px;
+           line-height: 70px;
+           margin-right: 20px;
         }
       }
     }

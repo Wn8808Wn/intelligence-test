@@ -98,7 +98,8 @@ export default {
     return {
       isRouterAlive: true,
       activeIndex: '/examManage',
-      keyPath: ""
+      keyPath: "",
+      nodeRouter:''
     };
   },
   watch:{
@@ -115,9 +116,19 @@ export default {
     },
     handleSelect(key, keyPath) {
       this.keyPath = keyPath[0];
+      console.log(key,'uuu')
+      this.nodeRouter = key
       this.reload();
-    }
+    },
+
   },
+  mounted(){
+    window.addEventListener('beforeunload', e => {
+        alert(0)
+        this.activeIndex = this.nodeRouter;
+    });
+  }
+ 
 };
 </script>
 

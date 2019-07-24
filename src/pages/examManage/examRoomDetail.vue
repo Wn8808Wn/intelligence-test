@@ -3,47 +3,29 @@
         <div class="examRoomInfo">
              <div class="prov unit">
                 <span class="commontips">管理单位:</span>
-                <el-select v-model="manageUnit"  :disabled="disabled">
-                    <el-option
-                    :value="manageUnit">
-                    </el-option>
-                </el-select>
+                <el-input v-model="manageUnit"  :disabled="disabled">
+                </el-input>
             </div>
             <div class="prov invenunit">
                 <span class="commontips">投资单位:</span>
-                <el-select v-model="investUnit"  :disabled="disabled">
-                    <el-option
-                    :value="investUnit">
-                    </el-option>
-                </el-select>
+                <el-input v-model="investUnit"  :disabled="disabled"></el-input>
+               
             </div>
 
             <div class="prov">
                 <span class="commontips">考场地址:(省)</span>
-                <el-select v-model="province"  :disabled="disabled">
-                    <el-option
-                    :value="province">
-                    </el-option>
-                </el-select>
+                <el-input v-model="province"  :disabled="disabled"></el-input>
             </div>
 
 
              <div class="prov">
                 <span class="commontips">市</span>
-                <el-select v-model="city"  :disabled="disabled">
-                    <el-option
-                    :value="city">
-                    </el-option>
-                </el-select>
+                <el-input v-model="city"  :disabled="disabled"> </el-input>
             </div>
 
             <div class="prov">
                 <span class="commontips">区/县</span>
-                <el-select   v-model="distric"  :disabled="disabled">
-                    <el-option
-                    :value="distric">
-                    </el-option>
-                </el-select>
+                <el-input   v-model="distric"  :disabled="disabled"></el-input>
             </div>
 
             <div class="prov address">
