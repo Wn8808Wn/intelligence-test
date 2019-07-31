@@ -16,7 +16,7 @@
                 </el-form-item>
                 <div class="remember">
                     <label class="check-box">
-                    <input type="checkbox"  v-model="remember" />&nbsp;&nbsp;记住密码</label>
+                    <input class="inpt" type="checkbox"  v-model="remember" />&nbsp;&nbsp;记住密码</label>
                 </div>
                 <div class="forget">
                     <label class="check-box"   v-model="forget" />&nbsp;&nbsp;忘记密码？</label>
@@ -127,12 +127,6 @@ export default {
     }
   },
   created() {
-    // var whdef = 100 / 1920; // 表示1920的设计图,使用100PX的默认值
-    // var wH = window.innerHeight; // 当前窗口的高度
-    // var wW = window.innerWidth; // 当前窗口的宽度
-    // var rem = wW * whdef; // 以默认比例值乘以当前窗口宽度,得到该宽度下的相应FONT-SIZE值
-    // $("html").css("font-size", rem + "px");
-    // console.log(rem);
     if (Cookies.get("dsName") != null) {
       this.form.username = Cookies.get("dsName") || "";
       this.form.password = Cookies.get("dsWord") || "";
@@ -180,11 +174,15 @@ export default {
     left: 8.78rem;
     top: 2.23rem;
     position: absolute;
-    background: url(../../assets/login_bg.png) no-repeat;
+    background: url('../../assets/login_bg.png') no-repeat;
     background-size: cover;
     .remember {
       float: left;
       font-size: 0.14rem;
+      .inpt{
+          height: 16px;
+          width: 16px;
+        }
     }
     .forget {
       float: right;
@@ -227,7 +225,7 @@ export default {
     line-height: 1;
     color: #ff0000;
   }
-  & /deep/ .el-form-item {
+  &>.el-form-item {
     margin-bottom: 0;
     width: 100%;
     position: relative;
@@ -245,13 +243,13 @@ export default {
       z-index: 10;
     }
 
-    & /deep/ .el-form-item__content {
+    &>.el-form-item__content{
       width: 100%;
       height: 0.33rem;
-      & /deep/ .el-input {
+      &>.el-input {
         width: 100%;
         height: 0.36rem;
-        & /deep/ .el-input__inner {
+        &>.el-input__inner {
           height: 0.33rem;
           padding: 0;
           border: none;

@@ -309,6 +309,9 @@ export default {
           this.timeOff--;
           if(this.timeOff<=0){
            this.dialogVisible =false;
+           this.form.examLev =1;
+           this.selectDate ='';
+           this.timeList = [];
            let params = new URLSearchParams()
            params.append("roomId", this.roomId);
            params.append('activeStatus',0)

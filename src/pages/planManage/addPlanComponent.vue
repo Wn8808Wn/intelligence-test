@@ -85,9 +85,9 @@
         <div class="tabs-data" id="addPlanTabs">     
             <el-table 
             border
+            :sort-method='sortExamLevel'
             :data="tableData" 
             style="width: 862px">
-
             <el-table-column
             label="日期"
             width="153">
@@ -108,7 +108,7 @@
               <template slot-scope="scope">
                   <span>{{scope.row.levelStr.replace(/,/g,'/')}}</span>
                   <span style="margin-left:10px">({{scope.row.timeStr}}钟)</span>
-                  <i  v-if='showDelIcon' class="el-icon-error" @click="delCurRow(scope.row)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
+                  <i  v-if='showDelIcon && outTime(scope.row.openTime)' class="el-icon-error" @click="delCurRow(scope.row)" style="cursor:pointer;color:#1f91b5;margin-left:10px;"></i>
               </template>
             </el-table-column>
 
@@ -190,9 +190,20 @@ export default {
     };
   },
   methods: {
+    sortExamLevel(a,b){
+      return a-b;
+    },
+    outTime(time){
+        var strtime = time.replace("/-/g", "/");//时间转换
+        var date1=new Date(strtime).getTime();
+        //现在时间
+        var date2=new Date().getTime();
+        //判断时间是否过期
+        return date1>date2?true:false;
+    },
     getData(params){
         this.$http.get("/api/plan/room_plan",params).then(res =>{
-          // console.log(res,'000')
+          console.log(res,'000')
           if(res.data.code === 0){
             this.tableData=[];
             this.totalPage = res.data.data.totalPage;
@@ -323,6 +334,9 @@ export default {
           this.timeOff--;
           if(this.timeOff<=0){
            this.dialogVisible =false;
+           this.form.examLev =1;
+           this.selectDate ='';
+           this.timeList = [];
            let params = new URLSearchParams()
            params.append("roomId", this.examRoomId);
            params.append('activeStatus',0)
@@ -340,6 +354,7 @@ export default {
       params.append("endDate", this.selectDate[1]);
       params.append("timeStrs", JSON.stringify(this.timeList));
       this.muchDate = (this.selectDate[1].getTime()-this.selectDate[0].getTime())/(1000*60*60*24)+1
+      console.log(this.muchDate,'this.machdate')
       this.$http.post("/api/plan/add_plan", params).then(res => {
           if(res.data.code===0){
               var p1 = new Promise( (resolve, reject)=> {

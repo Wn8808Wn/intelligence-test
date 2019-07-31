@@ -33,7 +33,8 @@
                 <el-table-column
                 prop="examLevel"
                 label="级别"
-                sortable  
+                sortable
+                :sort-method="sortExamLevel"  
                 width="78">
                 </el-table-column>
                 <el-table-column
@@ -114,6 +115,9 @@ export default {
     };
   },
   methods: {
+    sortExamLevel(a,b){
+      return a.sortNum-b.sortNum  //获取name上的数据进行排序
+    },
     indexMethod(index){
             return index+1+this.pageSize*(this.currentPage-1);
     },

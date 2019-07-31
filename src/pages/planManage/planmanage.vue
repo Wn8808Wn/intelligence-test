@@ -47,8 +47,8 @@ export default {
 //  标签页样式
 .planmanage {
   width: 1429px;
-  min-height: 926px;
-  height: 926px;
+  min-height: 925px;
+  height: 925px;
   & /deep/ .el-tabs--border-card > .el-tabs__content {
     padding: 0px;
   }

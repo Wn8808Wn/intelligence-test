@@ -11,7 +11,7 @@
 img { max-width: 100%;}
 .commonRight{
   overflow: hidden;
-  max-height: 926px;
+  max-height: 925px;
   margin-right: 319px;
   padding-top: 13px;
   .el-tabs--border-card{
@@ -288,7 +288,7 @@ img { max-width: 100%;}
 
 //头部标题icon 间距控制
 .el-tabs .el-tabs__item.is-top, .el-tabs .el-tabs__item.is-top.is-active{
-    & /deep/ span{
+    &>span{
       &>i{
         padding-right: 12px;
       }

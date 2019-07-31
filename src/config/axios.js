@@ -11,8 +11,8 @@ axios.defaults.withCredentials = true;
 let msg;
 //HTTPrequest拦截
 axios.interceptors.request.use(config => {
-    if (sessionStorage.getItem('token')) {
-		config.headers['Authorization'] = sessionStorage.getItem('token') 
+    if (sessionStorage.getItem('dsToken')) {
+		config.headers['Authorization'] = sessionStorage.getItem('dsToken') 
     }
 	return config
 }, error => {
@@ -20,6 +20,7 @@ axios.interceptors.request.use(config => {
 })
 //HTTPresponse拦截
 axios.interceptors.response.use( response => {
+
     if(response.data.data === 401){
         console.log('token过期啦')
         //重定向到登录页面
@@ -34,4 +35,4 @@ axios.interceptors.response.use( response => {
 	return Promise.reject(new Error(error));
 
 })
-export default axios
+export default axios;

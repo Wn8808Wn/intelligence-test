@@ -25,7 +25,7 @@
                      <i class="iconfont icon-kaotibiaozhunguanli-"></i>
                     <span slot="title">考题标准管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/planManage/limiteSet">
+                <el-menu-item  index="/planManage/planList">
                      <i class="iconfont icon-kaoshijihuaguanli-"></i>
                     <span slot="title">考试计划管理</span>
                 </el-menu-item>
@@ -71,7 +71,7 @@
             <div class="user-info">
                 <img src="../assets/userimg.png" alt="">
                 <span>超级管理员</span>
-                <i class="iconfont icon-tuichu-" style="margin-left:13px;vertical-align:middle;color:#4d655e; cursor:pointer"></i>
+                <i class="iconfont icon-tuichu-" style="margin-left:13px;vertical-align:middle;color:#4d655e; cursor:pointer" @click="logOut"></i>
 
             </div>
 
@@ -120,6 +120,15 @@ export default {
       this.nodeRouter = key
       this.reload();
     },
+    logOut(){
+      let dataStr = new URLSearchParams();
+      dataStr.append("token", sessionStorage.getItem('dsToken'));
+      this.$http.post("/api/logout", dataStr).then(res => {
+        if(res.data.code === 0 ){
+          alert('退出成功')
+        }
+      })
+    }
 
   },
   mounted(){

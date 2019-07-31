@@ -26,6 +26,7 @@ export default {
 <style rel='stylesheet/scss' lang="scss" scoped>
 .orderManage {
     width: 1196px;
+    height: 925px;
     & /deep/ .el-tabs--border-card > .el-tabs__content {
         padding: 0px;
     }
