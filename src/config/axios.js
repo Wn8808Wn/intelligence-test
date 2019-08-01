@@ -12,7 +12,7 @@ let msg;
 //HTTPrequest拦截
 axios.interceptors.request.use(config => {
     if (sessionStorage.getItem('dsToken')) {
-		config.headers['Authorization'] = sessionStorage.getItem('dsToken') 
+		config.headers['Token'] = sessionStorage.getItem('dsToken') 
     }
 	return config
 }, error => {

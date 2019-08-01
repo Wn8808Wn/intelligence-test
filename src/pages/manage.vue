@@ -84,7 +84,7 @@
 
 
 <script>
-
+import Cookies from "js-cookie";
 import "../assets/iconfont/iconfont.css"
 export default {
   name:'manage',
@@ -125,7 +125,9 @@ export default {
       dataStr.append("token", sessionStorage.getItem('dsToken'));
       this.$http.post("/api/logout", dataStr).then(res => {
         if(res.data.code === 0 ){
-          alert('退出成功')
+            sessionStorage.clear()
+            Cookies.remove("dsName");
+            Cookies.remove("dsWord");
         }
       })
     }
@@ -136,8 +138,7 @@ export default {
         alert(0)
         this.activeIndex = this.nodeRouter;
     });
-  }
- 
+  },
 };
 </script>
 

@@ -4,10 +4,18 @@ import Router from 'vue-router'
 Vue.use(Router)
 export default new Router({
   mode: 'history',
-  routes: [{
+  routes: [
+    //方便后期维护入口
+    {
       path: '/',
       name: 'login',
       component: () => import('@/pages/login/login'),
+    }, 
+    //接入第三方平台用于跳转
+    {
+      path: '/loading',
+      name: 'loading',
+      component: () => import('@/pages/loading'),
     }, 
     {
       path: '/manage',

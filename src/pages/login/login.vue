@@ -124,7 +124,7 @@ export default {
           });
         }
       });
-    }
+    },
   },
   created() {
     if (Cookies.get("dsName") != null) {
@@ -136,7 +136,8 @@ export default {
       this.form.password = "";
       this.remember = false;
     }
-  }
+  },
+ 
 };
 </script>
 
