@@ -12,7 +12,7 @@ module.exports = {
     proxyTable: {
       '/api': {
           // target: 'http://192.168.1.126:8080',//辉哥后端接口地址  
-          target: 'http://192.168.1.147:8080',//钟宇宏后端接口地址  
+          target: 'http://192.168.1.142:8080',//钟宇宏后端接口地址  
           // target: 'http://39.98.82.63:8080', 
           changeOrigin: true,//是否允许跨越
           pathRewrite: {

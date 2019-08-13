@@ -374,8 +374,6 @@ export default {
   },
   mounted() {
     let params = new URLSearchParams();
-    params.append("userId", 1);
-    params.append("provinceCode",110000) //后期更改 目前传值110000
     this.$http.get("/api/room/get_room_by_province", { params }).then(res => {
       // console.log(res,"addplan")
       if (res.status === 200 && res.data.code === 0) {

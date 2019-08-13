@@ -133,12 +133,12 @@ export default {
             this.unitsList  = res.data.data.unitsList;
             this.unitsList.unshift({unitName:'全部',id:0})
             this.levelList = res.data.data.levelList;
-            this.tableData.forEach( (item,index) =>{
-                item.manageUnit = this.unitsList.filter( (val) => val.id === item.manageUnit)[0].unitName
-                item.examLevel = this.levelList.filter( (val) => val.id === item.examLevel)[0].levelName
-                item.itemDifficulty = this.levelList.filter( (val) => val.id === parseInt(item.itemDifficulty))[0].levelName
-                item.updatedTime = item.updatedTime.split(' ')[0]
-            } )
+            // this.tableData.forEach( (item,index) =>{
+            //     item.manageUnit = this.unitsList.filter( (val) => val.id == item.manageUnit)[0].unitName
+            //     item.examLevel = this.levelList.filter( (val) => val.id == item.examLevel)[0].levelName
+            //     item.itemDifficulty = this.levelList.filter( (val) => val.id == parseInt(item.itemDifficulty))[0].levelName
+            //     item.updatedTime = item.updatedTime.split(' ')[0]
+            // } )
         })
     },
     handleAddStandard() {

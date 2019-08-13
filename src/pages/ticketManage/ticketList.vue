@@ -106,7 +106,7 @@
             <div class="examerInfo">
                 <div class="lf">
                     <p>姓　　名:<span>{{this.examerInfo.playerName}}</span></p>
-                    <p>性　　别:<span>{{this.examerInfo.gender == 0? '女' : '男'}}</span> 证件类型:<span style="color:#000;margin-left:20px;">{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
+                    <p>性　　别:<span>{{this.examerInfo.gender == 0? '男' : '女'}}</span> 证件类型:<span style="color:#000;margin-left:20px;">{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
                     <p><i class="threeLetter">证件号</i>:<span>{{this.examerInfo.certificateNo}}</span></p>
                     <p>报考等级:<span>{{this.examerInfo.examLevel}}</span></p>
                     <p>准考证号:<span>{{this.examerInfo.examPermitNo}}</span></p>

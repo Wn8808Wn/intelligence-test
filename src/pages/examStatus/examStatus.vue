@@ -165,7 +165,7 @@ export default {
         },
         {
           value: 0,
-          label: "未考试"
+          label: "待考试"
         },
         {
           value: 1,
