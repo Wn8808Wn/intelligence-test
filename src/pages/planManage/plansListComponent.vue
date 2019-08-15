@@ -200,7 +200,7 @@ export default {
         },
         searchData(){
             let params = new URLSearchParams();
-            params.append("provinceId",110000);
+            // params.append("provinceId",110000);
             params.append("paramStr",this.inputVal)
             if(this.manageUnitId !== ''){
                 params.append("manageUnit",this.manageUnitId)
@@ -223,7 +223,7 @@ export default {
         },
         changePickerTime(val){
             let params = new URLSearchParams();
-            params.append("provinceId",110000);
+            // params.append("provinceId",110000);
             if(this.pickerTime !== '' && this.pickerTime !== null){
                 params.append("begin",this.pickerTime[0])
                 params.append("end",this.pickerTime[1])
@@ -248,7 +248,7 @@ export default {
         changeManageUnit(val){
             this.manageUnitId = val;
             let params = new URLSearchParams();
-            params.append("provinceId",110000);
+            // params.append("provinceId",110000);
             params.append("manageUnit",val)
             if(this.inputVal !== ''){
                 params.append("paramStr",this.inputVal)          
@@ -270,7 +270,7 @@ export default {
             this.examRoomId =val;
             let params = new URLSearchParams();
             params.append("roomId",val)
-            params.append("provinceId",110000);
+            // params.append("provinceId",110000);
             if(this.inputVal !== ''){
                 params.append("paramStr",this.inputVal)        
             }else{
@@ -306,7 +306,7 @@ export default {
         },
         handleCurrentChange(val){
             let params = new URLSearchParams();
-            params.append("provinceId",110000);
+            // params.append("provinceId",110000);
             params.append("page", val);
             if(this.inputVal !== ''){
                 params.append("paramStr",this.inputVal)        
@@ -331,16 +331,8 @@ export default {
         },
     },
     mounted(){
-        // let  params={
-        //     "provinceId":110000,
-        //     "manageUnit":0,
-        //     "roomId":0,
-        //     // begin:this.pickerTime[0],
-        //     // end:this.pickerTime[1],
-        //     "paramStr":''
-        // }
         let params = new URLSearchParams();
-        params.append("provinceId", 110000);
+        // params.append("provinceId", 110000);
         params.append("manageUnit", 0);
         params.append("roomId", 0);
         params.append("paramStr", '');

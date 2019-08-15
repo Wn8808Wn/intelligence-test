@@ -149,12 +149,10 @@ export default {
   min-height: 938px;
   background: #f0f0f0;
   position: relative;
-  // overflow: hidden;
   overflow-y:auto;
   .left-box {
     width: 176px;
-    height: 100%;
-    // min-height: 938px;
+    min-height: 938px;
     float: left;
     margin-right: 13px;
     background: #222f3c;
@@ -222,7 +220,6 @@ export default {
     margin-left:176px;
     min-height: 938px;
     background: #f0f0f0;
-    // background: red;
   }
 }
 //白色三角形

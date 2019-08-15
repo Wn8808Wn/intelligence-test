@@ -31,11 +31,12 @@ export default {
     params.append('permission',userInfo.permission)
     //   console.log(params,'params')
       next( vm =>{
-        //   http://39.98.82.63:8080/loginByPlatform
           vm.$http.post('/api/loginByPlatform',params).then( res =>{
-              if( res.data.code === 0){
-                  vm.loading = false;
+              if( res.data.code == 0){
                   console.log(res.data,'00')
+                  sessionStorage.setItem("dsToken",res.data.data.token)
+                  console.log(sessionStorage.getItem("dsToken"),'token')
+                  vm.loading = false;
                   vm.$router.push({name:'manage'})
               }
           })
