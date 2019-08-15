@@ -128,13 +128,13 @@ export default {
         handleCurrentChange(val){
             let params = new URLSearchParams();
             params.append("page", val);
-            params.append("userId", 1);
+           params.append("userId", 1);
             this.getData("/api/message/notice_list", { params });
         }
     },
     mounted(){
         let params = new URLSearchParams();
-        params.append("userId", 1);
+       params.append("userId", 1);
         this.getData("/api/message/notice_list", { params });
     }
 }

@@ -14,7 +14,7 @@
             stripe
             style="width: 100%">
                 <el-table-column
-                prop="manageUnit"
+                prop="manageUnitName"
                 label="管理单位"
                 width="190">
                 </el-table-column>
@@ -106,7 +106,10 @@
             <div class="examerInfo">
                 <div class="lf">
                     <p>姓　　名:<span>{{this.examerInfo.playerName}}</span></p>
-                    <p>性　　别:<span>{{this.examerInfo.gender == 0? '男' : '女'}}</span> 证件类型:<span style="color:#000;margin-left:20px;">{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
+                    <p>性　　别:<span v-if="this.examerInfo.gender == 1">男</span>
+                        <span v-if="this.examerInfo.gender == 2">女</span>
+                        <span v-if="this.examerInfo.gender == 9">未知</span>
+                     证件类型:<span style="color:#000;margin-left:20px;">{{this.examerInfo.certificateType == 1? '身份证' :'护照'}}</span></p>
                     <p><i class="threeLetter">证件号</i>:<span>{{this.examerInfo.certificateNo}}</span></p>
                     <p>报考等级:<span>{{this.examerInfo.examLevel}}</span></p>
                     <p>准考证号:<span>{{this.examerInfo.examPermitNo}}</span></p>
@@ -193,7 +196,7 @@ export default {
                     this.levelList = res.data.data.levelList;
                     this.tableData.forEach( (item,index) =>{
                         item.examTime = this.getTimeStyle(item.examTime)
-                        item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
+                        // item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
                         item.chessLevel = this.levelList.filter( (value) => value.id === item.chessLevel)[0].levelName
                         item.examLevel = this.levelList.filter( (value) => value.id === item.examLevel)[0].levelName
                     } )
@@ -207,7 +210,7 @@ export default {
             this.showDetailPage = true;
             let params = new URLSearchParams();
             params.append("id",id);
-            params.append("userId", 1);
+           params.append("userId", 1);
             this.$http.get("/api/ticket/details_list", { params }).then( res => {
                 // console.log(res.data.data,111112)
                 let rst = res.data.data
@@ -241,7 +244,7 @@ export default {
                }
                if( reg.test(this.email)) { 
                    let params = new URLSearchParams();
-                   params.append("userId", 1);
+                  params.append("userId", 1);
                    params.append("id", 1);
                    params.append(email, this.email);
                 //    this.getData('/api/ /ticket/details_send',params) 
@@ -255,13 +258,13 @@ export default {
         handleCurrentChange(val) {
             let params = new URLSearchParams();
             params.append("page",val);
-            params.append("userId", 1);
+           params.append("userId", 1);
             this.getData("/api/ticket/manage_list", { params });
         },
         searchData(){
             // alert(this.nameNum)
             let params = new URLSearchParams();
-            params.append("userId", 1);
+           params.append("userId", 1);
             params.append("id", 1);
             params.append("str",this.nameNum)
             this.getData('/api/ticket/manage_list', { params })
@@ -272,7 +275,7 @@ export default {
     },
     mounted(){
         let params = new URLSearchParams();
-        params.append("userId", 1);
+       params.append("userId", 1);
         params.append("id", 1);
         this.getData('/api/ticket/manage_list', { params })
     }

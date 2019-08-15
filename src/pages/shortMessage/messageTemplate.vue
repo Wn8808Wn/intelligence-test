@@ -105,7 +105,7 @@ export default {
         handleCurrentChange(val){
             let params = new URLSearchParams();
             params.append("page", val);
-            params.append("userId", 1);
+           params.append("userId", 1);
             this.getData("/api/message/template_list", { params });
         },
         serverTypeAdd(){
@@ -113,7 +113,7 @@ export default {
                 let addCurrentPage = this.totalPage;
                 let params = new URLSearchParams();
                 params.append("page", addCurrentPage);
-                params.append("userId", 1);
+               params.append("userId", 1);
                 this.$http.get("/api/message/template_list",{ params }).then( res => {
                 // console.log(res,1111)
                 this.total = res.data.data.total;
@@ -152,7 +152,7 @@ export default {
                 center: true
                 });
                 let params = new URLSearchParams();
-                params.append("userId", 1);
+               params.append("userId", 1);
                 this.getData('/api/message/template_list',{ params })
                 })  
             }else{
@@ -171,7 +171,7 @@ export default {
                                     center: true
                                 });
                             let params = new URLSearchParams();
-                            params.append("userId", 1);
+                           params.append("userId", 1);
                             this.getData('/api/message/template_list',{ params })
                             }
                         });
@@ -190,7 +190,7 @@ export default {
     },
     mounted(){
         let params = new URLSearchParams();
-        params.append("userId", 1);
+       params.append("userId", 1);
         this.getData('/api/message/template_list',{ params })
     }
       

@@ -250,7 +250,7 @@ export default {
            let params = new URLSearchParams();
             params.append("roomId", this.roomId);
             params.append('activeStatus',0)
-            params.append("provinceCode",110000) //后期更改
+            // params.append("provinceCode",110000) //后期更改
             this.getData({ params })
           }else{
              this.$message({
@@ -275,7 +275,7 @@ export default {
             let params = new URLSearchParams();
             params.append("roomId", this.roomId);
             params.append('activeStatus',0)
-            params.append("provinceCode",110000) //后期更改
+            // params.append("provinceCode",110000) //后期更改
             this.getData({ params })
             this.$message({
               type:'success',
@@ -315,7 +315,7 @@ export default {
            let params = new URLSearchParams()
            params.append("roomId", this.roomId);
            params.append('activeStatus',0)
-           params.append("provinceCode",110000) //后期更改
+          //  params.append("provinceCode",110000) //后期更改
            this.getData({ params })
            clearInterval(timer);
           }
@@ -358,7 +358,7 @@ export default {
     this.examPlanEditId = this.$route.query.id;
     this.roomId = this.$route.query.roomId
     let params = new URLSearchParams();
-    params.append("provinceCode",110000) //后期更改
+    // params.append("provinceCode",110000) //后期更改
     this.$http.get("/api/room/get_room_by_province", { params }).then( res =>{
        if (res.data.code === 0) {
             console.log(res,'res')
@@ -369,7 +369,7 @@ export default {
               this.realSeatings =obj[0].seatSize-obj[0].spareSeatSize
               this.examRoomName = obj[0].examRoomName
               let params = new URLSearchParams();
-              params.append("provinceCode",110000) //后期更改
+              // params.append("provinceCode",110000) //后期更改
               params.append("roomId", this.roomId)
               this.getData({params})
             }

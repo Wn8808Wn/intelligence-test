@@ -144,7 +144,7 @@ export default {
       let params = new URLSearchParams();
       params.append("page", val);
       params.append("dataType", this.dataType);
-      params.append("userId", 1);
+     params.append("userId", 1);
       if(this.currManageUnit !== ''){
         params.append("manageUnit", this.currManageUnit);  
       }else{
@@ -156,7 +156,7 @@ export default {
       let params = new URLSearchParams();
       this.manageUnit =val;
       params.append("manageUnit", val);  
-      params.append("userId", 1);
+     params.append("userId", 1);
       params.append("dataType", this.dataType);
       this.getData(params);
     },
@@ -175,7 +175,7 @@ export default {
     //进入页面显示考题标准信息
     let params = new URLSearchParams();
     params.append("manageUnit", 0);
-    params.append("userId", 1);
+   params.append("userId", 1);
     params.append("dataType", 0);
     this.getData(params);
   }

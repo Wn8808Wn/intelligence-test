@@ -123,7 +123,7 @@ export default {
       //分页切换当前页
       let params = new URLSearchParams();
       params.append("dataStatus", 1);
-      params.append("userId", 1);
+     params.append("userId", 1);
       params.append("page", val);
       this.getData("/api/room/room_list", { params });
     },200),
@@ -144,7 +144,7 @@ export default {
           this.$http.post("/api/room/update_status", params).then( res =>{
 
             let params = new URLSearchParams();
-            params.append("userId", 1);
+           params.append("userId", 1);
             params.append("dataStatus", 1);
             this.getData("/api/room/room_list", { params });
             this.$message({

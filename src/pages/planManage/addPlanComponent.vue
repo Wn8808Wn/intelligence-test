@@ -224,12 +224,12 @@ export default {
     },
     chooseRoom(val) {
       this.addStatus =1; //选择考场后新增功能可用
+      console.log(val,'val')
       var obj = this.roomList.filter(item => item.id === val);
       this.realSeatings = obj[0].seatSize-obj[0].spareSeatSize
       let params = new URLSearchParams();
       params.append("roomId", val);
       params.append('activeStatus',0)
-      params.append("provinceCode",110000) //后期更改
       this.getData({ params })
     },
     showDelIconEvent() {
@@ -249,7 +249,7 @@ export default {
       params.append("page", val);
       params.append('activeStatus',0)
       params.append("roomId", this.examRoomId)
-      params.append("provinceCode",110000) //后期更改
+      // params.append("provinceCode",110000) //后期更改
       this.getData({ params });
     },
     //删除当前行
@@ -271,7 +271,7 @@ export default {
            let params = new URLSearchParams();
             params.append("roomId", this.examRoomId);
             params.append('activeStatus',0)
-            params.append("provinceCode",110000) //后期更改
+            // params.append("provinceCode",110000) //后期更改
             this.getData({ params })
           //  console.log(row.id,this.$store.state.deleCurrentRowId,"22222")
           }else{
@@ -297,7 +297,7 @@ export default {
             let params = new URLSearchParams();
             params.append("roomId", this.examRoomId);
             params.append('activeStatus',0)
-            params.append("provinceCode",110000) //后期更改
+            // params.append("provinceCode",110000) //后期更改
             this.getData({ params })
             this.$message({
               type:'success',
@@ -340,7 +340,7 @@ export default {
            let params = new URLSearchParams()
            params.append("roomId", this.examRoomId);
            params.append('activeStatus',0)
-           params.append("provinceCode",110000) //后期更改
+          //  params.append("provinceCode",110000) //后期更改
            this.getData({ params })
            clearInterval(timer);
           }
@@ -375,8 +375,8 @@ export default {
   mounted() {
     let params = new URLSearchParams();
     this.$http.get("/api/room/get_room_by_province", { params }).then(res => {
-      // console.log(res,"addplan")
-      if (res.status === 200 && res.data.code === 0) {
+      console.log(res,"roomList")
+      if ( res.data.code === 0) {
         this.roomList = res.data.data;
       }
     });

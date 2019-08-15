@@ -166,7 +166,7 @@ export default {
                     this.totalPage = res.data.data.planPage.totalPage;
                     this.pageSize = res.data.data.planPage.pageSize;
                     this.currentPage = res.data.data.planPage.page;
-                    // console.log(res.data.data,'999')
+                    console.log(res.data.data,'999')
                     let rst = res.data.data;
                     this.unitsList = rst.unitsList
                     this.unitsList.unshift({unitName:'全部',id:0})

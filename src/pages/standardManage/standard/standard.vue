@@ -26,7 +26,7 @@
                 width="74">
                 </el-table-column>
                 <el-table-column
-                prop="manageUnit"
+                prop="manageUnitName"
                 label="管理单位"
                 width="165">
                 </el-table-column>
@@ -124,7 +124,7 @@ export default {
     getData(params){
         this.$http.get("/api/standard/standard_list", { params }).then(res => {
             this.tableData=[];
-            console.log(res,'88');
+            console.log(res.data.data.standPage.rows,'000');
             this.total = res.data.data.standPage.total;
             this.pageSize = res.data.data.standPage.pageSize;
             this.currentPage = res.data.data.standPage.page;
@@ -133,12 +133,11 @@ export default {
             this.unitsList  = res.data.data.unitsList;
             this.unitsList.unshift({unitName:'全部',id:0})
             this.levelList = res.data.data.levelList;
-            // this.tableData.forEach( (item,index) =>{
-            //     item.manageUnit = this.unitsList.filter( (val) => val.id == item.manageUnit)[0].unitName
-            //     item.examLevel = this.levelList.filter( (val) => val.id == item.examLevel)[0].levelName
-            //     item.itemDifficulty = this.levelList.filter( (val) => val.id == parseInt(item.itemDifficulty))[0].levelName
-            //     item.updatedTime = item.updatedTime.split(' ')[0]
-            // } )
+            this.tableData.forEach( (item,index) =>{
+                item.examLevel = this.levelList.filter( (val) => val.id == item.examLevel)[0].levelName
+                item.itemDifficulty = this.levelList.filter( (val) => val.id == parseInt(item.itemDifficulty))[0].levelName
+                item.updatedTime = item.updatedTime.split(' ')[0]
+            } )
         })
     },
     handleAddStandard() {
@@ -148,7 +147,7 @@ export default {
       let params = new URLSearchParams();
       params.append("page", val);
       params.append("dataType", this.dataType);
-      params.append("userId", 1);
+     params.append("userId", 1);
       if(this.currManageUnit !== ''){
         params.append("manageUnit", this.currManageUnit);  
       }else{
@@ -160,7 +159,7 @@ export default {
       let params = new URLSearchParams();
       this.manageUnit =val;
       params.append("manageUnit", val);   
-      params.append("userId", 1);
+     params.append("userId", 1);
       params.append("dataType", this.dataType);
       this.getData(params);
     },
@@ -177,7 +176,6 @@ export default {
     //进入页面显示考题标准信息
     let params = new URLSearchParams();
     params.append("manageUnit", 0);
-    params.append("userId", 1);
     params.append("dataType", 1);
     this.getData(params);
   }
