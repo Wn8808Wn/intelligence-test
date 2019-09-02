@@ -365,6 +365,7 @@ export default {
               var p2 = new Promise( (resolve, reject) => {
                   setTimeout(()=>{
                       this.dialogVisible =true;
+                      this.timeOff = 5 ;
                       this.setIntervalFn()
                   }, 3500, 'P2');
               });
