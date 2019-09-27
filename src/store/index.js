@@ -9,7 +9,8 @@ const state = {
     examPlanEditId:null,
     roomId:null,
     deleCurrentRowId:null,
-    //登录页面设置token
+    //登录页面存储用户信息
+    userInfo:{}
 }
 
 const getters = {
@@ -20,6 +21,10 @@ const getters = {
 }
 
 const  mutations = {
+    saveUserInfo(state,val){
+        state.userInfo = val;
+        console.log(state.userInfo)
+    },
     modifyData(state,val){
         state.examPlanEditId = val.currentId;
         state.roomId =val.storeRoomId
@@ -34,6 +39,9 @@ const  mutations = {
 }
 
 const actions = {
+    saveUserInfo({commit},userInfo){
+        commit('saveUserInfo',userInfo)
+    },
     modifyDate({commit},obj){
         commit('modifyData',obj)
     },
@@ -45,7 +53,7 @@ const actions = {
     }
 }
 
-export default new Vuex.Store({
+export default  new Vuex.Store({
     state,
     mutations,
     getters,

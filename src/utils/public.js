@@ -47,6 +47,8 @@ export function _throttle(fn, interval) {
      return times;
 }
 
+
+
 function  getDateStyle(time){
     let d = new Date(time);
     let times =
@@ -55,3 +57,4 @@ function  getDateStyle(time){
      return times;
 }
 export  {getTimeStyle,getDateStyle}
+

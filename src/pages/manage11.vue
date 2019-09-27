@@ -16,52 +16,52 @@
             text-color="#fff"
             active-text-color="#fff"
             router
-            style="border-right: none">   
-                <el-menu-item index="/examManage">
+            style="border-right: none"> 
+                <el-menu-item index="/examManage" v-if="showHall">
                     <i class="iconfont icon-kaochangguanli-"></i>
                     <span slot="title">考场管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/standardManage">
+                <el-menu-item  index="/standardManage" v-if="showStandard">
                      <i class="iconfont icon-kaotibiaozhunguanli-"></i>
                     <span slot="title">考题标准管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/planManage/planList">
+                <el-menu-item  index="/planManage/planList" v-if="showPlan">
                      <i class="iconfont icon-kaoshijihuaguanli-"></i>
                     <span slot="title">考试计划管理</span>
                 </el-menu-item>
-                <el-menu-item  index="/orderManage">
+                <el-menu-item  index="/orderManage" v-if="showOrder">
                      <i class="iconfont icon-dingdanguanli-"></i>
                     <span slot="title">订单管理</span>
                 </el-menu-item>
-                <el-menu-item index="/examStatus">
+                <el-menu-item index="/examStatus" v-if="showStatus">
                     <i class="iconfont icon-kaoshizhuangtaichaxun-"></i>
                     <span slot="title">考试状态查询</span>
                 </el-menu-item>
-                <el-menu-item index="/ticketManage">
+                <el-menu-item index="/ticketManage" v-if="showPaper">
                    <i class="iconfont icon-zhuankaozhengguanli-"></i>
                     <span slot="title">准考证管理</span>
                 </el-menu-item>
-                <el-menu-item index="7">
+                <el-menu-item index="7" v-if="false">
                     <i class="iconfont icon-caiwuguanli-"></i>
                     <span slot="title">财务管理</span>
                 </el-menu-item>
-                <el-menu-item index="8">
+                <el-menu-item index="8"  v-if="false">
                     <i class="iconfont icon-tongjifenxi-"></i>
                     <span slot="title">统计分析</span>
                 </el-menu-item>
-                <el-menu-item index="9">
+                <el-menu-item index="9"  v-if="false">
                     <i class="iconfont icon-QA-"></i>
                     <span slot="title">Q&A</span>
                 </el-menu-item>
-                <el-menu-item index="/shortMessage">
+                <el-menu-item index="/shortMessage" v-if="showMessage">
                     <i class="iconfont icon-duanxintongzhi-"></i>
                     <span slot="title">短信通知</span>
                 </el-menu-item>
-                <el-menu-item index="11">
+                <el-menu-item index="11"  v-if="false">
                     <i class="iconfont icon-xitongtongzhi-"></i>
                     <span slot="title">系统通知</span>
                 </el-menu-item>
-                <el-menu-item index="12">
+                <el-menu-item index="12"  v-if="false">
                     <i class="iconfont icon-xitongrizhi-"></i>
                     <span slot="title">系统日志</span>
                 </el-menu-item>
@@ -83,28 +83,77 @@
 
 <script>
 import Cookies from "js-cookie";
-import "../assets/iconfont/iconfont.css"
+import "../assets/iconfont/iconfont.css";
 export default {
-  name:'manage',
+  name: "manage",
   // 向后代注入这个provide中的所有内容
   provide() {
     return {
-      reload: this.reload  // 调用的是methods中的方法
+      reload: this.reload // 调用的是methods中的方法
     };
   },
   data() {
     return {
       isRouterAlive: true,
-      activeIndex: '/examManage',
+      activeIndex: "/examManage",
       keyPath: "",
-      nodeRouter:'',
-
+      nodeRouter: "",
+      menuList: "",
+      showHall: false,
+      showStandard: false,
+      showPlan: false,
+      showOrder: false,
+      showStatus: false,
+      showPaper: false,
+      showMessage: false
     };
   },
-  watch:{
-      
-  },
   methods: {
+    showRoleMenuList() {
+      let menuArrlist = this.menuList.split(",");
+      console.log(menuArrlist, "000");
+      if (menuArrlist.indexOf("hall") !== -1) {
+        this.showHall = true;
+      } else {
+        this.showHall = false;
+      }
+
+      if (menuArrlist.indexOf("standard") !== -1) {
+        this.showStandard = true;
+      } else {
+        this.showStandard = false;
+      }
+
+      if (menuArrlist.indexOf("plan") !== -1) {
+        this.showPlan = true;
+      } else {
+        this.showPlan = false;
+      }
+
+      if (menuArrlist.indexOf("order") !== -1) {
+        this.showOrder = true;
+      } else {
+        this.showOrder = false;
+      }
+
+      if (menuArrlist.indexOf("status") !== -1) {
+        this.showStatus = true;
+      } else {
+        this.showStatus = false;
+      }
+
+      if (menuArrlist.indexOf("paper") !== -1) {
+        this.showPaper = true;
+      } else {
+        this.showPaper = false;
+      }
+      
+      if (menuArrlist.indexOf("message") !== -1) {
+        this.showMessage = true;
+      } else {
+        this.showMessage = false;
+      }
+    },
     reload() {
       // 调用这个reload()函数时，v-if=false,页面会将router-view中的DOM元素全部删除，当页面更新完毕时，
       //再重新创建一个router-view出口。这时里面的页面内容会重新加载。
@@ -115,29 +164,34 @@ export default {
     },
     handleSelect(key, keyPath) {
       this.keyPath = keyPath[0];
-      console.log(key,'uuu')
-      this.nodeRouter = key
+      console.log(key, "uuu");
+      this.nodeRouter = key;
       this.reload();
     },
-    logOut(){
+    logOut() {
       let dataStr = new URLSearchParams();
-      dataStr.append("token", sessionStorage.getItem('dsToken'));
+      dataStr.append("token", sessionStorage.getItem("dsToken"));
       this.$http.post("/api/logout", dataStr).then(res => {
-        if(res.data.code === 0 ){
-            sessionStorage.clear()
-            Cookies.remove("dsName");
-            Cookies.remove("dsWord");
+        if (res.data.code === 0) {
+          sessionStorage.clear();
+          Cookies.remove("dsName");
+          Cookies.remove("dsWord");
         }
-      })
+      });
     }
-
   },
-  mounted(){
-    window.addEventListener('beforeunload', e => {
-        alert(0)
-        this.activeIndex = this.nodeRouter;
+  mounted() {
+    window.addEventListener("beforeunload", e => {
+      alert(0);
+      this.activeIndex = this.nodeRouter;
     });
   },
+  created() {
+    console.log(this.$store.state.userInfo, "this.$store.state.userInfo");
+    this.menuList = this.$store.state.userInfo.menu;
+    // console.log(this.menuList,'this.menuList')
+    this.showRoleMenuList();
+  }
 };
 </script>
 
@@ -148,7 +202,7 @@ export default {
   min-height: 938px;
   background: #f0f0f0;
   position: relative;
-  overflow-y:auto;
+  overflow-y: auto;
   .left-box {
     width: 176px;
     min-height: 938px;
@@ -167,8 +221,8 @@ export default {
       }
       & > span {
         font-size: 16px;
-        color:#52b1cf;
-        font-weight:700;
+        color: #52b1cf;
+        font-weight: 700;
         float: right;
         margin-top: 26px;
         margin-bottom: 25px;
@@ -216,7 +270,7 @@ export default {
     }
   }
   #right-box {
-    margin-left:176px;
+    margin-left: 176px;
     min-height: 938px;
     background: #f0f0f0;
   }
@@ -229,7 +283,7 @@ export default {
     content: "";
     width: 0;
     height: 0;
-    border: 12px  solid #fff;
+    border: 12px solid #fff;
     border-color: transparent #fff transparent transparent;
     position: absolute;
     top: 16px;

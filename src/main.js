@@ -16,7 +16,6 @@ import './styles/reset.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import  "./styles/commonStyle.scss"
-
 // ajax
 // import http from './config/api'
 
@@ -31,6 +30,7 @@ import {getTimeStyle,getDateStyle} from './utils/public'
 
 Vue.prototype.getTimeStyle = getTimeStyle
 Vue.prototype.getDateStyle = getDateStyle
+
 
 Vue.use(ElementUI);
 

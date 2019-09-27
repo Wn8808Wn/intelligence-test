@@ -23,12 +23,12 @@
                 type="index"
                 :index="indexMethod"
                 label="序号"
-                width="74">
+                >
                 </el-table-column>
                 <el-table-column
                 prop="manageUnitName"
                 label="管理单位"
-                width="165">
+                >
                 </el-table-column>
                 <el-table-column
                 prop="examLevel"
@@ -46,7 +46,7 @@
                 </el-table-column>
                 <el-table-column
                 label="知识体系"
-                width="245">
+                width="285">
                 <template slot-scope="scope">
                     <span>{{scope.row.knowledgeHierarchy.replace(/@/g,'')}}</span>
                 </template>
@@ -84,15 +84,14 @@
                 </template>
                 </el-table-column >
             </el-table>
-
-                <el-pagination
-                background
-                :total="total" 
-                layout="prev, pager, next"
-                :current-page="currentPage"
-                @current-change="handleCurrentChange"
-                >
-                </el-pagination>
+            <el-pagination
+            background
+            :total="total" 
+            layout="prev, pager, next"
+            :current-page="currentPage"
+            @current-change="handleCurrentChange"
+            >
+            </el-pagination>
         </div>
 
     </div>

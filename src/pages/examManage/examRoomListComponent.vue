@@ -19,40 +19,49 @@
                 <el-table-column
                 prop="province"
                 label="省份"
-                width="120">
+                >
                 </el-table-column>
                 <el-table-column
                 prop="manageUnit"
                 label="管理单位"
-                width="226">
+                >
                 </el-table-column>
+
+                <el-table-column
+                prop="examRoomName"
+                label="考场名称"
+                >
+                </el-table-column>
+
                 <el-table-column
                 prop="examRoomCode"
                 label="考场编号"
-                width="140">
+                >
                 </el-table-column>
 
-                 <el-table-column
+                <el-table-column
                 label="座位数"
-                width="104">
+                >
                 <template slot-scope="scope">{{ scope.row.seatSize+'个' }}</template>
                 </el-table-column>
 
                 <el-table-column
                 prop="addressabbr"
                 label="地址"
-                width="300">
+                >
                 </el-table-column>
                 <el-table-column
                 prop="buildDate"
                 label="设立时间"
-                width="158">
+                >
                 </el-table-column>
+
                 <el-table-column
                 prop="createdUser"
                 label="添加人"
-                width="125">
+                >
                 </el-table-column>
+                
                 <el-table-column
                 label="管理操作">
                 <template slot-scope="scope">
@@ -76,7 +85,7 @@
 <script>
 import { _debounce } from "../../utils/public.js";
 export default {
-  inject:['reload'],
+  inject: ["reload"],
   data() {
     return {
       RoomCode: "",
@@ -86,15 +95,17 @@ export default {
       total: null,
       isDisable: false,
       tableData: [],
-      unitsList:[]
+      unitsList: []
     };
   },
   methods: {
     getData(url, params) {
       this.tableData = [];
-      this.$http.get(url, params).then(res => {
+      this.$http
+        .get(url, params)
+        .then(res => {
           // 分页
-          console.log(res,'212313');
+          console.log(res, "212313");
           this.total = res.data.data.roomPage.total;
           this.totalPage = res.data.data.roomPage.totalPage;
           this.pageSize = res.data.data.roomPage.pageSize;
@@ -104,23 +115,24 @@ export default {
           //转换日期格式  地址缩写
           this.tableData = rst;
           this.unitsList = res.data.data.unitsList;
-          this.tableData.forEach( (item,index) => {
-            item.buildDate = this.getDateStyle(item.buildDate)
-            if(item.province === '北京市'){
-                item.addressabbr = item.province + item.distric;
-            }else if(item.province === '天津市'){
-                item.addressabbr = item.province + item.distric;
-            }else if(item.province === '上海市'){
-                item.addressabbr = item.province + item.distric;
-            }else if(item.province === '重庆市'){
-                item.addressabbr = item.province + item.distric;
-            }else{
-                item.addressabbr = item.province + item.city + item.distric;
+          this.tableData.forEach((item, index) => {
+            item.buildDate = this.getDateStyle(item.buildDate);
+            if (item.province === "北京市") {
+              item.addressabbr = item.province + item.distric;
+            } else if (item.province === "天津市") {
+              item.addressabbr = item.province + item.distric;
+            } else if (item.province === "上海市") {
+              item.addressabbr = item.province + item.distric;
+            } else if (item.province === "重庆市") {
+              item.addressabbr = item.province + item.distric;
+            } else {
+              item.addressabbr = item.province + item.city + item.distric;
             }
             //管理单位code码转换为名字
-            item.manageUnit = this.unitsList.filter( (value) => value.id === item.manageUnit)[0].unitName
-          })
-
+            item.manageUnit = this.unitsList.filter(
+              value => value.id === item.manageUnit
+            )[0].unitName;
+          });
         })
         .catch(err => {
           console.log(err);
@@ -128,24 +140,24 @@ export default {
     },
     freezedRoom() {
       //查看已冻结考场信息  1：冻结  0 ：正常
-      this.$router.push({name:'frozenRoom'})
+      this.$router.push({ name: "frozenRoom" });
     },
-    handleCurrentChange:_debounce(function(val) {
+    handleCurrentChange: _debounce(function(val) {
       //分页切换当前页
       let params = new URLSearchParams();
-      if(this.RoomCode){
-       params.append("examRoomCode", this.RoomCode);
-      }else{
-        params.append("examRoomCode",'');
+      if (this.RoomCode) {
+        params.append("examRoomCode", this.RoomCode);
+      } else {
+        params.append("examRoomCode", "");
       }
       params.append("dataStatus", 0);
       params.append("userId", 1);
       params.append("page", val);
       this.getData("/api/room/room_list", { params });
-    },300),
+    }, 300),
     handleAddRoom() {
-        //跳转新增考场页面
-        this.$router.push({name:'addRoom'})
+      //跳转新增考场页面
+      this.$router.push({ name: "addRoom" });
     },
     freezeData(id) {
       //冻结考场操作
@@ -161,7 +173,7 @@ export default {
           let params = new URLSearchParams();
           params.append("id", id);
           params.append("dataStatus", 1);
-          this.$http.post("/api/room/update_status", params)
+          this.$http.post("/api/room/update_status", params);
           this.$message({
             type: "success",
             message: "冻结成功!"
@@ -199,5 +211,4 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang="scss">
-
 </style>
